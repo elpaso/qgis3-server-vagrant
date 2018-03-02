@@ -1,0 +1,16 @@
+[Unit]
+Description=Starts QGIS Server as FastCGI uwsgi app
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/uwsgi --ini /etc/uwsgi/apps-enabled/qgis-server.ini
+User=www-data
+Group=www-data
+Restart=on-failure
+KillSignal=SIGQUIT
+Type=notify
+StandardError=syslog
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target

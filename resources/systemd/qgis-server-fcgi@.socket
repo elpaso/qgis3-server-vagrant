@@ -1,0 +1,15 @@
+
+# Path: /etc/systemd/system/qgis-fcgi@.socket
+# systemctl enable qgis-fcgi@{1..4}.socket && systemctl start qgis-fcgi@{1..4}.socket
+
+[Unit]
+Description = QGIS Server FastCGI Socket (instance %i)
+ 
+[Socket]
+SocketUser = www-data
+SocketGroup = www-data
+SocketMode = 0660
+ListenStream = /run/qgis_mapserv%i.sock
+ 
+[Install]
+WantedBy = sockets.target

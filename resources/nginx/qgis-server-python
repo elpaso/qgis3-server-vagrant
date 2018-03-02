@@ -1,0 +1,45 @@
+# Default QGIS server configuration template for Python server
+# This is parsed by provisioning scripts to
+# create the final configuration file
+
+# Extract server name and port from HTTP_HOST, this 
+# is needed because we are behind a VMs mapped port
+
+map $http_host $parsed_server_name {
+    default  $host;
+    "~(?P<h>[^:]+):(?P<p>.*+)" $h;
+}
+
+map $http_host $parsed_server_port {
+    default  $host;
+    "~(?P<h>[^:]+):(?P<p>.*+)" $p;
+}
+
+upstream qgis_mapserv_python_backend {
+QGIS_SERVER_HTTP_SERVERS
+}
+ 
+server {
+    listen 82 default_server;
+    listen [::]:82 default_server;
+
+    # This is vital
+    underscores_in_headers on;
+
+    root /qgis-server/htdocs;
+
+    location / {
+            # First attempt to serve request as file, then
+            # as directory, then fall back to displaying a 404.
+            try_files $uri $uri/ =404;
+    }
+
+
+
+    location /cgi-bin/ {
+
+        proxy_pass http://qgis_mapserv_python_backend;
+
+    }
+
+}

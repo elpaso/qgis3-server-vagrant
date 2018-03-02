@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+     <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>QGIS Server Explorer</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.14.2/ol.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.14.2/ol.js"></script>
+    <title>QGIS Map Explorer</title>
+    <style type="text/css">
+    #map {
+        border: solid 1px #ddd;
+    }
+    .ol-popup {
+        background-color: white;
+        border: 1px solid #cccccc;
+        border-radius: 10px;
+        bottom: 12px;
+        filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.2));
+        left: -50px;
+        padding: 15px;
+        position: absolute;
+    }
+    .ol-popup::after, .ol-popup::before {
+        border: medium solid transparent;
+        content: " ";
+        height: 0;
+        pointer-events: none;
+        position: absolute;
+        top: 100%%;
+        width: 0;
+    }
+    .ol-popup::after {
+        border-top-color: white;
+        border-width: 10px;
+        left: 48px;
+        margin-left: -10px;
+    }
+    .ol-popup::before {
+        border-top-color: #cccccc;
+        border-width: 11px;
+        left: 48px;
+        margin-left: -11px;
+    }
+    .ol-popup-closer {
+        position: absolute;
+        right: 8px;
+        text-decoration: none;
+        top: 2px;
+    }
+    .ol-popup-closer::after {
+        content: "✖";
+    }
+
+    iframe, iframe table, iframe table td, iframe table tr {
+        border: medium none !important;
+        font-size: 9px !important;
+    }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>%(layers)s</h1>
+                <div id="map" style="width:%(width)spx;height:%(height)spx">
+                    <div id="popup" class="ol-popup">
+                        <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                        <div id="popup-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        var mousePositionControl = new ol.control.MousePosition({
+            coordinateFormat: ol.coordinate.createStringXY(4),
+            projection: "%(projection)s",
+            undefinedHTML: '&nbsp;'
+        });
+
+        /**
+        * Elements that make up the popup.
+        */
+        var container = document.getElementById('popup');
+        var content = document.getElementById('popup-content');
+        var closer = document.getElementById('popup-closer');
+
+        /**
+        * Add a click handler to hide the popup.
+        */
+        closer.onclick = function() {
+            overlay.setPosition(undefined);
+            closer.blur();
+            return false;
+        };
+        /**
+        * Create an overlay to anchor the popup to the map.
+        */
+        var overlay = new ol.Overlay( ({
+            element: container,
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 250
+            }
+        }));
+
+        var wmsSource = new ol.source.ImageWMS({
+            url: '%(url)s',
+            params: {'LAYERS': '%(layers)s'},
+            serverType: 'qgis'
+        });
+
+
+        var layers = [
+            /*new ol.layer.Tile({
+                source: new ol.source.MapQuest({layer: 'sat'})
+            }),*/
+            new ol.layer.Image({
+                extent: [%(extent)s],
+                source: wmsSource
+            })
+        ];
+
+        var view = new ol.View({
+            projection: '%(projection)s',
+        });
+
+        var map = new ol.Map({
+            controls: ol.control.defaults().extend([
+                new ol.control.ScaleLine({
+                    units: 'degrees'
+                }),
+                mousePositionControl
+            ]),
+            layers: layers,
+            target: 'map',
+            overlays: [overlay],
+            view: view
+        });
+
+        view.fit([%(extent)s], [%(width)s,%(height)s]);
+
+        map.on('singleclick', function(evt) {
+            var coordinate = evt.coordinate;
+            overlay.setPosition(coordinate);
+            content.innerHTML = '';
+            var viewResolution = view.getResolution();
+            var url = wmsSource.getGetFeatureInfoUrl(
+                evt.coordinate, viewResolution, '%(projection)s',
+                {'INFO_FORMAT': 'text/html'});
+            if (url) {
+                content.innerHTML = '<iframe seamless src="' + url + '"></iframe>';
+            }
+         });
+
+  </script>
+
+  </body>
+</html>

@@ -1,0 +1,14 @@
+[general]
+name=QGIS GetFeatureInfo Plugin
+qgisMinimumVersion=2.8
+qgisMaximumVersion=2.99
+description=GetFeatureInfo Plugin
+version=version 1.0
+author=Alessandro Pasotti (ItOpen)
+email=elpaso@itopen.it
+; if True it's a server plugin
+server=True
+
+changelog=
+
+about=Adds a GetFeatureInfo link to download a large file (QGIS sources)
