@@ -19,7 +19,7 @@ Restart = always
 # Environment
 Environment=QGIS_SERVER_PORT=809%i
 Environment="QGIS_AUTH_DB_DIR_PATH=/qgis-server/projects"
-Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-nginx-python-000.log"
+Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python-000.log"
 Environment="QGIS_SERVER_LOG_LEVEL=0"
 Environment="QGIS_DEBUG=1"
 # Temporary workaround for #18230

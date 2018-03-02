@@ -39,11 +39,9 @@ sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@" /etc/systemd/system/qgis-serve
 sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@" /etc/systemd/system/qgis-server-fcgi@.socket
 systemctl enable qgis-server-fcgi@{1..${NUM_PROCESSES}}.socket && systemctl start qgis-server-fcgi@{1..${NUM_PROCESSES}}.socket
 systemctl enable qgis-server-fcgi@{1..${NUM_PROCESSES}}.service && systemctl start qgis-server-fcgi@{1..${NUM_PROCESSES}}.service
-
+# No socket for python
 sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@" /etc/systemd/system/qgis-server-python@.service
-sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@" /etc/systemd/system/qgis-server-python@.socket
-systemctl enable qgis-python@{1..${NUM_PROCESSES}}.socket && systemctl start qgis-server-python@{1..${NUM_PROCESSES}}.socket
 systemctl enable qgis-python@{1..${NUM_PROCESSES}}.service && systemctl start qgis-server-python@{1..${NUM_PROCESSES}}.service
 
 # Restart the server
-/etc/init.d/nginx restart
+systemctl restart nginx
