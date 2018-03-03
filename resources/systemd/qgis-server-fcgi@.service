@@ -16,6 +16,8 @@ StandardInput = socket
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=qgis-server-fcgi
+WorkingDirectory=/tmp
+
 Restart = always
 
 # Environment
