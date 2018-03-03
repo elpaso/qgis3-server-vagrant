@@ -3,3 +3,6 @@
 
 # Common configuration
 export QGIS_SERVER_DIR=/qgis-server
+
+export NUM_PROCESSES=4
+

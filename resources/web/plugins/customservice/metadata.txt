@@ -1,0 +1,13 @@
+[general]
+name=QGIS Server Custom Service Plugin
+qgisMinimumVersion=3.0
+description=QGIS Server Custom Service Plugin 
+version=version 1.0
+author=Alessandro Pasotti (ItOpen)
+email=elpaso@itopen.it
+; if True it's a server plugin
+server=True
+
+changelog=
+
+about=Adds Custom Service

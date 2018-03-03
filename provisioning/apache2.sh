@@ -22,5 +22,6 @@ a2ensite 001-qgis-server
 # Listen on port 81 instead of 80 (nginx)
 sed -i -e 's/Listen 80/Listen 81/' /etc/apache2/ports.conf
 sed -i -e 's/VirtualHost \*:80/VirtualHost \*:81/' /etc/apache2/sites-available/001-qgis-server.conf
+
 # Restart the server
 service apache2 restart

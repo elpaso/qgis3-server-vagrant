@@ -1,4 +1,5 @@
-# Default QGIS server configuration template for Python server
+
+# Default mapproxy server configuration template
 # This is parsed by provisioning scripts to
 # create the final configuration file
 
@@ -15,13 +16,13 @@ map $http_host $parsed_server_port {
     "~(?P<h>[^:]+):(?P<p>.*+)" $p;
 }
 
-upstream qgis_mapserv_python_backend {
+upstream mapproxy_backend {
 QGIS_SERVER_HTTP_SERVERS
 }
  
 server {
-    listen 82 default_server;
-    listen [::]:82 default_server;
+    listen 83 default_server;
+    listen [::]:83 default_server;
 
     # This is vital
     underscores_in_headers on;
@@ -35,7 +36,6 @@ server {
     }
 
 
-
     location /cgi-bin/ {
 
         # $http_host contains the original server name and port, such as: "localhost:8080"
@@ -45,8 +45,9 @@ server {
         proxy_set_header    HOST      $parsed_server_name;
         proxy_set_header    PORT      $parsed_server_port;
 
-        proxy_pass http://qgis_mapserv_python_backend;
+        proxy_pass http://mapproxy_backend;
 
     }
 
 }
+

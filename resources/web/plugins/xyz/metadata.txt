@@ -1,0 +1,13 @@
+[general]
+name=QGIS Server XYZPlugin
+qgisMinimumVersion=3.0
+description=QGIS Server XYZPlugin 
+version=version 1.0
+author=Alessandro Pasotti (ItOpen)
+email=elpaso@itopen.it
+; if True it's a server plugin
+server=True
+
+changelog=
+
+about=Adds XYZ
