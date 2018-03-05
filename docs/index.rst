@@ -719,7 +719,8 @@ Systemd
 Caching
 ============================
 
-A QGIS Server instance caches the capabilities.
+A QGIS Server instance caches the capabilities, caches
+are **not** shared among instances.
 
 Layers are **not** cached.
 
@@ -744,3 +745,14 @@ Server:
 
 https://github.com/qgis/QGIS/tree/master/tests/src/python
 
+
+Authenticated layers in QGIS Server
+===================================
+
+QGIS authentication DB `qgis-auth.db` path can be specified with 
+the environment variable `QGIS_AUTH_DB_DIR_PATH`
+
+`QGIS_AUTH_PASSWORD_FILE` environment variable can contain the
+master password required to decrypt the authentication DB.
+
+Note: ensure to limit the file as only readable by the Server’s process user and to not store the file within web-accessible directories.
