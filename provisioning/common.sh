@@ -16,10 +16,10 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update && apt-get -y upgrade
 
 # Install the software
-apt-get -y install qgis-server python-qgis xvfb ipython3
+apt-get -y install qgis-server python-qgis xvfb
 
 # Install utilities (optional)
-apt-get -y install vim unzip
+apt-get -y install vim unzip ipython3
 
 # Install sample projects and plugins
 mkdir -p $QGIS_SERVER_DIR/logs

@@ -37,9 +37,18 @@ class ServerSimpleFilter(QgsServerFilter):
 
     def get_url(self, request, params):
         url = 'http://' if not self.serverInterface().getEnv("HTTPS") == 'on' else 'https://'
-        url += self.serverInterface().getEnv("SERVER_NAME")
-        url += ':' + self.serverInterface().getEnv("SERVER_PORT")
-        url += self.serverInterface().getEnv("SCRIPT_NAME")
+        server_name = self.serverInterface().getEnv("SERVER_NAME")
+        if not server_name:
+            server_name = self.serverInterface().requestHandler().requestHeader("HTTP_HOST")
+        server_port = self.serverInterface().getEnv("SERVER_PORT")
+        if not server_port:
+            server_port = self.serverInterface().requestHandler().requestHeader("HTTP_PORT")
+        url += server_name
+        url += ':' + server_port
+        script_name = self.serverInterface().getEnv("SCRIPT_NAME")
+        if not script_name:
+            script_name = self.serverInterface().requestHandler().requestHeader("HTTP_PATH_INFO")
+        url += script_name
         url += '?MAP=' + params.get('MAP', '')
         return url
 

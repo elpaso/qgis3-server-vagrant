@@ -1,0 +1,20 @@
+
+body {
+    font-size: 150%;
+}
+
+em {
+    color: green;
+    font-weight: bold;
+}
+
+.header img {
+    width: 6%;
+}
+
+.footer {
+	position: fixed;
+	bottom: -3%;
+    font-size: 60%;
+    color: darkgrey;
+}

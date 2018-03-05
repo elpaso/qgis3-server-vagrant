@@ -44,7 +44,8 @@ server {
         # Pass headers to proxy
         proxy_set_header    HOST      $parsed_server_name;
         proxy_set_header    PORT      $parsed_server_port;
-
+        proxy_set_header    SERVER_NAME      $parsed_server_name;
+        proxy_set_header    SERVER_PORT      $parsed_server_port;
         proxy_pass http://qgis_mapserv_python_backend;
 
     }

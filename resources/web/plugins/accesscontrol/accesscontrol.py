@@ -79,7 +79,7 @@ class RestrictedAccessControl(QgsAccessControlFilter):
     def cacheKey(self):
         return "r" if self._active else "f"
 
-    
+   
 
 
 class AccessControl:

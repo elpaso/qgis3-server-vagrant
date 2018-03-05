@@ -70,7 +70,7 @@ A presentation is available in the [docs directory](docs/index.rst)
 From the directory that contains this README:
 
 ```
-vagrant up --no-provision
+vagrant up
 ```
 
 Follow the steps in the documentation for further setup.
