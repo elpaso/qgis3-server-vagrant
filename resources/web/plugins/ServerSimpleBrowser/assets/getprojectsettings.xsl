@@ -112,7 +112,7 @@
 
 <xsl:template match="//wms:Capability">
     <xsl:param name="getmap"/>
-    <xsl:for-each select="//wms:Layer">
+    <xsl:for-each select="//wms:Layer/wms:Layer">
     <!--stick to 4326, inverted axis -->
     <xsl:variable name="CRS" select="wms:BoundingBox[@CRS='EPSG:4326']/@CRS" />
     <xsl:variable name="maxy" select="wms:BoundingBox[@CRS='EPSG:4326']/@maxx" />

@@ -340,11 +340,28 @@ Nginx configuration III
 
 .. code:: php
 
+    upstream qgis_mapserv_backend {
+        server unix:/run/qgis_mapserv4.sock;
+        server unix:/run/qgis_mapserv3.sock;
+        server unix:/run/qgis_mapserv2.sock;
+        server unix:/run/qgis_mapserv1.sock;
+
+    }
+----
+
+Nginx configuration IV
+=======================
+
+.. code:: php
+
     server {
         listen 80 default_server;
         listen [::]:80 default_server;
 
-        root QGIS_SERVER_DIR/htdocs;
+        # This is vital
+        underscores_in_headers on;
+
+        root /qgis-server/htdocs;
 
         location / {
                 # First attempt to serve request as file, then
@@ -354,7 +371,7 @@ Nginx configuration III
 
 ----
 
-Nginx configuration IV
+Nginx configuration V
 =======================
 
 .. code:: php
@@ -365,17 +382,16 @@ Nginx configuration IV
             gzip off;
 
             # Fastcgi socket
-            fastcgi_pass  unix:/tmp/qgis-server.sock;
+            fastcgi_pass  qgis_mapserv_backend;
 
-            # $http_host contains the original server name and port, 
-            # such as: "localhost:8080"
-            # QGIS Server behind a VM needs this parsed values in 
-            # order to automatically get the correct values for the 
-            # online resource URIs
+            # $http_host contains the original server name and port, such as: "localhost:8080"
+            # QGIS Server behind a VM needs this parsed values in order to automatically
+            # get the correct values for the online resource URIs
             fastcgi_param SERVER_NAME       $parsed_server_name;
             fastcgi_param SERVER_PORT       $parsed_server_port;
 
-            # Fastcgi parameters, include the standard ones
+            # Fastcgi parameters, include the standard ones 
+            # (note: this needs to be last or it will overwrite fastcgi_param set above)
             include /etc/nginx/fastcgi_params;
 
         }
@@ -384,120 +400,83 @@ Nginx configuration IV
 
 ----
 
-Nginx configuration V
-=======================
+Systemd configuration for FastCGI
+===================================
 
+Socket
 
-.. code:: bash
+.. code:: php
 
-    # Restart the server
-    /etc/init.d/nginx restart
-
-
-**Checkpoint**: check wether Nginx is listening on localhost port 8080 http://localhost:8080
-
-----
-
-Uvsgi configuration I
-=======================
-
-.. code:: bash
-
-    # Configure uwsgi
-    cp /vagrant/resources/uwsgi/uwsgi-qgis.service \
-        /etc/systemd/system/uwsgi-qgis.service
-    cp /vagrant/resources/uwsgi/qgis-server.ini \
-        /etc/uwsgi/apps-enabled/qgis-server.ini
-    sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@" \
-        /etc/uwsgi/apps-enabled/qgis-server.ini
-
-----
-
-Uvsgi configuration II
-=======================
-
-Service `systemd` configuration
-
-.. code:: ini
+    # Path: /etc/systemd/system/qgis-fcgi@.socket
+    # systemctl enable qgis-fcgi@{1..4}.socket && systemctl start qgis-fcgi@{1..4}.socket
 
     [Unit]
-    Description=Starts QGIS Server as FastCGI uwsgi app
-    After=network.target
-
-    [Service]
-    ExecStart=/usr/bin/uwsgi --ini \
-        /etc/uwsgi/apps-enabled/qgis-server.ini
-    User=www-data
-    Group=www-data
-
-----
-
-Uvsgi configuration II
-=======================
-
-.. code:: ini
-
-    Restart=on-failure
-    KillSignal=SIGQUIT
-    Type=notify
-    StandardError=syslog
-    NotifyAccess=all
-
+    Description = QGIS Server FastCGI Socket (instance %i)
+    
+    [Socket]
+    SocketUser = www-data
+    SocketGroup = www-data
+    SocketMode = 0660
+    ListenStream = /run/qgis_mapserv%i.sock
+    
     [Install]
-    WantedBy=multi-user.target
+    WantedBy = sockets.target
 
 ----
 
-Uvsgi configuration III
-=======================
 
-App configuration
+Systemd configuration for FastCGI 2
+===================================
 
-.. code:: ini
+Service
 
-    [uwsgi]
-    fastcgi-socket = /tmp/qgis-server.sock
-    protocol = fastcgi
-    worker-exec = /usr/lib/cgi-bin/qgis_mapserv.fcgi
-    processes = 10
-    enable-threads = true
-    master = true
-    chdir = /usr/lib/cgi-bin/
-    chmod-socket = 777
-    vacuum = true
-    logto = QGIS_SERVER_DIR/logs/qgis-nginx-000.log
+.. code:: php
 
+    # Path: /etc/systemd/system/qgis-fcgi@.service
+    # systemctl start qgis-fcgi@{1..4}.service
+
+    [Unit]
+    Description = QGIS Server Tracker FastCGI backend (instance %i)
+    
+    [Service]
+    User = www-data
+    Group = www-data
+    ExecStart = /usr/lib/cgi-bin/qgis_mapserv.fcgi
+    StandardInput = socket
+    #StandardOutput = null
+    #StandardError = null
+    StandardOutput=syslog
+    StandardError=syslog
+    SyslogIdentifier=qgis-server-fcgi
+    WorkingDirectory=/tmp
+
+    Restart = always
+
+   
 ----
 
-Uvsgi configuration IV
-=======================
+Systemd configuration for FastCGI 3
+===================================
 
-.. code:: ini
+Service
 
-    uid = www-data
-    gid = www-data
+.. code:: php
 
-    env = QGIS_AUTH_DB_DIR_PATH=QGIS_SERVER_DIR/projects
-    env = QGIS_SERVER_LOG_FILE=QGIS_SERVER_DIR/logs/qgis-nginx-000.log
-    env = QGIS_SERVER_LOG_LEVEL=0
-    env = QGIS_DEBUG=1
-    env = DISPLAY=:99
-    env = QGIS_PLUGINPATH=QGIS_SERVER_DIR/plugins
-    env = QGIS_OPTIONS_PATH=QGIS_SERVER_DIR
-    env = QGIS_CUSTOM_CONFIG_PATH=QGIS_SERVER_DIR
+   
+    # Environment
+    Environment="QGIS_AUTH_DB_DIR_PATH=QGIS_SERVER_DIR/projects"
+    Environment="QGIS_SERVER_LOG_FILE=QGIS_SERVER_DIR/logs/qgis-server-fcgi.log"
+    Environment="QGIS_SERVER_LOG_LEVEL=0"
+    Environment="QGIS_DEBUG=1"
+    # Temporary workaround for #18230
+    Environment="QGIS_PREFIX_PATH=/usr"
+    Environment="DISPLAY=:99"
+    Environment="QGIS_PLUGINPATH=QGIS_SERVER_DIR/plugins"
+    Environment="QGIS_OPTIONS_PATH=QGIS_SERVER_DIR"
+    Environment="QGIS_CUSTOM_CONFIG_PATH=QGIS_SERVER_DIR"
 
-----
-
-Uvsgi configuration V
-=======================
-
-Restart the service
-
-.. code:: bash
-
-    update-rc.d uwsgi remove # Remove stock uwsgi
-    systemctl enable /etc/systemd/system/uwsgi-qgis.service
-    service uwsgi-qgis start
+[Install]
+WantedBy = multi-user.target
 
 ----
 
@@ -534,8 +513,7 @@ Check that **WFS** requires a "username" and "password"
 Check that **WWS** *GetFeatureInfo* returns a (blueish) formatted HTML
 
 Note: a test project with pre-configured endpoints 
-is available in the same directory that hosts
-this presentation.
+is available in the `resources/qgis/` directory.
 
 ----
 
@@ -642,6 +620,7 @@ Since QGIS 2.99
 Full script:
 https://github.com/qgis/QGIS/blob/master/tests/src/python/qgis_wrapped_server.py
 
+----
 
 QGIS Server and python plugins
 ==================================
@@ -649,6 +628,8 @@ QGIS Server and python plugins
 See presentation: http://www.itopen.it/bulk/nodebo/Presentations/Server%20Plugins/index.html
 
 There are no substantial differences between plugins API in 2.x and 3.x
+
+----
 
 QGIS Server Access Control Plugins
 ==================================
@@ -664,6 +645,7 @@ Example:
 https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/accesscontrol/accesscontrol.py
 
 
+----
 
 QGIS Server 3.x and python services
 ===================================
@@ -676,7 +658,89 @@ You can now create custom services in pure *Python*.
 
 Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customservice/customservice.py
 
+----
+
+QGIS Server Python application 1
+================================
+
+Systemd
+
+.. code:: php
+
+    # Listen on ports 809%i
+    # Path: /etc/systemd/system/qgis-server-python@.service
+    # systemctl start qgis-server-python@{1..4}.service
 
 
+    [Unit]
+    Description = QGIS Server Tracker Python backend (instance %i)
+    
+    [Service]
+    User = www-data
+    Group = www-data
+    ExecStart = /qgis-server/qgis_wrapped_server_wsgi.py
+    StandardInput = null
+    #StandardOutput = null
+    #StandardError = null
+    StandardOutput=syslog
+    StandardError=syslog
+    SyslogIdentifier=qgis-server-python
+    WorkingDirectory=/tmp
 
+    Restart = always
+
+----
+
+QGIS Server Python application 2
+================================
+
+Systemd
+
+.. code:: php
+
+    # Environment
+    Environment=QGIS_SERVER_PORT=809%i
+    Environment="QGIS_AUTH_DB_DIR_PATH=/qgis-server/projects"
+    Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python.log"
+    Environment="QGIS_SERVER_LOG_LEVEL=0"
+    Environment="QGIS_DEBUG=1"
+    # Temporary workaround for #18230
+    Environment="QGIS_PREFIX_PATH=/usr"
+    Environment="DISPLAY=:99"
+    Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
+    Environment="QGIS_OPTIONS_PATH=/qgis-server"
+    Environment="QGIS_CUSTOM_CONFIG_PATH=/qgis-server"
+
+    [Install]
+    WantedBy = multi-user.target
+
+----
+
+Caching
+============================
+
+A QGIS Server instance caches the capabilities.
+
+Layers are **not** cached.
+
+Caching is generally delegated to different tier,
+caching solutions are expecially recommended for serving
+tiles:
+
++ mapproxy https://mapproxy.org/
++ tilecache http://tilecache.org/
++ tilestache http://tilestache.org/
+
+Look for metatiles support if your layers contain labels.
+
+----
+
+Other examples
+=====================
+
+The Python QGIS tests contain a comprehensive set
+of scripts to test all possible services of QGIS 
+Server: 
+
+https://github.com/qgis/QGIS/tree/master/tests/src/python
 
