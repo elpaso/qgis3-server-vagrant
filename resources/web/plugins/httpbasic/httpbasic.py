@@ -8,6 +8,7 @@ import base64
 class HTTPBasicFilter(QgsServerFilter):
 
     def _checkAuth(self):
+        # NOAUTH for wget / GET retrieving
         if 'NOAUTH' in self.serverInterface().requestHandler().parameterMap():
             return True
         auth = self.serverInterface().getEnv('HTTP_AUTHORIZATION')

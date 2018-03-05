@@ -657,6 +657,7 @@ Since QGIS 2.12
 
 Fine-grained control over layers, features and attributes!
 
+https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/server.html#access-control-plugin
 
 
 Example: 
