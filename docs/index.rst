@@ -76,7 +76,7 @@ Add required repositories
 Add required repositories
 =========================
 
-**Checkpoint**: the available version of qgis-server must be >= 2.18.11 from qgis.org
+**Checkpoint**: the available version of qgis-server must be >= 3 from qgis.org
 
 .. code:: bash
 
@@ -298,7 +298,7 @@ Nginx Installation
 
     # Install the software
     export DEBIAN_FRONTEND=noninteractive
-    apt-get -y install nginx uwsgi
+    apt-get -y install nginx
 
 ----
 
@@ -318,7 +318,7 @@ Nginx configuration I
 Nginx configuration II
 =======================
 
-.. code:: php
+.. code:: bash
 
     # Extract server name and port from HTTP_HOST, this 
     # is needed because we are behind a VMs mapped port
@@ -338,6 +338,9 @@ Nginx configuration II
 Nginx configuration III
 =======================
 
+Load balancing
+(round robin default, or least_conn;)
+
 .. code:: php
 
     upstream qgis_mapserv_backend {
@@ -347,12 +350,15 @@ Nginx configuration III
         server unix:/run/qgis_mapserv1.sock;
 
     }
+
+Note: sessions and persistence (ip-hash)!
+
 ----
 
 Nginx configuration IV
 =======================
 
-.. code:: php
+.. code:: bash
 
     server {
         listen 80 default_server;
@@ -374,7 +380,7 @@ Nginx configuration IV
 Nginx configuration V
 =======================
 
-.. code:: php
+.. code:: bash
 
         location /cgi-bin/ { 
             # Disable gzip (it makes scripts feel slower since they 
@@ -405,10 +411,10 @@ Systemd configuration for FastCGI
 
 Socket
 
-.. code:: php
+.. code:: bash
 
-    # Path: /etc/systemd/system/qgis-fcgi@.socket
-    # systemctl enable qgis-fcgi@{1..4}.socket && systemctl start qgis-fcgi@{1..4}.socket
+    # Path: /etc/systemd/system/qgis-server-fcgi@.socket
+    # systemctl enable qgis-server-fcgi@{1..4}.socket && systemctl start qgis-server-fcgi@{1..4}.socket
 
     [Unit]
     Description = QGIS Server FastCGI Socket (instance %i)
@@ -430,10 +436,10 @@ Systemd configuration for FastCGI 2
 
 Service
 
-.. code:: php
+.. code:: bash
 
-    # Path: /etc/systemd/system/qgis-fcgi@.service
-    # systemctl start qgis-fcgi@{1..4}.service
+    # Path: /etc/systemd/system/qgis-server-fcgi@.service
+    # systemctl start qgis-server-fcgi@{1..4}.service
 
     [Unit]
     Description = QGIS Server Tracker FastCGI backend (instance %i)
@@ -460,8 +466,7 @@ Systemd configuration for FastCGI 3
 
 Service
 
-.. code:: php
-
+.. code:: bash
    
     # Environment
     Environment="QGIS_AUTH_DB_DIR_PATH=QGIS_SERVER_DIR/projects"
@@ -522,7 +527,14 @@ Checkpoint: WMS search
 
 Searching features with **WMS**
 
-http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&REQUEST=GetFeatureInfo&CRS=EPSG%3A4326&WIDTH=1794&HEIGHT=1194&LAYERS=world&QUERY_LAYERS=world&FILTER=world%3A%22NAME%22%20%3D%20%27SPAIN%27
+.. code::
+
+    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
+    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS
+    &REQUEST=GetFeatureInfo&CRS=EPSG%3A4326&WIDTH=1794&HEIGHT=1194
+    &LAYERS=world&QUERY_LAYERS=world&
+    FILTER=world%3A%22NAME%22%20%3D%20%27SPAIN%27
+
 The filter is a QGIS Expression:
 
 **FILTER=world:"NAME" = 'SPAIN'**
@@ -541,7 +553,14 @@ The **SELECTION** parameter can highlight features from one or more layers:
 Vector features can be selected by passing comma separated lists with feature ids in *GetMap* and *GetPrint*.
 Example: *SELECTION=mylayer1:3,6,9;mylayer2:1,5,6*
 
-http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.3.0&SELECTION=world%3A44&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&LAYERS=world&CRS=EPSG%3A4326&STYLES=&DPI=180&WIDTH=1794&HEIGHT=1194&BBOX=31.7944%2C-18.2153%2C58.0297%2C21.20361
+.. code::
+
+    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
+    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.3.0&
+    SELECTION=world%3A44&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&
+    LAYERS=world&CRS=EPSG%3A4326&STYLES=&DPI=180&WIDTH=1794&HEIGHT=1194&
+    BBOX=31.7944%2C-18.2153%2C58.0297%2C21.20361
+
 
 ----
 
@@ -553,7 +572,8 @@ From composer templates (with substitutions!)
 .. code:: xml
 
   <Layouts>
-    <Layout units="mm" printResolution="300" name="Printable World" worldFileMap="{db75b0bf-f2f1-42e6-9727-1b6b21d8862e}">
+    <Layout units="mm" printResolution="300" name="Printable World" 
+    worldFileMap="{db75b0bf-f2f1-42e6-9727-1b6b21d8862e}">
     ...
 
 FORMAT can be any of PDF, PNG
@@ -564,7 +584,12 @@ See also: DXF Export
 Checkpoint: printing URL
 ==============================
 
-http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetPrint&TEMPLATE=Printable%20World&CRS=EPSG%3A4326&map0:EXTENT=4,52,14,58&FORMAT=png&LAYERS=bluemarble,world
+.. code::
+
+    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
+    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.1.1&
+    REQUEST=GetPrint&TEMPLATE=Printable%20World&CRS=EPSG%3A4326&
+    map0:EXTENT=4,52,14,58&FORMAT=png&LAYERS=bluemarble,world
 
 ----
 
@@ -575,7 +600,13 @@ Checkpoint: printing substitutions
 - add *label_name=Your custom text*
 - as an ID, choose a word that is not reserved in **WMS**
 
-http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetPrint&TEMPLATE=Printable%20World&CRS=EPSG%3A4326&map0:EXTENT=4,52,14,58&FORMAT=png&LAYERS=bluemarble,world&print_title=Custom%20print%20title!
+.. code::
+
+    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
+    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&
+    VERSION=1.1.1&REQUEST=GetPrint&TEMPLATE=Printable%20World
+    &CRS=EPSG%3A4326&map0:EXTENT=4,52,14,58&FORMAT=png
+    &LAYERS=bluemarble,world&print_title=Custom%20print%20title!
 
 ----
 
@@ -665,7 +696,7 @@ QGIS Server Python application 1
 
 Systemd
 
-.. code:: php
+.. code:: bash
 
     # Listen on ports 809%i
     # Path: /etc/systemd/system/qgis-server-python@.service
@@ -696,7 +727,7 @@ QGIS Server Python application 2
 
 Systemd
 
-.. code:: php
+.. code:: bash
 
     # Environment
     Environment=QGIS_SERVER_PORT=809%i
