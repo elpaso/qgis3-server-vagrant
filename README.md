@@ -69,14 +69,9 @@ A presentation is available in the [docs directory](docs/index.rst)
 
 From the directory that contains this README:
 
-<<<<<<< Updated upstream
 ```
 vagrant up
 ```
-=======
-    vagrant up
-
->>>>>>> Stashed changes
 
 Follow the steps in the documentation for further setup.
 
