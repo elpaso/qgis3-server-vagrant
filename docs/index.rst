@@ -15,6 +15,49 @@
 
 ----
 
+
+Supporteds standards
+====================
+
++ WMS 1.3 
++ WFS 1.0.0, 1.1.0 (currently broken) 
++ WCS 1.1.1 
+
+----
+
+Compliance tests
+================
+
+OGC CITE Compliance Testing
+
+CI tests:
+
+http://37.187.164.233/ogc/
+
+----
+
+Architecture
+=============
+
+`SERVICE` modules
+
++ WMS
++ WFS
++ WCS
++ custom modules (C++ and Python)
+
++ Python plugins
++ Python bindings
+
+----
+
+API
+===
+
+https://qgis.org/api/group__server.html
+
+----
+
 OS Setup
 ====================
 
@@ -248,7 +291,7 @@ Apache2 configuration V
 
 .. code:: bash
 
-        # Needed for QGIS HelloServer plugin HTTP BASIC auth
+        # Needed for QGIS plugin HTTP BASIC auth
         <IfModule mod_fcgid.c>
             RewriteEngine on
             RewriteCond %{HTTP:Authorization} .
@@ -480,8 +523,8 @@ Service
     Environment="QGIS_OPTIONS_PATH=QGIS_SERVER_DIR"
     Environment="QGIS_CUSTOM_CONFIG_PATH=QGIS_SERVER_DIR"
 
-[Install]
-WantedBy = multi-user.target
+    [Install]
+    WantedBy = multi-user.target
 
 ----
 
@@ -541,7 +584,6 @@ The filter is a QGIS Expression:
 
 * Field name is enclosed in double quotes, literal string in single quotes
 * You need one space between the operator and tokens
-* Temporary fix: you need BBOX (fixed in master)
 
 
 ----
@@ -641,7 +683,7 @@ Since QGIS 2.99
     qgs_app = QgsApplication([], False)
     qgs_server = QgsServer()
     request = QgsBufferServerRequest(
-        'MAP=/qgis-server/projects/helloworld.qgs' + 
+        'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' + 
         '&SERVICE=WMS&REQUEST=GetCapabilities')
     response = QgsBufferServerResponse()
     qgs_server.handleRequest(request, response)
@@ -750,8 +792,12 @@ Systemd
 Caching
 ============================
 
-A QGIS Server instance caches the capabilities, caches
-are **not** shared among instances.
+A QGIS Server instance caches:
+
++ capabilities
++ projects
+
+Caches are **not** shared among instances.
 
 Layers are **not** cached.
 
@@ -776,6 +822,7 @@ Server:
 
 https://github.com/qgis/QGIS/tree/master/tests/src/python
 
+----
 
 Authenticated layers in QGIS Server
 ===================================
@@ -787,3 +834,48 @@ the environment variable `QGIS_AUTH_DB_DIR_PATH`
 master password required to decrypt the authentication DB.
 
 Note: ensure to limit the file as only readable by the Server’s process user and to not store the file within web-accessible directories.
+
+----
+
+Parallel rendering
+============================================
+
+
+`QGIS_SERVER_PARALLEL_RENDERING`
+
+Activates parallel rendering for WMS GetMap requests. It’s disabled (false) by default. Available values are:
+
+0 or false (case insensitive)
+1 or true (case insensitive)
+
+`QGIS_SERVER_MAX_THREADS`
+
+Number of threads to use when parallel rendering is activated. Default value is -1 to use the number of processor cores.
+
+
+----
+
+Logging
+=======
+
+
+`QGIS_SERVER_LOG_FILE`
+
+Specify path and filename. Make sure that server has proper permissions for writing to file. File should be created automatically, just send some requests to server. If it’s not there, check permissions.
+
+
+`QGIS_SERVER_LOG_LEVEL`
+
+Specify desired log level. Available values are:
+
+0 or `INFO` (log all requests)
+1 or `WARNING`
+2 or `CRITICAL` (log just critical errors, suitable for production purposes)
+
+
+Release cycle
+=============
+
+LTR: 12 months support
+
+https://www.qgis.org/it/site/getinvolved/development/roadmap.html#release-schedule
