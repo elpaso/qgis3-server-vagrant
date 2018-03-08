@@ -3,13 +3,15 @@
 
 # Common setup for all servers
 
+set -e
+
 . /vagrant/provisioning/config.sh
 
 echo "Changing QGIS_SERVER_DIR to ${QGIS_SERVER_DIR} ..."
 
 # Add QGIS repositories
 apt-key adv --keyserver keyserver.ubuntu.com --recv-key CAEB3DC3BDF7FB45
-echo 'deb http://qgis.org/debian bionic main' > /etc/apt/sources.list.d/debian-gis.list
+echo 'deb http://qgis.org/debian-nightly bionic main' > /etc/apt/sources.list.d/debian-gis.list
 
 # Update && upgrade packages
 export DEBIAN_FRONTEND=noninteractive

@@ -1,6 +1,8 @@
 #!/bin/bash
 # Provisioning file for Vagrant: nginx
 
+set -e
+
 . /vagrant/provisioning/config.sh
 
 echo "Changing QGIS_SERVER_DIR to ${QGIS_SERVER_DIR} ..."

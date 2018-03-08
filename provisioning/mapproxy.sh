@@ -1,6 +1,8 @@
 #!/bin/bash
 # Install and configure mapproxy
 
+set -e
+
 . /vagrant/provisioning/config.sh
 
 echo "Changing QGIS_SERVER_DIR to ${QGIS_SERVER_DIR} ..."
@@ -13,7 +15,7 @@ pip3 install virtualenv
 
 MAPPROXY_DIR=${QGIS_SERVER_DIR}/mapproxy
 
-if [ -e ${MAPPROXY_DIR} ]; then
+if [ ! -e ${MAPPROXY_DIR} ]; then
     mkdir -p ${MAPPROXY_DIR}
 fi 
 
@@ -22,17 +24,15 @@ source ${MAPPROXY_DIR}/bin/activate
 pip3 install MapProxy
 
 pushd .
+
 cd ${MAPPROXY_DIR}
-mapproxy-util --version
-mapproxy-util create -t base-config myconfig
-mapproxy-util create -t wsgi-app -f myconfig/mapproxy.yaml myconfig.py
+mapproxy-util create -t base-config --force myconfig
+mapproxy-util create -t wsgi-app --force -f myconfig/mapproxy.yaml myconfig.py
 # Overwrite with prepared configuration
-cp /vagrant/resources/mapproxy.yaml ${MAPPROXY_DIR}/myconfig/
+cp /vagrant/resources/mapproxy/mapproxy.yaml ${MAPPROXY_DIR}/myconfig/
 
 popd 
 
-
-echo "Changing QGIS_SERVER_DIR to ${QGIS_SERVER_DIR} ..."
 
 # Install the software
 export DEBIAN_FRONTEND=noninteractive
@@ -49,6 +49,9 @@ chmod +x ${QGIS_SERVER_DIR}/*.py
 
 
 sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@g" /etc/systemd/system/mapproxy@.service
+
+echo "Changing MAPPROXY_DIR to ${MAPPROXY_DIR} ..."
+
 sed -i -e "s@MAPPROXY_DIR@${MAPPROXY_DIR}@g" /etc/systemd/system/mapproxy@.service
 /bin/bash -c "systemctl enable mapproxy@{1..${NUM_PROCESSES}}.service && systemctl start mapproxy@{1..${NUM_PROCESSES}}.service"
 

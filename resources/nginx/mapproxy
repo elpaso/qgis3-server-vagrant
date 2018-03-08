@@ -30,13 +30,6 @@ server {
     root QGIS_SERVER_DIR/htdocs;
 
     location / {
-            # First attempt to serve request as file, then
-            # as directory, then fall back to displaying a 404.
-            try_files $uri $uri/ =404;
-    }
-
-
-    location /cgi-bin/ {
 
         # $http_host contains the original server name and port, such as: "localhost:8080"
         # QGIS Server behind a VM needs this parsed values in order to automatically

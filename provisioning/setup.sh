@@ -2,7 +2,6 @@
 # Provisioning file for Vagrant
 # Install the software
 
-
 set -e
 
 # Load configuration
