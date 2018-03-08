@@ -47,5 +47,5 @@ class HTTPBasic:
 
     def __init__(self, serverIface):
         # Save reference to the QGIS server interface
-        serverIface.registerFilter( HTTPBasicFilter(serverIface), 100 )
+        serverIface.registerFilter( HTTPBasicFilter(serverIface), 10 )
     

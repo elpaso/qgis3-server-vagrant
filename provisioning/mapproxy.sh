@@ -31,6 +31,7 @@ cp /vagrant/resources/mapproxy.yaml ${MAPPROXY_DIR}/myconfig/
 
 popd 
 
+
 echo "Changing QGIS_SERVER_DIR to ${QGIS_SERVER_DIR} ..."
 
 # Install the software
@@ -49,11 +50,10 @@ chmod +x ${QGIS_SERVER_DIR}/*.py
 
 sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@g" /etc/systemd/system/mapproxy@.service
 sed -i -e "s@MAPPROXY_DIR@${MAPPROXY_DIR}@g" /etc/systemd/system/mapproxy@.service
-/bin/bash -c "systemctl enable qgis-server-python@{1..${NUM_PROCESSES}}.service && systemctl start qgis-server-python@{1..${NUM_PROCESSES}}.service"
+/bin/bash -c "systemctl enable mapproxy@{1..${NUM_PROCESSES}}.service && systemctl start mapproxy@{1..${NUM_PROCESSES}}.service"
 
 
-chown -R www-data.www.data ${MAPPROXY_DIR}
-
+chown -R www-data.www-data ${MAPPROXY_DIR}
 
 systemctl restart nginx.service
 

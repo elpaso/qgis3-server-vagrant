@@ -42,11 +42,9 @@ server {
         # QGIS Server behind a VM needs this parsed values in order to automatically
         # get the correct values for the online resource URIs
         # Pass headers to proxy
-        proxy_set_header    HOST      $parsed_server_name;
-        proxy_set_header    PORT      $parsed_server_port;
-
+        proxy_set_header    X_FORWARDED_HOST  $parsed_server_name:$parsed_server_port;
+ 
         proxy_pass http://mapproxy_backend;
-
     }
 
 }

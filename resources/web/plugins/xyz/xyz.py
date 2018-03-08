@@ -38,6 +38,5 @@ class XYZFilter(QgsServerFilter):
 
 class XYZ:
     def __init__(self, serverIface):
-        # Save reference to the QGIS server interface
         serverIface.registerFilter( XYZFilter(serverIface), 100 )
     

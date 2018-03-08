@@ -22,6 +22,7 @@ echo "Runnig provisioning scripts ..."
 /vagrant/provisioning/common.sh
 /vagrant/provisioning/apache2.sh
 /vagrant/provisioning/nginx.sh
+/vagrant/provisioning/mapproxy.sh
 
 # Clean
 echo "Cleaning up ..."
