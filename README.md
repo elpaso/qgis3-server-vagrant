@@ -4,10 +4,10 @@ Yet another QGIS Server demo VM, initially prepared for Nødebo QGIS
 confererence and workshop 2017 this new version uses QGIS 3
 and offers new deployment strategies:
 
-#. Apache Fast CGI
-#. Apache CGI
-#. Nginx Fast CGI
-#. Nginx load balancing proxy to Python wsgi
++ Apache Fast CGI
++ Apache CGI
++ Nginx Fast CGI
++ Nginx load balancing proxy to Python wsgi
 
 A mapproxy demo is also installed.
 
@@ -69,9 +69,14 @@ A presentation is available in the [docs directory](docs/index.rst)
 
 From the directory that contains this README:
 
+<<<<<<< Updated upstream
 ```
 vagrant up
 ```
+=======
+    vagrant up
+
+>>>>>>> Stashed changes
 
 Follow the steps in the documentation for further setup.
 
