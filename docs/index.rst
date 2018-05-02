@@ -351,8 +351,8 @@ Nginx configuration I
 .. code:: bash
 
     rm /etc/nginx/sites-enabled/default
-    cp /vagrant/resources/nginx/qgis-server \
-        /etc/nginx/sites-enabled
+    cp /vagrant/resources/nginx/qgis-server-fcgi \
+        /etc/nginx/sites-enabled/qgis-server
     sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@" \
         /etc/nginx/sites-enabled/qgis-server
 
