@@ -608,8 +608,7 @@ Example: *SELECTION=mylayer1:3,6,9;mylayer2:1,5,6*
 
 .. code::
 
-    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
-    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.3.0&
+    http://localhost:8080/qtb/helloworld?SERVICE=WMS&VERSION=1.3.0&
     SELECTION=world%3A44&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&
     LAYERS=world&CRS=EPSG%3A4326&STYLES=&DPI=180&WIDTH=1794&HEIGHT=1194&
     BBOX=31.7944%2C-18.2153%2C58.0297%2C21.20361
@@ -639,8 +638,7 @@ Checkpoint: printing URL
 
 .. code::
 
-    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
-    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.1.1&
+    http://localhost:8080/qtb/helloworld?SERVICE=WMS&VERSION=1.1.1&
     REQUEST=GetPrint&TEMPLATE=Printable%20World&CRS=EPSG%3A4326&
     map0:EXTENT=4,52,14,58&FORMAT=png&LAYERS=bluemarble,world
 
@@ -655,8 +653,7 @@ Checkpoint: printing substitutions
 
 .. code::
 
-    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
-    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&
+    http://localhost:8080/qtb/helloworld?SERVICE=WMS&
     VERSION=1.1.1&REQUEST=GetPrint&TEMPLATE=Printable%20World
     &CRS=EPSG%3A4326&map0:EXTENT=4,52,14,58&FORMAT=png
     &LAYERS=bluemarble,world&print_title=Custom%20print%20title!
@@ -673,7 +670,7 @@ Since QGIS 2.8
     from qgis.server import QgsServer   
     s = QgsServer()
     header, body = s.handleRequest(
-        'MAP=/qgis-server/projects/helloworld.qgs' + 
+        'MAP=/qgis-server/projects/helloworld.qgs' +
         '&SERVICE=WMS&REQUEST=GetCapabilities')
     print(header, body)
 
@@ -694,7 +691,7 @@ Since QGIS 2.99
     qgs_app = QgsApplication([], False)
     qgs_server = QgsServer()
     request = QgsBufferServerRequest(
-        'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' + 
+        'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' +
         '&SERVICE=WMS&REQUEST=GetCapabilities')
     response = QgsBufferServerResponse()
     qgs_server.handleRequest(request, response)
@@ -889,4 +886,4 @@ Release cycle
 
 LTR: 12 months support
 
-https://www.qgis.org/it/site/getinvolved/development/roadmap.html#release-schedule
+https://www.qgis.org/en/site/getinvolved/development/roadmap.html#release-schedule
