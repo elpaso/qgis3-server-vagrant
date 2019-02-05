@@ -425,6 +425,18 @@ Nginx configuration V
 
 .. code:: bash
 
+        # Rewrite rule to shorten url + hide the project locations on disk
+        # E.g. you can do a http://localhost:8080/qtb/helloworld?SERVICE=WMS.. instead of
+        # http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS..
+        rewrite ^/qtb/(.*)$ /cgi-bin/qgis_mapserv.fcgi?map=/qgis-server/projects/$1.qgs last;
+
+----
+
+Nginx configuration VI
+=======================
+
+.. code:: bash
+
         location /cgi-bin/ { 
             # Disable gzip (it makes scripts feel slower since they 
             # have to complete before getting gzipped)
@@ -572,8 +584,7 @@ Searching features with **WMS**
 
 .. code::
 
-    http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?
-    MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS
+    http://localhost:8080/qtb/helloworld?SERVICE=WMS
     &REQUEST=GetFeatureInfo&CRS=EPSG%3A4326&WIDTH=1794&HEIGHT=1194
     &LAYERS=world&QUERY_LAYERS=world&
     FILTER=world%3A%22NAME%22%20%3D%20%27SPAIN%27
