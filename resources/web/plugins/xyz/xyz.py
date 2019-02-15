@@ -4,7 +4,7 @@ from qgis.server import *
 from qgis.core import QgsMessageLog
 
 def num2deg(xtile, ytile, zoom):
-    """This returns the NW-corner of the square. Use the function with xtile+1 and/or ytile+1 
+    """This returns the NW-corner of the square. Use the function with xtile+1 and/or ytile+1
     to get the other corners. With xtile+0.5 & ytile+0.5 it will return the center of the tile."""
     n = 2.0 ** zoom
     lon_deg = xtile / n * 360.0 - 180.0
@@ -16,13 +16,19 @@ def num2deg(xtile, ytile, zoom):
 class XYZFilter(QgsServerFilter):
     """XYZ server, example: ?MAP=/path/to/projects.qgs&SERVICE=XYZ&X=1&Y=0&Z=1&LAYERS=world"""
 
+    def safeGetInt(self, handler, param_name):
+        try:
+            return int(handler.parameter(param_name))
+        except ValueError:
+            return 0
+
     def requestReady(self):
         QgsMessageLog.logMessage('XYZ requestReady called!')
         handler = self.serverInterface().requestHandler()
         if handler.parameter('SERVICE') == 'XYZ':
-            x = int(handler.parameter('X'))
-            y = int(handler.parameter('Y'))
-            z = int(handler.parameter('Z'))
+            x = self.safeGetInt(handler, 'X')
+            y = self.safeGetInt(handler, 'Y')
+            z = self.safeGetInt(handler, 'Z')
             # NW corner
             lat_deg, lon_deg = num2deg(x, y, z)
             # SE corner
@@ -39,4 +45,4 @@ class XYZFilter(QgsServerFilter):
 class XYZ:
     def __init__(self, serverIface):
         serverIface.registerFilter( XYZFilter(serverIface), 100 )
-    
+
