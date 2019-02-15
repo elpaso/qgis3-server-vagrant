@@ -2,7 +2,7 @@
 # This is parsed by provisioning scripts to
 # create the final configuration file
 
-# Extract server name and port from HTTP_HOST, this 
+# Extract server name and port from HTTP_HOST, this
 # is needed because we are behind a VMs mapped port
 
 map $http_host $parsed_server_name {
@@ -18,7 +18,7 @@ map $http_host $parsed_server_port {
 upstream qgis_mapserv_backend {
 QGIS_SERVER_SOCKETS
 }
- 
+
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
@@ -39,11 +39,11 @@ server {
     # http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS..
     rewrite ^/qtb/(.*)$ /cgi-bin/qgis_mapserv.fcgi?map=/qgis-server/projects/$1.qgs last;
 
-    location /cgi-bin/ { 
+    location /cgi-bin/ {
         # Disable gzip (it makes scripts feel slower since they have to complete
         # before getting gzipped)
         gzip off;
-        
+
         # Fastcgi socket
         fastcgi_pass  qgis_mapserv_backend;
 
@@ -53,8 +53,9 @@ server {
         fastcgi_param SERVER_NAME       $parsed_server_name;
         fastcgi_param SERVER_PORT       $parsed_server_port;
 
-        # Fastcgi parameters, include the standard ones 
-        # (note: this needs to be last or it will overwrite fastcgi_param set above)
+        # Fastcgi parameters, include the standard ones
+        # Note: this needs to be last or it will take precedence over the SERVER_NAME/PORT overridden above
+        # See: https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx
         include /etc/nginx/fastcgi_params;
 
     }
