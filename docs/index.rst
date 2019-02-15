@@ -19,9 +19,10 @@
 Supported standards
 ====================
 
-+ WMS 1.3 
-+ WFS 1.0.0, 1.1.0 (currently broken) 
-+ WCS 1.1.1 
++ WMS 1.3
++ WFS 1.0.0, 1.1.0
++ WCS 1.1.1
++ WMTS 1.0.0
 
 ----
 
@@ -32,7 +33,8 @@ OGC CITE Compliance Testing
 
 CI tests:
 
-http://37.187.164.233/ogc/
+http://test.qgis.org/ogc_cite/
+
 
 ----
 
@@ -44,6 +46,7 @@ Architecture
 + WMS
 + WFS
 + WCS
++ WMTS
 + custom modules (C++ and Python)
 
 + Python plugins
@@ -98,7 +101,7 @@ Only for unprovisioned machines!
 .. code:: bash
 
     wget https://github.com/elpaso/qgis3-server-vagrant/archive/master.zip
-    unzip master.zip 
+    unzip master.zip
     rmdir /vagrant/
     mv qgis3-server-vagrant-master/ /vagrant
 
@@ -123,13 +126,16 @@ Add required repositories
 
 .. code:: bash
 
-    apt-cache policy qgis-server
     qgis-server:
-        Installed: 1:3.0.0+28bionic
-        Candidate: 1:3.0.0+28bionic
-        Version table:
-        *** 1:3.0.0+28bionic 500
-            500 http://qgis.org/debian bionic/main amd64 Packages
+    Installed: 1:3.5.0+git20190214+dabd649+28bionic
+    Candidate: 1:3.5.0+git20190214+dabd649+28bionic
+    Version table:
+    *** 1:3.5.0+git20190214+dabd649+28bionic 500
+            500 http://qgis.org/debian-nightly bionic/main amd64 Packages
+            100 /var/lib/dpkg/status
+        2.18.17+dfsg-1 500
+            500 http://archive.ubuntu.com/ubuntu bionic/universe amd64 Packages
+
 
 ----
 
@@ -140,7 +146,11 @@ Install the software
 
 .. code:: bash
 
+    # Common configuration
+    export QGIS_SERVER_DIR=/qgis-server
     export DEBIAN_FRONTEND=noninteractive
+
+    # Install QGIS server and deps
     apt-get -y install qgis-server python-qgis xvfb
 
     # Install utilities (optional)
@@ -205,13 +215,8 @@ Apache2
 
 Installation (with FCGI module)
 
-.. code:: bash 
+.. code:: bash
 
-    # Common configuration
-    export QGIS_SERVER_DIR=/qgis-server
-
-    # Install the required server software
-    export DEBIAN_FRONTEND=noninteractive
     apt-get -y install apache2 libapache2-mod-fcgid
 
 
@@ -222,7 +227,7 @@ Apache2 configuration I
 
 Configure the web server
 
-.. code:: bash 
+.. code:: bash
 
     cp /vagrant/resources/apache2/001-qgis-server.conf \
         /etc/apache2/sites-available
@@ -245,7 +250,7 @@ VirtualHost configuration for both **FastCGI** and **CGI**
 .. code:: bash
 
     <VirtualHost *:81>
-        
+
         # [ ... ] Standard config goes here
 
         # Longer timeout for WPS... default = 40
@@ -305,11 +310,11 @@ Apache2 configuration V
             Allow from all
             AddHandler cgi-script .cgi
             AddHandler fcgid-script .fcgi
-            Require all granted        
+            Require all granted
         </Directory>
 
     </VirtualHost>
-        
+
 -----
 
 Apache2 configuration VI
@@ -321,12 +326,12 @@ Enable sites and restart
 
     a2enmod rewrite # Only required by some plugins
     a2enmod cgid # Required by plain old CGI
-    a2dissite 000-default 
+    a2dissite 000-default
     a2ensite 001-qgis-server
 
     # Listen on port 81 instead of 80 (nginx)
     sed -i -e 's/Listen 80/Listen 81/' /etc/apache2/ports.conf
-   
+
     service apache2 restart # Restart the server
 
 
@@ -363,7 +368,7 @@ Nginx configuration II
 
 .. code:: bash
 
-    # Extract server name and port from HTTP_HOST, this 
+    # Extract server name and port from HTTP_HOST, this
     # is needed because we are behind a VMs mapped port
 
     map $http_host $parsed_server_name {
@@ -425,8 +430,8 @@ Nginx configuration V
 
 .. code:: bash
 
-        location /cgi-bin/ { 
-            # Disable gzip (it makes scripts feel slower since they 
+        location /cgi-bin/ {
+            # Disable gzip (it makes scripts feel slower since they
             # have to complete before getting gzipped)
             gzip off;
 
@@ -439,7 +444,7 @@ Nginx configuration V
             fastcgi_param SERVER_NAME       $parsed_server_name;
             fastcgi_param SERVER_PORT       $parsed_server_port;
 
-            # Fastcgi parameters, include the standard ones 
+            # Fastcgi parameters, include the standard ones
             # (note: this needs to be last or it will overwrite fastcgi_param set above)
             include /etc/nginx/fastcgi_params;
 
@@ -461,13 +466,13 @@ Socket
 
     [Unit]
     Description = QGIS Server FastCGI Socket (instance %i)
-    
+
     [Socket]
     SocketUser = www-data
     SocketGroup = www-data
     SocketMode = 0660
     ListenStream = /run/qgis_mapserv%i.sock
-    
+
     [Install]
     WantedBy = sockets.target
 
@@ -486,7 +491,7 @@ Service
 
     [Unit]
     Description = QGIS Server Tracker FastCGI backend (instance %i)
-    
+
     [Service]
     User = www-data
     Group = www-data
@@ -501,7 +506,7 @@ Service
 
     Restart = always
 
-   
+
 ----
 
 Systemd configuration for FastCGI 3
@@ -510,7 +515,7 @@ Systemd configuration for FastCGI 3
 Service
 
 .. code:: bash
-   
+
     # Environment
     Environment="QGIS_AUTH_DB_DIR_PATH=QGIS_SERVER_DIR/projects"
     Environment="QGIS_SERVER_LOG_FILE=QGIS_SERVER_DIR/logs/qgis-server-fcgi.log"
@@ -560,7 +565,7 @@ Check that **WFS** requires a "username" and "password"
 
 Check that **WWS** *GetFeatureInfo* returns a (blueish) formatted HTML
 
-Note: a test project with pre-configured endpoints 
+Note: a test project with pre-configured endpoints
 is available in the `resources/qgis/` directory.
 
 ----
@@ -614,7 +619,7 @@ From composer templates (with substitutions!)
 .. code:: xml
 
   <Layouts>
-    <Layout units="mm" printResolution="300" name="Printable World" 
+    <Layout units="mm" printResolution="300" name="Printable World"
     worldFileMap="{db75b0bf-f2f1-42e6-9727-1b6b21d8862e}">
     ...
 
@@ -659,10 +664,10 @@ Since QGIS 2.8
 
 .. code:: python
 
-    from qgis.server import QgsServer   
+    from qgis.server import QgsServer
     s = QgsServer()
     header, body = s.handleRequest(
-        'MAP=/qgis-server/projects/helloworld.qgs' + 
+        'MAP=/qgis-server/projects/helloworld.qgs' +
         '&SERVICE=WMS&REQUEST=GetCapabilities')
     print(header, body)
 
@@ -683,7 +688,7 @@ Since QGIS 2.99
     qgs_app = QgsApplication([], False)
     qgs_server = QgsServer()
     request = QgsBufferServerRequest(
-        'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' + 
+        'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' +
         '&SERVICE=WMS&REQUEST=GetCapabilities')
     response = QgsBufferServerResponse()
     qgs_server.handleRequest(request, response)
@@ -714,7 +719,7 @@ Fine-grained control over layers, features and attributes!
 https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/server.html#access-control-plugin
 
 
-Example: 
+Example:
 https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/accesscontrol/accesscontrol.py
 
 
@@ -747,7 +752,7 @@ Systemd
 
     [Unit]
     Description = QGIS Server Tracker Python backend (instance %i)
-    
+
     [Service]
     User = www-data
     Group = www-data
@@ -817,8 +822,8 @@ Other examples
 =====================
 
 The Python QGIS tests contain a comprehensive set
-of scripts to test all possible services of QGIS 
-Server: 
+of scripts to test all possible services of QGIS
+Server:
 
 https://github.com/qgis/QGIS/tree/master/tests/src/python
 
@@ -827,7 +832,7 @@ https://github.com/qgis/QGIS/tree/master/tests/src/python
 Authenticated layers in QGIS Server
 ===================================
 
-QGIS authentication DB `qgis-auth.db` path can be specified with 
+QGIS authentication DB `qgis-auth.db` path can be specified with
 the environment variable `QGIS_AUTH_DB_DIR_PATH`
 
 `QGIS_AUTH_PASSWORD_FILE` environment variable can contain the
