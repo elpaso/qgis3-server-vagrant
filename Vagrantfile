@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--vram", "128"]
   end
 
-    # Install the required software
+  # Install the required software
   config.vm.provision "shell",
     path: "provisioning/setup.sh",
     args: ENV['SHELL_ARGS']

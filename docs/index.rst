@@ -16,7 +16,7 @@
 ----
 
 
-Supporteds standards
+Supported standards
 ====================
 
 + WMS 1.3 
