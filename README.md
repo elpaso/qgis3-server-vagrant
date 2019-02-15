@@ -11,6 +11,9 @@ and offers new deployment strategies:
 
 A mapproxy demo is also installed.
 
+> Note: this VM was not designed for production but for demonstration purposes only.
+
+
 ## Requirements
 
 You need a working installation of Vagrant with Virtualbox.
@@ -22,7 +25,16 @@ https://www.virtualbox.org/wiki/Downloads
 
 For disk resizing you will also need the Vagrant plugin `vagrant-disksize`, you can install the plugin with:
 
-    vagrant plugin install vagrant-disksize
+```
+vagrant plugin install vagrant-disksize
+```
+
+> Note: if you have any issue installing `vagrant-disksize` plugin, you can try to upgrade Vagrant with the following command (adapt the version numbers to the newest available release)
+
+```
+wget -c https://releases.hashicorp.com/vagrant/2.0.3/vagrant_2.0.3_x86_64.deb
+sudo dpkg -i vagrant_2.0.3_x86_64.deb
+```
 
 
 ## Features
