@@ -20,8 +20,8 @@ You need a working installation of Vagrant with Virtualbox.
 
 Please follow the installation instructions here:
 
-https://www.vagrantup.com/docs/installation/
 https://www.virtualbox.org/wiki/Downloads
+https://www.vagrantup.com/docs/installation/
 
 For disk resizing you will also need the Vagrant plugin `vagrant-disksize`, you can install the plugin with:
 
@@ -29,7 +29,7 @@ For disk resizing you will also need the Vagrant plugin `vagrant-disksize`, you 
 vagrant plugin install vagrant-disksize
 ```
 
-> Note: if you have any issue installing `vagrant-disksize` plugin, you can try to upgrade Vagrant with the following command (adapt the version numbers to the newest available release)
+> Note: if you have any issue installing `vagrant-disksize` plugin on Linux, you can try to upgrade Vagrant with the following command (adapt the version numbers to the newest available release)
 
 ```
 wget -c https://releases.hashicorp.com/vagrant/2.0.3/vagrant_2.0.3_x86_64.deb
@@ -86,4 +86,13 @@ vagrant up
 ```
 
 Follow the steps in the documentation for further setup.
+
+
+### Details of the provisioning scripts
+
+The provisioning scripts are contained in the directory `provisioning`.
+
+The common configuration for all the scripts is in `config.sh`.
+
+The main script is `setup.sh` which calls all the other scripts.
 
