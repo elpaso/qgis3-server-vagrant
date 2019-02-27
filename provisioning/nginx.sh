@@ -8,7 +8,6 @@ set -e
 echo "Changing QGIS_SERVER_DIR to ${QGIS_SERVER_DIR} ..."
 
 # Install the software
-export DEBIAN_FRONTEND=noninteractive
 apt-get -y install nginx uwsgi
 
 # Configure the web server

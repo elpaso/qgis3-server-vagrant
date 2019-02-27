@@ -14,11 +14,11 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-key CAEB3DC3BDF7FB45
 echo 'deb http://qgis.org/debian-nightly bionic main' > /etc/apt/sources.list.d/debian-gis.list
 
 # Update && upgrade packages
-export DEBIAN_FRONTEND=noninteractive
 apt-get update && apt-get -y upgrade
 
 # Install the software
-apt-get -y install qgis-server python-qgis xvfb
+# Temporary workaround: overwrite is required because of a packaging bug
+apt-get -y install -o Dpkg::Options::="--force-overwrite" qgis-server python3-qgis xvfb
 
 # Install utilities (optional)
 apt-get -y install vim unzip ipython3

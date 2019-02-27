@@ -8,16 +8,15 @@ set -e
 echo "Changing QGIS_SERVER_DIR to ${QGIS_SERVER_DIR} ..."
 
 # Install the software
-export DEBIAN_FRONTEND=noninteractive
 
-apt-get install -y python3-pil python3-yaml libproj12 python3-shapely
+apt-get install -y python3-pil python3-yaml libproj12 python3-shapely python3-pip
 pip3 install virtualenv
 
 MAPPROXY_DIR=${QGIS_SERVER_DIR}/mapproxy
 
 if [ ! -e ${MAPPROXY_DIR} ]; then
     mkdir -p ${MAPPROXY_DIR}
-fi 
+fi
 
 virtualenv --system-site-packages ${MAPPROXY_DIR}
 source ${MAPPROXY_DIR}/bin/activate
@@ -31,11 +30,10 @@ mapproxy-util create -t wsgi-app --force -f myconfig/mapproxy.yaml myconfig.py
 # Overwrite with prepared configuration
 cp /vagrant/resources/mapproxy/mapproxy.yaml ${MAPPROXY_DIR}/myconfig/
 
-popd 
+popd
 
 
 # Install the software
-export DEBIAN_FRONTEND=noninteractive
 apt-get -y install nginx uwsgi
 
 # Configure mapp nginx conf

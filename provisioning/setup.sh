@@ -8,10 +8,8 @@ set -e
 . /vagrant/provisioning/config.sh
 
 
-export LC_ALL=C 
+export LC_ALL=C
 export DEBIAN_FRONTEND=noninteractive
-
-sudo adduser vagrant sudo
 
 # Fix DNS for gnupg import key
 sed -i -e 's/nameserver.*/nameserver 8.8.8.8/' /etc/resolv.conf
