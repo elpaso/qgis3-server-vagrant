@@ -151,7 +151,7 @@ Install the software
     export DEBIAN_FRONTEND=noninteractive
 
     # Install QGIS server and deps
-    apt-get -y install qgis-server python-qgis xvfb
+    apt-get -y install qgis-server python3-qgis xvfb
 
     # Install utilities (optional)
     apt-get -y install vim unzip ipython3
@@ -783,7 +783,7 @@ Systemd
     Environment="QGIS_SERVER_LOG_LEVEL=0"
     Environment="QGIS_DEBUG=1"
     # Temporary workaround for #18230
-    Environment="QGIS_PREFIX_PATH=/usr"
+    # Not required in 3.4: Environment="QGIS_PREFIX_PATH=/usr"
     Environment="DISPLAY=:99"
     Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
     Environment="QGIS_OPTIONS_PATH=/qgis-server"
