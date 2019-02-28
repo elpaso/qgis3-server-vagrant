@@ -606,6 +606,7 @@ Full list:  https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/s
 + **WITH_MAPTIPS** (FALSE|TRUE)
 
 .. code::
+
     http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?
     INFO_FORMAT=application/json&MAP=/qgis-server/projects/helloworld.qgs
     &SERVICE=WMS&REQUEST=GetFeatureInfo&CRS=EPSG%3A4326&WIDTH=1794&HEIGHT=1194&LAYERS=world&
