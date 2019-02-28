@@ -1,0 +1,197 @@
+
+/* ABP: custom per singolo tema */
+
+
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
+
+
+.scale-50 {
+    width: 50%;
+}
+
+.step {
+    width: 960px;
+    height: 600px;
+}
+
+p > tt {
+    font-weight: bold;
+    color: rgb(29, 126, 0);
+}
+
+body {
+    background: white;
+    color: #222;
+    font-family: 'Libre Baskerville', sans-serif;
+    font-size: 150%;
+}
+
+.step img {
+    max-height: 75%;
+    max-width: 80%;
+}
+
+table p {
+    margin: 0;
+    padding: 0.5em;
+}
+
+:link, :visited {text-decoration: none;color:green;}
+
+
+table {
+    border-collapse:collapse;
+}
+
+table th {
+    border: solid 1px rgb(146, 146, 146);
+}
+
+table td {
+    border: solid 1px rgb(146, 146, 146);
+}
+
+blockquote {
+    color: #92CC47;
+    font-style: italic;
+}
+
+strong {
+    color: green;
+}
+
+div.sidebar {
+    background-color:#FFFF66;
+    color: black;
+    /*border:medium outset;*/
+    clear:right;
+    float:right;
+    /*margin:0 0 0.5em 1em;*/
+    /*padding:1em;*/
+    width:30%;
+
+}
+
+div.sidebar p{
+    padding: 0 1em 1em 1em;
+    font-size: 70%;
+}
+
+div.sidebar ul {
+    font-size: 70%;
+    margin-top:0;
+}
+
+
+div.sidebar p.sidebar-title {
+    cursor: pointer;
+    padding: 1em;
+    font-weight: bold;
+    font-size: 80%;
+    margin:0;
+    color: #23392F;
+}
+
+
+#controls #navLinks a {
+    font-size: 24px;
+}
+
+#controls #navLinks {
+    height: 60px;
+}
+
+dt {
+    font-weight:bold;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+
+.borderless td, .borderless th{
+    border: solid 1px transparent;
+}
+
+div#header, div#footer {
+    background:none repeat scroll 0 0 #ddd;
+    font-family:sans-serif;
+}
+
+
+
+div#footer {
+    /*border-top: solid 2px green;*/
+}
+
+em {
+    color: brown;
+    /*font-weight: bold;*/
+    /*text-shadow: 0 0 3px #FF0000;*/
+}
+
+img.align-right {
+    float: right;
+    }
+
+img.align-left{
+    float: left;
+    }
+
+h1 strong {color: inherit}
+
+.sidebar em
+,.sidebar cite{
+    color: #CC0000;
+}
+
+
+tt.docutils ,
+pre.literal-block, pre.doctest-block,
+div.sidebar
+{
+    background-color: #f9f2f4;
+    border-radius: 4px;
+    color: #c7254e;
+}
+
+blockquote {
+    color: #338833;
+    font-style: italic;
+}
+
+.slide h1 {
+    background-color: #ddd;
+    margin-right: 50px;
+    border-radius: 4px;
+}
+
+
+.slide ul ul li p {
+    margin: 0 4px;
+}
+
+
+li dt {
+    font-weight:normal;
+}
+
+ul li {
+    margin: 0.5em 0;
+}
+
+#qgis-core table th {
+    text-align: center;
+    border: solid 1px gray;
+}
+
+#qgis-core table td {
+    text-align: right;
+    width: 5em;
+    border: solid 1px gray;
+}
+
+.slide > h1 {
+    text-shadow: #aaa 0 2px 3px;
+}
