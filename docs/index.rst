@@ -1,8 +1,9 @@
 :data-transition-duration: 2000
 :skip-help: true
+:css: css/custom-hov.css
 :css: css/custom.css
 
-.. title:: QGIS Server Workshop 2018
+.. title:: QGIS Server Workshop 2019
 
 .. header::
 
@@ -11,7 +12,7 @@
 
 .. footer::
 
-    Introduction to QGIS Server Workshop 2018
+    Introduction to QGIS Server Workshop 2019
 
 ----
 
@@ -41,7 +42,7 @@ http://test.qgis.org/ogc_cite/
 Architecture
 =============
 
-`SERVICE` modules
+``SERVICE`` modules
 
 + WMS
 + WFS
@@ -89,7 +90,7 @@ SSH into the machine
     vagrant ssh
     sudo su -
 
-**Checkpoint**: you need to be able to log into the machine and become `root`
+**Checkpoint**: you need to be able to log into the machine and become ``root``
 
 ----
 
@@ -399,7 +400,9 @@ Load balancing
 
     }
 
-Note: sessions and persistence (ip-hash)!
+.. note::
+
+    Sessions and persistence (ip-hash)!
 
 ----
 
@@ -454,7 +457,7 @@ Nginx configuration V
 
 ----
 
-Systemd configuration for FastCGI
+Systemd config for FastCGI
 ===================================
 
 Socket
@@ -479,7 +482,7 @@ Socket
 ----
 
 
-Systemd configuration for FastCGI 2
+Systemd config for FastCGI 2
 ===================================
 
 Service
@@ -509,7 +512,7 @@ Service
 
 ----
 
-Systemd configuration for FastCGI 3
+Systemd config for FastCGI 3
 ===================================
 
 Service
@@ -566,7 +569,7 @@ Check that **WFS** requires a "username" and "password"
 Check that **WWS** *GetFeatureInfo* returns a (blueish) formatted HTML
 
 Note: a test project with pre-configured endpoints
-is available in the `resources/qgis/` directory.
+is available in the ``resources/qgis/`` directory.
 
 ----
 
@@ -592,6 +595,23 @@ The filter is a QGIS Expression:
 
 
 ----
+
+WMS vendor parameters
+=======================
+
+Full list:  https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/server/services.html
+
+
++ **WITH_GEOMETRY** (FALSE|TRUE)
++ **WITH_MAPTIPS** (FALSE|TRUE)
+
+.. code::
+    http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?
+    INFO_FORMAT=application/json&MAP=/qgis-server/projects/helloworld.qgs
+    &SERVICE=WMS&REQUEST=GetFeatureInfo&CRS=EPSG%3A4326&WIDTH=1794&HEIGHT=1194&LAYERS=world&
+    WITH_GEOMETRY=TRUE&QUERY_LAYERS=world&FILTER=world%3A%22NAME%22%20%3D%20%27SPAIN%27
+
+---
 
 Checkpoint: highlighting
 =================================
@@ -705,6 +725,8 @@ QGIS Server and python plugins
 
 See presentation: http://www.itopen.it/bulk/nodebo/Presentations/Server%20Plugins/index.html
 
+API: Server https://qgis.org/pyqgis/master/server/index.html
+
 There are no substantial differences between plugins API in 2.x and 3.x
 
 ----
@@ -737,6 +759,23 @@ You can now create custom services in pure *Python*.
 Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customservice/customservice.py
 
 ----
+
+QGIS Server Python app: the basics
+==================================
+
+.. code:: python
+
+    from qgis.core import *
+    from qgis.server import *
+    app = QgsApplication([], False)
+    s = QgsServer()
+    request = QgsBufferServerRequest('?MAP=/qgis-server/projects/helloworld.qgs&REQUEST=GetCapabilities&SERVICE=WMS')
+    response = QgsBufferServerResponse()
+    s.handleRequest(request, response)
+    print(response.body().data().decode('utf8'))
+
+
+-----
 
 QGIS Server Python application 1
 ================================
@@ -832,13 +871,15 @@ https://github.com/qgis/QGIS/tree/master/tests/src/python
 Authenticated layers in QGIS Server
 ===================================
 
-QGIS authentication DB `qgis-auth.db` path can be specified with
-the environment variable `QGIS_AUTH_DB_DIR_PATH`
+QGIS authentication DB ``qgis-auth.db`` path can be specified with
+the environment variable ``QGIS_AUTH_DB_DIR_PATH``
 
-`QGIS_AUTH_PASSWORD_FILE` environment variable can contain the
+``QGIS_AUTH_PASSWORD_FILE`` environment variable can contain the
 master password required to decrypt the authentication DB.
 
-Note: ensure to limit the file as only readable by the Server’s process user and to not store the file within web-accessible directories.
+.. warning::
+
+    Make sure to limit the file as only readable by the Server’s process user and to not store the file within web-accessible directories.
 
 ----
 
@@ -846,14 +887,14 @@ Parallel rendering
 ============================================
 
 
-`QGIS_SERVER_PARALLEL_RENDERING`
+``QGIS_SERVER_PARALLEL_RENDERING``
 
 Activates parallel rendering for WMS GetMap requests. It’s disabled (false) by default. Available values are:
 
 0 or false (case insensitive)
 1 or true (case insensitive)
 
-`QGIS_SERVER_MAX_THREADS`
+``QGIS_SERVER_MAX_THREADS``
 
 Number of threads to use when parallel rendering is activated. Default value is -1 to use the number of processor cores.
 
@@ -864,19 +905,20 @@ Logging
 =======
 
 
-`QGIS_SERVER_LOG_FILE`
+``QGIS_SERVER_LOG_FILE``
 
 Specify path and filename. Make sure that server has proper permissions for writing to file. File should be created automatically, just send some requests to server. If it’s not there, check permissions.
 
 
-`QGIS_SERVER_LOG_LEVEL`
+``QGIS_SERVER_LOG_LEVEL``
 
 Specify desired log level. Available values are:
 
-0 or `INFO` (log all requests)
-1 or `WARNING`
-2 or `CRITICAL` (log just critical errors, suitable for production purposes)
+0 or ``INFO`` (log all requests)
+1 or ``WARNING``
+2 or ``CRITICAL`` (log just critical errors, suitable for production purposes)
 
+-----
 
 Release cycle
 =============
