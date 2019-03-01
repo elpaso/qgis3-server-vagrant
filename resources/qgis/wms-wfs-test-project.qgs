@@ -1,5 +1,6 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="3.1.0-Master" projectname="">
+<qgis version="3.7.0-Master" projectname="">
+  <homePath path=""/>
   <title></title>
   <autotransaction active="0"/>
   <evaluateDefaultValues active="0"/>
@@ -18,19 +19,22 @@
   </projectCrs>
   <layer-tree-group>
     <customproperties/>
-    <layer-tree-layer checked="Qt::Checked" source="user='username' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='restricted' url='http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table=&quot;&quot; sql=" expanded="1" id="restricted_871115fd_fc90_4174_b536_1412ad8c097f" name="restricted" providerKey="WFS">
+    <layer-tree-layer id="world_c7545d57_2c94_4d52_894e_3efce543f109" name="world 2082" source="user='username' pagingEnabled='true' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='world' url='http://localhost:8082/cgi-bin/qgis_mapserv.cgi?MAP=/qgis-server/projects/helloworld.qgs' version='auto' table=&quot;&quot; sql=" checked="Qt::Checked" providerKey="WFS" expanded="1">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer checked="Qt::Checked" source="user='username' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='world' url='http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table=&quot;&quot; sql=" expanded="1" id="world_c1508bba_e3df_4b63_8b13_47f2630afdb7" name="world" providerKey="WFS">
+    <layer-tree-layer id="restricted_871115fd_fc90_4174_b536_1412ad8c097f" name="restricted" source="user='username' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='restricted' url='http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table=&quot;&quot; sql=" checked="Qt::Unchecked" providerKey="WFS" expanded="1">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer checked="Qt::Unchecked" source="contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=restricted&amp;styles=&amp;url=http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs" expanded="0" id="restricted_7432ee84_6f8d_4a89_b6f0_0a23404f09d1" name="restricted" providerKey="wms">
+    <layer-tree-layer id="world_c1508bba_e3df_4b63_8b13_47f2630afdb7" name="world" source="user='username' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='world' url='http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table=&quot;&quot; sql=" checked="Qt::Unchecked" providerKey="WFS" expanded="1">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer checked="Qt::Unchecked" source="contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=world&amp;styles=&amp;url=http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs" expanded="0" id="world_3e36ee67_5bf2_4d18_9a9c_f210b25d7b6f" name="world" providerKey="wms">
+    <layer-tree-layer id="restricted_7432ee84_6f8d_4a89_b6f0_0a23404f09d1" name="restricted" source="contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=restricted&amp;styles=&amp;url=http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs" checked="Qt::Unchecked" providerKey="wms" expanded="0">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer checked="Qt::Unchecked" source="contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=bluemarble&amp;styles=&amp;url=http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs" expanded="0" id="bluemarble_610e4919_0565_4580_ac9e_710fbfcdcc00" name="bluemarble" providerKey="wms">
+    <layer-tree-layer id="world_3e36ee67_5bf2_4d18_9a9c_f210b25d7b6f" name="world" source="contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=world&amp;styles=&amp;url=http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs" checked="Qt::Unchecked" providerKey="wms" expanded="0">
+      <customproperties/>
+    </layer-tree-layer>
+    <layer-tree-layer id="bluemarble_610e4919_0565_4580_ac9e_710fbfcdcc00" name="bluemarble" source="contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=bluemarble&amp;styles=&amp;url=http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs" checked="Qt::Unchecked" providerKey="wms" expanded="0">
       <customproperties/>
     </layer-tree-layer>
     <custom-order enabled="0">
@@ -39,22 +43,24 @@
       <item>bluemarble_610e4919_0565_4580_ac9e_710fbfcdcc00</item>
       <item>world_c1508bba_e3df_4b63_8b13_47f2630afdb7</item>
       <item>restricted_871115fd_fc90_4174_b536_1412ad8c097f</item>
+      <item>world_c7545d57_2c94_4d52_894e_3efce543f109</item>
     </custom-order>
   </layer-tree-group>
-  <snapping-settings mode="2" enabled="0" unit="1" type="1" tolerance="12" intersection-snapping="0">
+  <snapping-settings type="1" enabled="0" intersection-snapping="0" tolerance="12" unit="1" mode="2">
     <individual-layer-settings>
-      <layer-setting units="1" enabled="0" type="1" tolerance="12" id="restricted_871115fd_fc90_4174_b536_1412ad8c097f"/>
-      <layer-setting units="1" enabled="0" type="1" tolerance="12" id="world_c1508bba_e3df_4b63_8b13_47f2630afdb7"/>
+      <layer-setting type="1" enabled="0" id="restricted_871115fd_fc90_4174_b536_1412ad8c097f" tolerance="12" units="1"/>
+      <layer-setting type="1" enabled="0" id="world_c1508bba_e3df_4b63_8b13_47f2630afdb7" tolerance="12" units="1"/>
+      <layer-setting type="1" enabled="0" id="world_c7545d57_2c94_4d52_894e_3efce543f109" tolerance="12" units="1"/>
     </individual-layer-settings>
   </snapping-settings>
   <relations/>
-  <mapcanvas annotationsVisible="1" name="theMapCanvas">
+  <mapcanvas name="theMapCanvas" annotationsVisible="1">
     <units>degrees</units>
     <extent>
-      <xmin>-16.40587293422103699</xmin>
-      <ymin>12.96982074721777423</ymin>
-      <xmax>78.09412706577896301</xmax>
-      <ymax>58.54601574721785795</ymax>
+      <xmin>-171.89262329637048765</xmin>
+      <ymin>-85.05094443385711145</ymin>
+      <xmax>206.10737670362951235</xmax>
+      <ymax>97.25383556614322345</ymax>
     </extent>
     <rotation>0</rotation>
     <destinationsrs>
@@ -70,45 +76,124 @@
       </spatialrefsys>
     </destinationsrs>
     <rendermaptile>0</rendermaptile>
+    <expressionContextScope/>
   </mapcanvas>
+  <projectModels/>
   <legend updateDrawingOrder="true">
-    <legendlayer checked="Qt::Checked" drawingOrder="-1" showFeatureCount="0" open="true" name="restricted">
-      <filegroup hidden="false" open="true">
-        <legendlayerfile layerid="restricted_871115fd_fc90_4174_b536_1412ad8c097f" visible="1" isInOverview="0"/>
+    <legendlayer open="true" showFeatureCount="0" name="world 2082" checked="Qt::Checked" drawingOrder="-1">
+      <filegroup open="true" hidden="false">
+        <legendlayerfile visible="1" isInOverview="0" layerid="world_c7545d57_2c94_4d52_894e_3efce543f109"/>
       </filegroup>
     </legendlayer>
-    <legendlayer checked="Qt::Checked" drawingOrder="-1" showFeatureCount="0" open="true" name="world">
-      <filegroup hidden="false" open="true">
-        <legendlayerfile layerid="world_c1508bba_e3df_4b63_8b13_47f2630afdb7" visible="1" isInOverview="0"/>
+    <legendlayer open="true" showFeatureCount="0" name="restricted" checked="Qt::Unchecked" drawingOrder="-1">
+      <filegroup open="true" hidden="false">
+        <legendlayerfile visible="0" isInOverview="0" layerid="restricted_871115fd_fc90_4174_b536_1412ad8c097f"/>
       </filegroup>
     </legendlayer>
-    <legendlayer checked="Qt::Unchecked" drawingOrder="-1" showFeatureCount="0" open="false" name="restricted">
-      <filegroup hidden="false" open="false">
-        <legendlayerfile layerid="restricted_7432ee84_6f8d_4a89_b6f0_0a23404f09d1" visible="0" isInOverview="0"/>
+    <legendlayer open="true" showFeatureCount="0" name="world" checked="Qt::Unchecked" drawingOrder="-1">
+      <filegroup open="true" hidden="false">
+        <legendlayerfile visible="0" isInOverview="0" layerid="world_c1508bba_e3df_4b63_8b13_47f2630afdb7"/>
       </filegroup>
     </legendlayer>
-    <legendlayer checked="Qt::Unchecked" drawingOrder="-1" showFeatureCount="0" open="false" name="world">
-      <filegroup hidden="false" open="false">
-        <legendlayerfile layerid="world_3e36ee67_5bf2_4d18_9a9c_f210b25d7b6f" visible="0" isInOverview="0"/>
+    <legendlayer open="false" showFeatureCount="0" name="restricted" checked="Qt::Unchecked" drawingOrder="-1">
+      <filegroup open="false" hidden="false">
+        <legendlayerfile visible="0" isInOverview="0" layerid="restricted_7432ee84_6f8d_4a89_b6f0_0a23404f09d1"/>
       </filegroup>
     </legendlayer>
-    <legendlayer checked="Qt::Unchecked" drawingOrder="-1" showFeatureCount="0" open="false" name="bluemarble">
-      <filegroup hidden="false" open="false">
-        <legendlayerfile layerid="bluemarble_610e4919_0565_4580_ac9e_710fbfcdcc00" visible="0" isInOverview="0"/>
+    <legendlayer open="false" showFeatureCount="0" name="world" checked="Qt::Unchecked" drawingOrder="-1">
+      <filegroup open="false" hidden="false">
+        <legendlayerfile visible="0" isInOverview="0" layerid="world_3e36ee67_5bf2_4d18_9a9c_f210b25d7b6f"/>
+      </filegroup>
+    </legendlayer>
+    <legendlayer open="false" showFeatureCount="0" name="bluemarble" checked="Qt::Unchecked" drawingOrder="-1">
+      <filegroup open="false" hidden="false">
+        <legendlayerfile visible="0" isInOverview="0" layerid="bluemarble_610e4919_0565_4580_ac9e_710fbfcdcc00"/>
       </filegroup>
     </legendlayer>
   </legend>
   <mapViewDocks/>
+  <mapcanvas name="mAreaCanvas" annotationsVisible="1">
+    <units>degrees</units>
+    <extent>
+      <xmin>0</xmin>
+      <ymin>0</ymin>
+      <xmax>0</xmax>
+      <ymax>0</ymax>
+    </extent>
+    <rotation>0</rotation>
+    <destinationsrs>
+      <spatialrefsys>
+        <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+        <srsid>3452</srsid>
+        <srid>4326</srid>
+        <authid>EPSG:4326</authid>
+        <description>WGS 84</description>
+        <projectionacronym>longlat</projectionacronym>
+        <ellipsoidacronym>WGS84</ellipsoidacronym>
+        <geographicflag>true</geographicflag>
+      </spatialrefsys>
+    </destinationsrs>
+    <rendermaptile>0</rendermaptile>
+    <expressionContextScope/>
+  </mapcanvas>
+  <mapcanvas name="mAreaCanvas" annotationsVisible="1">
+    <units>degrees</units>
+    <extent>
+      <xmin>0</xmin>
+      <ymin>0</ymin>
+      <xmax>0</xmax>
+      <ymax>0</ymax>
+    </extent>
+    <rotation>0</rotation>
+    <destinationsrs>
+      <spatialrefsys>
+        <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+        <srsid>3452</srsid>
+        <srid>4326</srid>
+        <authid>EPSG:4326</authid>
+        <description>WGS 84</description>
+        <projectionacronym>longlat</projectionacronym>
+        <ellipsoidacronym>WGS84</ellipsoidacronym>
+        <geographicflag>true</geographicflag>
+      </spatialrefsys>
+    </destinationsrs>
+    <rendermaptile>0</rendermaptile>
+    <expressionContextScope/>
+  </mapcanvas>
+  <mapcanvas name="mAreaCanvas" annotationsVisible="1">
+    <units>degrees</units>
+    <extent>
+      <xmin>0</xmin>
+      <ymin>0</ymin>
+      <xmax>0</xmax>
+      <ymax>0</ymax>
+    </extent>
+    <rotation>0</rotation>
+    <destinationsrs>
+      <spatialrefsys>
+        <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+        <srsid>3452</srsid>
+        <srid>4326</srid>
+        <authid>EPSG:4326</authid>
+        <description>WGS 84</description>
+        <projectionacronym>longlat</projectionacronym>
+        <ellipsoidacronym>WGS84</ellipsoidacronym>
+        <geographicflag>true</geographicflag>
+      </spatialrefsys>
+    </destinationsrs>
+    <rendermaptile>0</rendermaptile>
+    <expressionContextScope/>
+  </mapcanvas>
   <projectlayers>
-    <maplayer refreshOnNotifyEnabled="0" refreshOnNotifyMessage="" maxScale="0" autoRefreshTime="0" minScale="1e+8" type="raster" autoRefreshEnabled="0" hasScaleBasedVisibilityFlag="0">
+    <maplayer refreshOnNotifyEnabled="0" type="raster" autoRefreshEnabled="0" maxScale="0" minScale="1e+08" autoRefreshTime="0" styleCategories="AllStyleCategories" hasScaleBasedVisibilityFlag="0" refreshOnNotifyMessage="">
       <extent>
-        <xmin>-189</xmin>
-        <ymin>-123.8160000000000025</ymin>
-        <xmax>189</xmax>
-        <ymax>117.43899999999999295</ymax>
+        <xmin>-180</xmin>
+        <ymin>-90</ymin>
+        <xmax>180</xmax>
+        <ymax>90</ymax>
       </extent>
       <id>bluemarble_610e4919_0565_4580_ac9e_710fbfcdcc00</id>
-      <datasource>contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=bluemarble&amp;styles=&amp;url=http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs</datasource>
+      <datasource>contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=bluemarble&amp;styles=&amp;url=http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -132,83 +217,7 @@
         <type></type>
         <title></title>
         <abstract></abstract>
-        <fees></fees>
-        <encoding></encoding>
-        <crs>
-          <spatialrefsys>
-            <proj4></proj4>
-            <srsid>0</srsid>
-            <srid>0</srid>
-            <authid></authid>
-            <description></description>
-            <projectionacronym></projectionacronym>
-            <ellipsoidacronym></ellipsoidacronym>
-            <geographicflag>true</geographicflag>
-          </spatialrefsys>
-        </crs>
-        <extent/>
         <links/>
-      </resourceMetadata>
-      <customproperties>
-        <property key="identify/format" value="Html"/>
-      </customproperties>
-      <provider>wms</provider>
-      <noData>
-        <noDataList useSrcNoData="0" bandNo="1"/>
-      </noData>
-      <map-layer-style-manager current="default">
-        <map-layer-style name="default"/>
-      </map-layer-style-manager>
-      <pipe>
-        <rasterrenderer band="1" opacity="1" type="singlebandcolordata" alphaBand="-1">
-          <rasterTransparency/>
-          <minMaxOrigin>
-            <limits>None</limits>
-            <extent>WholeRaster</extent>
-            <statAccuracy>Estimated</statAccuracy>
-            <cumulativeCutLower>0.02</cumulativeCutLower>
-            <cumulativeCutUpper>0.98</cumulativeCutUpper>
-            <stdDevFactor>2</stdDevFactor>
-          </minMaxOrigin>
-        </rasterrenderer>
-        <brightnesscontrast brightness="0" contrast="0"/>
-        <huesaturation colorizeOn="0" colorizeStrength="100" grayscaleMode="0" colorizeRed="255" colorizeBlue="128" colorizeGreen="128" saturation="0"/>
-        <rasterresampler maxOversampling="2"/>
-      </pipe>
-      <blendMode>0</blendMode>
-    </maplayer>
-    <maplayer refreshOnNotifyEnabled="0" refreshOnNotifyMessage="" maxScale="0" autoRefreshTime="0" minScale="1e+8" type="raster" autoRefreshEnabled="0" hasScaleBasedVisibilityFlag="0">
-      <extent>
-        <xmin>-189</xmin>
-        <ymin>-123.8160000000000025</ymin>
-        <xmax>189</xmax>
-        <ymax>117.43899999999999295</ymax>
-      </extent>
-      <id>restricted_7432ee84_6f8d_4a89_b6f0_0a23404f09d1</id>
-      <datasource>contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=restricted&amp;styles=&amp;url=http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs</datasource>
-      <keywordList>
-        <value></value>
-      </keywordList>
-      <layername>restricted</layername>
-      <srs>
-        <spatialrefsys>
-          <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
-          <srsid>3452</srsid>
-          <srid>4326</srid>
-          <authid>EPSG:4326</authid>
-          <description>WGS 84</description>
-          <projectionacronym>longlat</projectionacronym>
-          <ellipsoidacronym>WGS84</ellipsoidacronym>
-          <geographicflag>true</geographicflag>
-        </spatialrefsys>
-      </srs>
-      <resourceMetadata>
-        <identifier></identifier>
-        <parentidentifier></parentidentifier>
-        <language></language>
-        <type></type>
-        <title></title>
-        <abstract></abstract>
         <fees></fees>
         <encoding></encoding>
         <crs>
@@ -224,11 +233,7 @@
           </spatialrefsys>
         </crs>
         <extent/>
-        <links/>
       </resourceMetadata>
-      <customproperties>
-        <property key="identify/format" value="Html"/>
-      </customproperties>
       <provider>wms</provider>
       <noData>
         <noDataList useSrcNoData="0" bandNo="1"/>
@@ -236,8 +241,16 @@
       <map-layer-style-manager current="default">
         <map-layer-style name="default"/>
       </map-layer-style-manager>
+      <flags>
+        <Identifiable>1</Identifiable>
+        <Removable>1</Removable>
+        <Searchable>1</Searchable>
+      </flags>
+      <customproperties>
+        <property value="Html" key="identify/format"/>
+      </customproperties>
       <pipe>
-        <rasterrenderer band="1" opacity="1" type="singlebandcolordata" alphaBand="-1">
+        <rasterrenderer type="singlebandcolordata" band="1" opacity="1" alphaBand="-1">
           <rasterTransparency/>
           <minMaxOrigin>
             <limits>None</limits>
@@ -248,21 +261,21 @@
             <stdDevFactor>2</stdDevFactor>
           </minMaxOrigin>
         </rasterrenderer>
-        <brightnesscontrast brightness="0" contrast="0"/>
-        <huesaturation colorizeOn="0" colorizeStrength="100" grayscaleMode="0" colorizeRed="255" colorizeBlue="128" colorizeGreen="128" saturation="0"/>
+        <brightnesscontrast contrast="0" brightness="0"/>
+        <huesaturation colorizeOn="0" colorizeBlue="128" colorizeRed="255" grayscaleMode="0" colorizeGreen="128" saturation="0" colorizeStrength="100"/>
         <rasterresampler maxOversampling="2"/>
       </pipe>
       <blendMode>0</blendMode>
     </maplayer>
-    <maplayer refreshOnNotifyEnabled="0" readOnly="0" refreshOnNotifyMessage="" simplifyDrawingHints="1" simplifyAlgorithm="0" maxScale="0" autoRefreshTime="0" minScale="1e+8" geometry="Polygon" labelsEnabled="0" simplifyDrawingTol="1" type="vector" autoRefreshEnabled="0" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="1">
+    <maplayer refreshOnNotifyEnabled="0" type="raster" autoRefreshEnabled="0" maxScale="0" minScale="1e+08" autoRefreshTime="0" styleCategories="AllStyleCategories" hasScaleBasedVisibilityFlag="0" refreshOnNotifyMessage="">
       <extent>
         <xmin>-180</xmin>
         <ymin>-90</ymin>
         <xmax>180</xmax>
         <ymax>83.62359999999999616</ymax>
       </extent>
-      <id>restricted_871115fd_fc90_4174_b536_1412ad8c097f</id>
-      <datasource>user='username' password='password' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='restricted' url='http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table="" sql=</datasource>
+      <id>restricted_7432ee84_6f8d_4a89_b6f0_0a23404f09d1</id>
+      <datasource>contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=restricted&amp;styles=&amp;url=http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -286,6 +299,7 @@
         <type></type>
         <title></title>
         <abstract></abstract>
+        <links/>
         <fees></fees>
         <encoding></encoding>
         <crs>
@@ -301,21 +315,108 @@
           </spatialrefsys>
         </crs>
         <extent/>
+      </resourceMetadata>
+      <provider>wms</provider>
+      <noData>
+        <noDataList useSrcNoData="0" bandNo="1"/>
+      </noData>
+      <map-layer-style-manager current="default">
+        <map-layer-style name="default"/>
+      </map-layer-style-manager>
+      <flags>
+        <Identifiable>1</Identifiable>
+        <Removable>1</Removable>
+        <Searchable>1</Searchable>
+      </flags>
+      <customproperties>
+        <property value="Html" key="identify/format"/>
+      </customproperties>
+      <pipe>
+        <rasterrenderer type="singlebandcolordata" band="1" opacity="1" alphaBand="-1">
+          <rasterTransparency/>
+          <minMaxOrigin>
+            <limits>None</limits>
+            <extent>WholeRaster</extent>
+            <statAccuracy>Estimated</statAccuracy>
+            <cumulativeCutLower>0.02</cumulativeCutLower>
+            <cumulativeCutUpper>0.98</cumulativeCutUpper>
+            <stdDevFactor>2</stdDevFactor>
+          </minMaxOrigin>
+        </rasterrenderer>
+        <brightnesscontrast contrast="0" brightness="0"/>
+        <huesaturation colorizeOn="0" colorizeBlue="128" colorizeRed="255" grayscaleMode="0" colorizeGreen="128" saturation="0" colorizeStrength="100"/>
+        <rasterresampler maxOversampling="2"/>
+      </pipe>
+      <blendMode>0</blendMode>
+    </maplayer>
+    <maplayer simplifyDrawingTol="1" simplifyLocal="1" refreshOnNotifyEnabled="0" type="vector" autoRefreshEnabled="0" maxScale="0" geometry="Polygon" minScale="1e+08" labelsEnabled="0" autoRefreshTime="0" styleCategories="AllStyleCategories" readOnly="0" hasScaleBasedVisibilityFlag="0" simplifyDrawingHints="1" simplifyAlgorithm="0" refreshOnNotifyMessage="" simplifyMaxScale="1">
+      <extent>
+        <xmin>6.61976000000000031</xmin>
+        <ymin>36.64916199999999691</ymin>
+        <xmax>18.51499899999999954</xmax>
+        <ymax>47.09471899999999778</ymax>
+      </extent>
+      <id>restricted_871115fd_fc90_4174_b536_1412ad8c097f</id>
+      <datasource>user='username' password='password' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='restricted' url='http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table="" sql=</datasource>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>restricted</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+          <srsid>3452</srsid>
+          <srid>4326</srid>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <projectionacronym>longlat</projectionacronym>
+          <ellipsoidacronym>WGS84</ellipsoidacronym>
+          <geographicflag>true</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <resourceMetadata>
+        <identifier></identifier>
+        <parentidentifier></parentidentifier>
+        <language></language>
+        <type></type>
+        <title></title>
+        <abstract></abstract>
         <links/>
+        <fees></fees>
+        <encoding></encoding>
+        <crs>
+          <spatialrefsys>
+            <proj4></proj4>
+            <srsid>0</srsid>
+            <srid>0</srid>
+            <authid></authid>
+            <description></description>
+            <projectionacronym></projectionacronym>
+            <ellipsoidacronym></ellipsoidacronym>
+            <geographicflag>false</geographicflag>
+          </spatialrefsys>
+        </crs>
+        <extent/>
       </resourceMetadata>
       <provider encoding="UTF-8">WFS</provider>
       <vectorjoins/>
       <layerDependencies/>
       <dataDependencies/>
+      <legend type="default-vector"/>
       <expressionfields/>
       <map-layer-style-manager current="predefinito">
         <map-layer-style name="predefinito"/>
       </map-layer-style-manager>
       <auxiliaryLayer/>
-      <renderer-v2 forceraster="0" type="singleSymbol" enableorderby="0" symbollevels="0">
+      <flags>
+        <Identifiable>1</Identifiable>
+        <Removable>1</Removable>
+        <Searchable>1</Searchable>
+      </flags>
+      <renderer-v2 type="singleSymbol" enableorderby="0" forceraster="0" symbollevels="0">
         <symbols>
-          <symbol alpha="1" type="fill" clip_to_extent="1" name="0">
-            <layer locked="0" class="SimpleFill" pass="0" enabled="1">
+          <symbol force_rhr="0" type="fill" name="0" alpha="1" clip_to_extent="1">
+            <layer pass="0" enabled="1" locked="0" class="SimpleFill">
               <prop k="border_width_map_unit_scale" v="3x:0,0,0,0,0,0"/>
               <prop k="color" v="188,27,70,255"/>
               <prop k="joinstyle" v="bevel"/>
@@ -329,9 +430,9 @@
               <prop k="style" v="solid"/>
               <data_defined_properties>
                 <Option type="Map">
-                  <Option value="" type="QString" name="name"/>
+                  <Option type="QString" value="" name="name"/>
                   <Option name="properties"/>
-                  <Option value="collection" type="QString" name="type"/>
+                  <Option type="QString" value="collection" name="type"/>
                 </Option>
               </data_defined_properties>
             </layer>
@@ -344,6 +445,10 @@
       <blendMode>0</blendMode>
       <featureBlendMode>0</featureBlendMode>
       <layerOpacity>1</layerOpacity>
+      <geometryOptions removeDuplicateNodes="0" geometryPrecision="0">
+        <activeChecks/>
+        <checkConfiguration/>
+      </geometryOptions>
       <fieldConfiguration>
         <field name="FIPS">
           <editWidget type="">
@@ -424,45 +529,45 @@
         </field>
       </fieldConfiguration>
       <aliases>
-        <alias index="0" field="FIPS" name=""/>
-        <alias index="1" field="ISO2" name=""/>
-        <alias index="2" field="ISO3" name=""/>
-        <alias index="3" field="UN" name=""/>
-        <alias index="4" field="NAME" name=""/>
-        <alias index="5" field="AREA" name=""/>
-        <alias index="6" field="POP2005" name=""/>
-        <alias index="7" field="REGION" name=""/>
-        <alias index="8" field="SUBREGION" name=""/>
-        <alias index="9" field="LON" name=""/>
-        <alias index="10" field="LAT" name=""/>
+        <alias index="0" name="" field="FIPS"/>
+        <alias index="1" name="" field="ISO2"/>
+        <alias index="2" name="" field="ISO3"/>
+        <alias index="3" name="" field="UN"/>
+        <alias index="4" name="" field="NAME"/>
+        <alias index="5" name="" field="AREA"/>
+        <alias index="6" name="" field="POP2005"/>
+        <alias index="7" name="" field="REGION"/>
+        <alias index="8" name="" field="SUBREGION"/>
+        <alias index="9" name="" field="LON"/>
+        <alias index="10" name="" field="LAT"/>
       </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <defaults>
-        <default expression="" applyOnUpdate="0" field="FIPS"/>
-        <default expression="" applyOnUpdate="0" field="ISO2"/>
-        <default expression="" applyOnUpdate="0" field="ISO3"/>
-        <default expression="" applyOnUpdate="0" field="UN"/>
-        <default expression="" applyOnUpdate="0" field="NAME"/>
-        <default expression="" applyOnUpdate="0" field="AREA"/>
-        <default expression="" applyOnUpdate="0" field="POP2005"/>
-        <default expression="" applyOnUpdate="0" field="REGION"/>
-        <default expression="" applyOnUpdate="0" field="SUBREGION"/>
-        <default expression="" applyOnUpdate="0" field="LON"/>
-        <default expression="" applyOnUpdate="0" field="LAT"/>
+        <default applyOnUpdate="0" expression="" field="FIPS"/>
+        <default applyOnUpdate="0" expression="" field="ISO2"/>
+        <default applyOnUpdate="0" expression="" field="ISO3"/>
+        <default applyOnUpdate="0" expression="" field="UN"/>
+        <default applyOnUpdate="0" expression="" field="NAME"/>
+        <default applyOnUpdate="0" expression="" field="AREA"/>
+        <default applyOnUpdate="0" expression="" field="POP2005"/>
+        <default applyOnUpdate="0" expression="" field="REGION"/>
+        <default applyOnUpdate="0" expression="" field="SUBREGION"/>
+        <default applyOnUpdate="0" expression="" field="LON"/>
+        <default applyOnUpdate="0" expression="" field="LAT"/>
       </defaults>
       <constraints>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="FIPS"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="ISO2"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="ISO3"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="UN"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="NAME"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="AREA"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="POP2005"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="REGION"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="SUBREGION"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="LON"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="LAT"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="FIPS" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="ISO2" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="ISO3" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="UN" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="NAME" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="AREA" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POP2005" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="REGION" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="SUBREGION" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="LON" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="LAT" constraints="0"/>
       </constraints>
       <constraintExpressions>
         <constraint exp="" desc="" field="FIPS"/>
@@ -477,13 +582,18 @@
         <constraint exp="" desc="" field="LON"/>
         <constraint exp="" desc="" field="LAT"/>
       </constraintExpressions>
+      <expressionfields/>
       <attributeactions>
-        <defaultAction key="Canvas" value="{00000000-0000-0000-0000-000000000000}"/>
+        <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
       </attributeactions>
-      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
+      <attributetableconfig sortExpression="" sortOrder="0" actionWidgetStyle="dropDown">
         <columns/>
       </attributetableconfig>
-      <editform>.</editform>
+      <conditionalstyles>
+        <rowstyles/>
+        <fieldstyles/>
+      </conditionalstyles>
+      <editform tolerant="1">.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
       <editforminitfilepath></editforminitfilepath>
@@ -493,23 +603,18 @@
       <editable/>
       <labelOnTop/>
       <widgets/>
-      <conditionalstyles>
-        <rowstyles/>
-        <fieldstyles/>
-      </conditionalstyles>
-      <expressionfields/>
       <previewExpression></previewExpression>
       <mapTip></mapTip>
     </maplayer>
-    <maplayer refreshOnNotifyEnabled="0" refreshOnNotifyMessage="" maxScale="0" autoRefreshTime="0" minScale="1e+8" type="raster" autoRefreshEnabled="0" hasScaleBasedVisibilityFlag="0">
+    <maplayer refreshOnNotifyEnabled="0" type="raster" autoRefreshEnabled="0" maxScale="0" minScale="1e+08" autoRefreshTime="0" styleCategories="AllStyleCategories" hasScaleBasedVisibilityFlag="0" refreshOnNotifyMessage="">
       <extent>
-        <xmin>-189</xmin>
-        <ymin>-123.8160000000000025</ymin>
-        <xmax>189</xmax>
-        <ymax>117.43899999999999295</ymax>
+        <xmin>-180</xmin>
+        <ymin>-90</ymin>
+        <xmax>180</xmax>
+        <ymax>83.62359999999999616</ymax>
       </extent>
       <id>world_3e36ee67_5bf2_4d18_9a9c_f210b25d7b6f</id>
-      <datasource>contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=world&amp;styles=&amp;url=http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs</datasource>
+      <datasource>contextualWMSLegend=0&amp;crs=EPSG:4326&amp;dpiMode=7&amp;featureCount=10&amp;format=image/jpeg&amp;layers=world&amp;styles=&amp;url=http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?ANOAUTH%3D1%26MAP%3D/qgis-server/projects/helloworld.qgs</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -533,6 +638,7 @@
         <type></type>
         <title></title>
         <abstract></abstract>
+        <links/>
         <fees></fees>
         <encoding></encoding>
         <crs>
@@ -548,11 +654,7 @@
           </spatialrefsys>
         </crs>
         <extent/>
-        <links/>
       </resourceMetadata>
-      <customproperties>
-        <property key="identify/format" value="Html"/>
-      </customproperties>
       <provider>wms</provider>
       <noData>
         <noDataList useSrcNoData="0" bandNo="1"/>
@@ -560,8 +662,16 @@
       <map-layer-style-manager current="default">
         <map-layer-style name="default"/>
       </map-layer-style-manager>
+      <flags>
+        <Identifiable>1</Identifiable>
+        <Removable>1</Removable>
+        <Searchable>1</Searchable>
+      </flags>
+      <customproperties>
+        <property value="Html" key="identify/format"/>
+      </customproperties>
       <pipe>
-        <rasterrenderer band="1" opacity="1" type="singlebandcolordata" alphaBand="-1">
+        <rasterrenderer type="singlebandcolordata" band="1" opacity="1" alphaBand="-1">
           <rasterTransparency/>
           <minMaxOrigin>
             <limits>None</limits>
@@ -572,21 +682,21 @@
             <stdDevFactor>2</stdDevFactor>
           </minMaxOrigin>
         </rasterrenderer>
-        <brightnesscontrast brightness="0" contrast="0"/>
-        <huesaturation colorizeOn="0" colorizeStrength="100" grayscaleMode="0" colorizeRed="255" colorizeBlue="128" colorizeGreen="128" saturation="0"/>
+        <brightnesscontrast contrast="0" brightness="0"/>
+        <huesaturation colorizeOn="0" colorizeBlue="128" colorizeRed="255" grayscaleMode="0" colorizeGreen="128" saturation="0" colorizeStrength="100"/>
         <rasterresampler maxOversampling="2"/>
       </pipe>
       <blendMode>0</blendMode>
     </maplayer>
-    <maplayer refreshOnNotifyEnabled="0" readOnly="0" refreshOnNotifyMessage="" simplifyDrawingHints="1" simplifyAlgorithm="0" maxScale="0" autoRefreshTime="0" minScale="1e+8" geometry="Polygon" labelsEnabled="0" simplifyDrawingTol="1" type="vector" autoRefreshEnabled="0" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="1">
+    <maplayer simplifyDrawingTol="1" simplifyLocal="1" refreshOnNotifyEnabled="0" type="vector" autoRefreshEnabled="0" maxScale="0" geometry="Polygon" minScale="1e+08" labelsEnabled="0" autoRefreshTime="0" styleCategories="AllStyleCategories" readOnly="0" hasScaleBasedVisibilityFlag="0" simplifyDrawingHints="1" simplifyAlgorithm="0" refreshOnNotifyMessage="" simplifyMaxScale="1">
       <extent>
-        <xmin>-25.36055800000000104</xmin>
-        <ymin>12.30174799999999991</ymin>
-        <xmax>40.17971800000000115</xmax>
-        <ymax>71.15470899999999688</ymax>
+        <xmin>-180</xmin>
+        <ymin>-90</ymin>
+        <xmax>180</xmax>
+        <ymax>83.62359600000000626</ymax>
       </extent>
       <id>world_c1508bba_e3df_4b63_8b13_47f2630afdb7</id>
-      <datasource>user='username' password='password' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='world' url='http://localhost:8082/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table="" sql=</datasource>
+      <datasource>user='username' password='password' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='world' url='http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs' version='1.0.0' table="" sql=</datasource>
       <keywordList>
         <value></value>
       </keywordList>
@@ -610,6 +720,7 @@
         <type></type>
         <title></title>
         <abstract></abstract>
+        <links/>
         <fees></fees>
         <encoding></encoding>
         <crs>
@@ -625,21 +736,26 @@
           </spatialrefsys>
         </crs>
         <extent/>
-        <links/>
       </resourceMetadata>
       <provider encoding="UTF-8">WFS</provider>
       <vectorjoins/>
       <layerDependencies/>
       <dataDependencies/>
+      <legend type="default-vector"/>
       <expressionfields/>
       <map-layer-style-manager current="predefinito">
         <map-layer-style name="predefinito"/>
       </map-layer-style-manager>
       <auxiliaryLayer/>
-      <renderer-v2 forceraster="0" type="singleSymbol" enableorderby="0" symbollevels="0">
+      <flags>
+        <Identifiable>1</Identifiable>
+        <Removable>1</Removable>
+        <Searchable>1</Searchable>
+      </flags>
+      <renderer-v2 type="singleSymbol" enableorderby="0" forceraster="0" symbollevels="0">
         <symbols>
-          <symbol alpha="1" type="fill" clip_to_extent="1" name="0">
-            <layer locked="0" class="SimpleFill" pass="0" enabled="1">
+          <symbol force_rhr="0" type="fill" name="0" alpha="1" clip_to_extent="1">
+            <layer pass="0" enabled="1" locked="0" class="SimpleFill">
               <prop k="border_width_map_unit_scale" v="3x:0,0,0,0,0,0"/>
               <prop k="color" v="196,73,252,255"/>
               <prop k="joinstyle" v="bevel"/>
@@ -653,9 +769,9 @@
               <prop k="style" v="solid"/>
               <data_defined_properties>
                 <Option type="Map">
-                  <Option value="" type="QString" name="name"/>
+                  <Option type="QString" value="" name="name"/>
                   <Option name="properties"/>
-                  <Option value="collection" type="QString" name="type"/>
+                  <Option type="QString" value="collection" name="type"/>
                 </Option>
               </data_defined_properties>
             </layer>
@@ -668,6 +784,10 @@
       <blendMode>0</blendMode>
       <featureBlendMode>0</featureBlendMode>
       <layerOpacity>1</layerOpacity>
+      <geometryOptions removeDuplicateNodes="0" geometryPrecision="0">
+        <activeChecks/>
+        <checkConfiguration/>
+      </geometryOptions>
       <fieldConfiguration>
         <field name="FIPS">
           <editWidget type="">
@@ -748,45 +868,45 @@
         </field>
       </fieldConfiguration>
       <aliases>
-        <alias index="0" field="FIPS" name=""/>
-        <alias index="1" field="ISO2" name=""/>
-        <alias index="2" field="ISO3" name=""/>
-        <alias index="3" field="UN" name=""/>
-        <alias index="4" field="NAME" name=""/>
-        <alias index="5" field="AREA" name=""/>
-        <alias index="6" field="POP2005" name=""/>
-        <alias index="7" field="REGION" name=""/>
-        <alias index="8" field="SUBREGION" name=""/>
-        <alias index="9" field="LON" name=""/>
-        <alias index="10" field="LAT" name=""/>
+        <alias index="0" name="" field="FIPS"/>
+        <alias index="1" name="" field="ISO2"/>
+        <alias index="2" name="" field="ISO3"/>
+        <alias index="3" name="" field="UN"/>
+        <alias index="4" name="" field="NAME"/>
+        <alias index="5" name="" field="AREA"/>
+        <alias index="6" name="" field="POP2005"/>
+        <alias index="7" name="" field="REGION"/>
+        <alias index="8" name="" field="SUBREGION"/>
+        <alias index="9" name="" field="LON"/>
+        <alias index="10" name="" field="LAT"/>
       </aliases>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <defaults>
-        <default expression="" applyOnUpdate="0" field="FIPS"/>
-        <default expression="" applyOnUpdate="0" field="ISO2"/>
-        <default expression="" applyOnUpdate="0" field="ISO3"/>
-        <default expression="" applyOnUpdate="0" field="UN"/>
-        <default expression="" applyOnUpdate="0" field="NAME"/>
-        <default expression="" applyOnUpdate="0" field="AREA"/>
-        <default expression="" applyOnUpdate="0" field="POP2005"/>
-        <default expression="" applyOnUpdate="0" field="REGION"/>
-        <default expression="" applyOnUpdate="0" field="SUBREGION"/>
-        <default expression="" applyOnUpdate="0" field="LON"/>
-        <default expression="" applyOnUpdate="0" field="LAT"/>
+        <default applyOnUpdate="0" expression="" field="FIPS"/>
+        <default applyOnUpdate="0" expression="" field="ISO2"/>
+        <default applyOnUpdate="0" expression="" field="ISO3"/>
+        <default applyOnUpdate="0" expression="" field="UN"/>
+        <default applyOnUpdate="0" expression="" field="NAME"/>
+        <default applyOnUpdate="0" expression="" field="AREA"/>
+        <default applyOnUpdate="0" expression="" field="POP2005"/>
+        <default applyOnUpdate="0" expression="" field="REGION"/>
+        <default applyOnUpdate="0" expression="" field="SUBREGION"/>
+        <default applyOnUpdate="0" expression="" field="LON"/>
+        <default applyOnUpdate="0" expression="" field="LAT"/>
       </defaults>
       <constraints>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="FIPS"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="ISO2"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="ISO3"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="UN"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="NAME"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="AREA"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="POP2005"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="REGION"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="SUBREGION"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="LON"/>
-        <constraint constraints="0" notnull_strength="0" exp_strength="0" unique_strength="0" field="LAT"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="FIPS" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="ISO2" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="ISO3" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="UN" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="NAME" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="AREA" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POP2005" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="REGION" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="SUBREGION" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="LON" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="LAT" constraints="0"/>
       </constraints>
       <constraintExpressions>
         <constraint exp="" desc="" field="FIPS"/>
@@ -801,13 +921,18 @@
         <constraint exp="" desc="" field="LON"/>
         <constraint exp="" desc="" field="LAT"/>
       </constraintExpressions>
+      <expressionfields/>
       <attributeactions>
-        <defaultAction key="Canvas" value="{00000000-0000-0000-0000-000000000000}"/>
+        <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
       </attributeactions>
-      <attributetableconfig actionWidgetStyle="dropDown" sortExpression="" sortOrder="0">
+      <attributetableconfig sortExpression="" sortOrder="0" actionWidgetStyle="dropDown">
         <columns/>
       </attributetableconfig>
-      <editform>.</editform>
+      <conditionalstyles>
+        <rowstyles/>
+        <fieldstyles/>
+      </conditionalstyles>
+      <editform tolerant="1">.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
       <editforminitfilepath></editforminitfilepath>
@@ -817,11 +942,263 @@
       <editable/>
       <labelOnTop/>
       <widgets/>
+      <previewExpression></previewExpression>
+      <mapTip></mapTip>
+    </maplayer>
+    <maplayer simplifyDrawingTol="1" simplifyLocal="1" refreshOnNotifyEnabled="0" type="vector" autoRefreshEnabled="0" maxScale="0" geometry="Polygon" minScale="1e+08" labelsEnabled="0" autoRefreshTime="0" styleCategories="AllStyleCategories" readOnly="0" hasScaleBasedVisibilityFlag="0" simplifyDrawingHints="1" simplifyAlgorithm="0" refreshOnNotifyMessage="" simplifyMaxScale="1">
+      <extent>
+        <xmin>-180</xmin>
+        <ymin>-90</ymin>
+        <xmax>180</xmax>
+        <ymax>83.62359999999999616</ymax>
+      </extent>
+      <id>world_c7545d57_2c94_4d52_894e_3efce543f109</id>
+      <datasource>user='username' password='password' pagingEnabled='true' restrictToRequestBBOX='1' srsname='EPSG:4326' typename='world' url='http://localhost:8082/cgi-bin/qgis_mapserv.cgi?MAP=/qgis-server/projects/helloworld.qgs' version='auto' table="" sql=</datasource>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>world 2082</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+          <srsid>3452</srsid>
+          <srid>4326</srid>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <projectionacronym>longlat</projectionacronym>
+          <ellipsoidacronym>WGS84</ellipsoidacronym>
+          <geographicflag>true</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <resourceMetadata>
+        <identifier></identifier>
+        <parentidentifier></parentidentifier>
+        <language></language>
+        <type></type>
+        <title></title>
+        <abstract></abstract>
+        <links/>
+        <fees></fees>
+        <encoding></encoding>
+        <crs>
+          <spatialrefsys>
+            <proj4></proj4>
+            <srsid>0</srsid>
+            <srid>0</srid>
+            <authid></authid>
+            <description></description>
+            <projectionacronym></projectionacronym>
+            <ellipsoidacronym></ellipsoidacronym>
+            <geographicflag>false</geographicflag>
+          </spatialrefsys>
+        </crs>
+        <extent/>
+      </resourceMetadata>
+      <provider encoding="UTF-8">WFS</provider>
+      <vectorjoins/>
+      <layerDependencies/>
+      <dataDependencies/>
+      <legend type="default-vector"/>
+      <expressionfields/>
+      <map-layer-style-manager current="default">
+        <map-layer-style name="default"/>
+      </map-layer-style-manager>
+      <auxiliaryLayer/>
+      <flags>
+        <Identifiable>1</Identifiable>
+        <Removable>1</Removable>
+        <Searchable>1</Searchable>
+      </flags>
+      <renderer-v2 type="singleSymbol" enableorderby="0" forceraster="0" symbollevels="0">
+        <symbols>
+          <symbol force_rhr="0" type="fill" name="0" alpha="1" clip_to_extent="1">
+            <layer pass="0" enabled="1" locked="0" class="SimpleFill">
+              <prop k="border_width_map_unit_scale" v="3x:0,0,0,0,0,0"/>
+              <prop k="color" v="229,182,54,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="3x:0,0,0,0,0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="35,35,35,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+              <data_defined_properties>
+                <Option type="Map">
+                  <Option type="QString" value="" name="name"/>
+                  <Option name="properties"/>
+                  <Option type="QString" value="collection" name="type"/>
+                </Option>
+              </data_defined_properties>
+            </layer>
+          </symbol>
+        </symbols>
+        <rotation/>
+        <sizescale/>
+      </renderer-v2>
+      <customproperties/>
+      <blendMode>0</blendMode>
+      <featureBlendMode>0</featureBlendMode>
+      <layerOpacity>1</layerOpacity>
+      <geometryOptions removeDuplicateNodes="0" geometryPrecision="0">
+        <activeChecks/>
+        <checkConfiguration/>
+      </geometryOptions>
+      <fieldConfiguration>
+        <field name="FIPS">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="ISO2">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="ISO3">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="UN">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="NAME">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="AREA">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="POP2005">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="REGION">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="SUBREGION">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="LON">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+        <field name="LAT">
+          <editWidget type="">
+            <config>
+              <Option/>
+            </config>
+          </editWidget>
+        </field>
+      </fieldConfiguration>
+      <aliases>
+        <alias index="0" name="" field="FIPS"/>
+        <alias index="1" name="" field="ISO2"/>
+        <alias index="2" name="" field="ISO3"/>
+        <alias index="3" name="" field="UN"/>
+        <alias index="4" name="" field="NAME"/>
+        <alias index="5" name="" field="AREA"/>
+        <alias index="6" name="" field="POP2005"/>
+        <alias index="7" name="" field="REGION"/>
+        <alias index="8" name="" field="SUBREGION"/>
+        <alias index="9" name="" field="LON"/>
+        <alias index="10" name="" field="LAT"/>
+      </aliases>
+      <excludeAttributesWMS/>
+      <excludeAttributesWFS/>
+      <defaults>
+        <default applyOnUpdate="0" expression="" field="FIPS"/>
+        <default applyOnUpdate="0" expression="" field="ISO2"/>
+        <default applyOnUpdate="0" expression="" field="ISO3"/>
+        <default applyOnUpdate="0" expression="" field="UN"/>
+        <default applyOnUpdate="0" expression="" field="NAME"/>
+        <default applyOnUpdate="0" expression="" field="AREA"/>
+        <default applyOnUpdate="0" expression="" field="POP2005"/>
+        <default applyOnUpdate="0" expression="" field="REGION"/>
+        <default applyOnUpdate="0" expression="" field="SUBREGION"/>
+        <default applyOnUpdate="0" expression="" field="LON"/>
+        <default applyOnUpdate="0" expression="" field="LAT"/>
+      </defaults>
+      <constraints>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="FIPS" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="ISO2" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="ISO3" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="UN" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="NAME" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="AREA" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="POP2005" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="REGION" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="SUBREGION" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="LON" constraints="0"/>
+        <constraint unique_strength="0" notnull_strength="0" exp_strength="0" field="LAT" constraints="0"/>
+      </constraints>
+      <constraintExpressions>
+        <constraint exp="" desc="" field="FIPS"/>
+        <constraint exp="" desc="" field="ISO2"/>
+        <constraint exp="" desc="" field="ISO3"/>
+        <constraint exp="" desc="" field="UN"/>
+        <constraint exp="" desc="" field="NAME"/>
+        <constraint exp="" desc="" field="AREA"/>
+        <constraint exp="" desc="" field="POP2005"/>
+        <constraint exp="" desc="" field="REGION"/>
+        <constraint exp="" desc="" field="SUBREGION"/>
+        <constraint exp="" desc="" field="LON"/>
+        <constraint exp="" desc="" field="LAT"/>
+      </constraintExpressions>
+      <expressionfields/>
+      <attributeactions>
+        <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
+      </attributeactions>
+      <attributetableconfig sortExpression="" sortOrder="0" actionWidgetStyle="dropDown">
+        <columns/>
+      </attributetableconfig>
       <conditionalstyles>
         <rowstyles/>
         <fieldstyles/>
       </conditionalstyles>
-      <expressionfields/>
+      <editform tolerant="1"></editform>
+      <editforminit/>
+      <editforminitcodesource>0</editforminitcodesource>
+      <editforminitfilepath></editforminitfilepath>
+      <editforminitcode><![CDATA[]]></editforminitcode>
+      <featformsuppress>0</featformsuppress>
+      <editorlayout>generatedlayout</editorlayout>
+      <editable/>
+      <labelOnTop/>
+      <widgets/>
       <previewExpression></previewExpression>
       <mapTip></mapTip>
     </maplayer>
@@ -832,8 +1209,43 @@
     <layer id="bluemarble_610e4919_0565_4580_ac9e_710fbfcdcc00"/>
     <layer id="world_c1508bba_e3df_4b63_8b13_47f2630afdb7"/>
     <layer id="restricted_871115fd_fc90_4174_b536_1412ad8c097f"/>
+    <layer id="world_c7545d57_2c94_4d52_894e_3efce543f109"/>
   </layerorder>
   <properties>
+    <PAL>
+      <DrawOutlineLabels type="bool">true</DrawOutlineLabels>
+      <CandidatesLine type="int">50</CandidatesLine>
+      <CandidatesPoint type="int">16</CandidatesPoint>
+      <ShowingAllLabels type="bool">false</ShowingAllLabels>
+      <TextFormat type="int">0</TextFormat>
+      <ShowingCandidates type="bool">false</ShowingCandidates>
+      <DrawRectOnly type="bool">false</DrawRectOnly>
+      <CandidatesPolygon type="int">30</CandidatesPolygon>
+      <SearchMethod type="int">0</SearchMethod>
+      <ShowingPartialsLabels type="bool">true</ShowingPartialsLabels>
+    </PAL>
+    <Measure>
+      <Ellipsoid type="QString">WGS84</Ellipsoid>
+    </Measure>
+    <SpatialRefSys>
+      <ProjectionsEnabled type="int">1</ProjectionsEnabled>
+    </SpatialRefSys>
+    <Gui>
+      <SelectionColorBluePart type="int">0</SelectionColorBluePart>
+      <SelectionColorAlphaPart type="int">255</SelectionColorAlphaPart>
+      <CanvasColorGreenPart type="int">255</CanvasColorGreenPart>
+      <CanvasColorRedPart type="int">255</CanvasColorRedPart>
+      <SelectionColorRedPart type="int">255</SelectionColorRedPart>
+      <CanvasColorBluePart type="int">255</CanvasColorBluePart>
+      <SelectionColorGreenPart type="int">255</SelectionColorGreenPart>
+    </Gui>
+    <Measurement>
+      <DistanceUnits type="QString">meters</DistanceUnits>
+      <AreaUnits type="QString">m2</AreaUnits>
+    </Measurement>
+    <Legend>
+      <filterByMap type="bool">false</filterByMap>
+    </Legend>
     <Paths>
       <Absolute type="bool">false</Absolute>
     </Paths>
@@ -841,42 +1253,20 @@
       <DecimalPlaces type="int">2</DecimalPlaces>
       <Automatic type="bool">true</Automatic>
     </PositionPrecision>
-    <SpatialRefSys>
-      <ProjectionsEnabled type="int">1</ProjectionsEnabled>
-    </SpatialRefSys>
-    <Measurement>
-      <AreaUnits type="QString">m2</AreaUnits>
-      <DistanceUnits type="QString">meters</DistanceUnits>
-    </Measurement>
-    <Legend>
-      <filterByMap type="bool">false</filterByMap>
-    </Legend>
-    <Gui>
-      <SelectionColorGreenPart type="int">255</SelectionColorGreenPart>
-      <CanvasColorRedPart type="int">255</CanvasColorRedPart>
-      <SelectionColorBluePart type="int">0</SelectionColorBluePart>
-      <SelectionColorRedPart type="int">255</SelectionColorRedPart>
-      <SelectionColorAlphaPart type="int">255</SelectionColorAlphaPart>
-      <CanvasColorBluePart type="int">255</CanvasColorBluePart>
-      <CanvasColorGreenPart type="int">255</CanvasColorGreenPart>
-    </Gui>
-    <Measure>
-      <Ellipsoid type="QString">WGS84</Ellipsoid>
-    </Measure>
-    <PAL>
-      <DrawOutlineLabels type="bool">true</DrawOutlineLabels>
-      <ShowingPartialsLabels type="bool">true</ShowingPartialsLabels>
-      <CandidatesLine type="int">50</CandidatesLine>
-      <DrawRectOnly type="bool">false</DrawRectOnly>
-      <ShowingCandidates type="bool">false</ShowingCandidates>
-      <CandidatesPolygon type="int">30</CandidatesPolygon>
-      <ShowingAllLabels type="bool">false</ShowingAllLabels>
-      <CandidatesPoint type="int">16</CandidatesPoint>
-      <SearchMethod type="int">0</SearchMethod>
-    </PAL>
   </properties>
   <visibility-presets/>
   <transformContext/>
+  <projectMetadata>
+    <identifier></identifier>
+    <parentidentifier></parentidentifier>
+    <language></language>
+    <type></type>
+    <title></title>
+    <abstract></abstract>
+    <links/>
+    <author></author>
+    <creation></creation>
+  </projectMetadata>
   <Annotations/>
   <Layouts/>
 </qgis>

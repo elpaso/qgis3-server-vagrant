@@ -8,8 +8,8 @@ class DebugFilter(QgsServerFilter):
 
     def requestReady(self):
         handler = self.serverInterface().requestHandler()
-        params = handler.parameterMap( ) 
-        if 'DEBUG' in params: 
+        params = handler.parameterMap( )
+        if 'DEBUG' in params:
             handler.setParameter('SERVICE', 'DEBUG')
 
     def responseComplete(self):
@@ -17,7 +17,7 @@ class DebugFilter(QgsServerFilter):
         params = handler.parameterMap( )
         if params.get('SERVICE') != 'DEBUG':
             return
-        
+
         headers_dict = handler.requestHeaders()
         handler.clear()
         handler.setResponseHeader('Status', '200 Ok')
@@ -30,12 +30,10 @@ class DebugFilter(QgsServerFilter):
             handler.appendBody(('<p><b>%s</b> %s</p>' % (k, headers_dict.get(k))).encode('utf8'))
 
 
-
-
 class Debug:
 
     def __init__(self, serverIface):
         # Save reference to the QGIS server interface
         # Higher priority
         serverIface.registerFilter( DebugFilter(serverIface), 10 )
-    
+

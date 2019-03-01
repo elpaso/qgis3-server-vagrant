@@ -4,9 +4,38 @@
 
 @import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
 
+.centered {
+    text-align: center;
+}
+
+img.centered {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.pull-right {
+   display: block;
+   width: 49%;
+   float: right;
+}
+
+.pull-left {
+    display: block;
+    width: 49%;
+}
+
+ul.pull-left, ul.pull-right {
+    list-style-position: inside;
+    padding-left: 0;
+}
 
 .scale-50 {
-    width: 50%;
+    max-width: 50%;
+}
+
+.scale-70 {
+    max-width: 70%;
 }
 
 .step {
@@ -60,30 +89,28 @@ strong {
     color: green;
 }
 
-div.sidebar {
-    background-color:#FFFF66;
-    color: black;
+p.sidebar {
+    display: block;
     /*border:medium outset;*/
     clear:right;
     float:right;
     /*margin:0 0 0.5em 1em;*/
     /*padding:1em;*/
     width:30%;
-
 }
 
-div.sidebar p{
+p.sidebar {
     padding: 0 1em 1em 1em;
     font-size: 70%;
 }
 
-div.sidebar ul {
+p.sidebar ul {
     font-size: 70%;
     margin-top:0;
 }
 
 
-div.sidebar p.sidebar-title {
+p.sidebar p.sidebar-title {
     cursor: pointer;
     padding: 1em;
     font-weight: bold;

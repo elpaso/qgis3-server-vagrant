@@ -17,6 +17,89 @@
 ----
 
 
+QGIS Server
+===========
+
+
+.. graph:: images/intro.png
+    :class: scale-70 centered
+
+    digraph g {
+            rankdir="LR"
+
+            edge [fontcolor=red fontsize=9]
+            node [shape=box style="rounded"]
+
+            desktop [label="QGIS Desktop"]
+            server [label="QGIS Server"]
+
+            desktop ->  server [label="deploy project"]
+
+    }
+
+
+.. class:: centered
+
+    The WYSIWYG GIS Server
+
+    From the desktop to the web!
+
+----
+
+Typical workflow
+================
+
+.. graph:: images/workflow.png
+    :class: scale-70 centered
+
+    digraph g {
+            rankdir="TB"
+
+            subgraph cluster_0 {
+                style=filled;
+                color=lightgrey;
+                node [shape=box style=filled,color=white];
+                "Prepare Data" -> "Configure QGIS Project";
+                label = "Client Tier";
+            }
+
+            subgraph cluster_1 {
+                style=filled;
+                color=lightgrey;
+                node [shape=box style=filled,color=white];
+                "QGIS Server";
+                label = "Server Tier";
+            }
+
+            node [shape=box style=box,color=blue]
+            edge [color=blue fontsize=9]
+
+            "Configure QGIS Project" -> "Transfer project and data (if local)"
+            "Transfer project and data (if local)" -> "QGIS Server";
+
+    }
+
+-----
+
+Configuring the project
+=======================
+
+.. image:: images/server-options.png
+    :class: centered
+
+-----
+
+Data Storage
+============
+
+.. image:: images/project-properties.png
+    :class: centered
+
+
+
+
+-----
+
 Supported standards
 ====================
 
@@ -48,9 +131,8 @@ Architecture
 + WFS
 + WCS
 + WMTS
-+ custom modules (C++ and Python)
-
-+ Python plugins
++ Custom modules (C++ and Python)
++ Python plugins (generic, access control, cache)
 + Python bindings
 
 ----
@@ -59,6 +141,64 @@ API
 ===
 
 https://qgis.org/api/group__server.html
+
+----
+
+System overview
+=====================
+
+.. graph:: images/system-overview.png
+    :class: scale-70 centered
+
+    digraph g {
+            rankdir="TB"
+
+            subgraph cluster_0 {
+                style=filled;
+                color=lightgrey;
+                node [style=filled,color=white];
+                "Web Server" -> "QGIS Server";
+                label = "Server Tier";
+                node [style=filled,color=white];
+                "QGIS Server" -> "Project 1.qgs"
+                "QGIS Server" -> "Project 2.qgs"
+                node [shape=box color="blue" style=box,color=blue]
+                edge [color=blue fontsize=9]
+                "Project 1.qgs" -> "Local Storage"
+            }
+
+
+            edge [fontcolor=red fontsize=9]
+            node [shape=box style="rounded"]
+
+            "Client Tier" -> "Web Server";
+
+            node [shape=box color="white"]
+            edge [color=red fontsize=9]
+            "Multiple processes" -> "QGIS Server";
+            "Multiple projects" -> "Project 1.qgs";
+            "Multiple projects" -> "Project 2.qgs";
+
+            node [shape=box style=box,color=blue]
+            edge [color=blue fontsize=9]
+            "Project 2.qgs" -> "Remote Storage"
+    }
+
+
+----
+
+Demo VM stack
+=============
+
+==================== ========== ============
+Server               Port       Mapped to
+-------------------- ---------- ------------
+Nginx **FastCGI**    80         8080
+Apache **(Fast)CGI** 81         8081
+Nginx **Python**     82         8082
+Nginx **MapProxy**   83         8083
+==================== ========== ============
+
 
 ----
 
@@ -336,7 +476,7 @@ Enable sites and restart
     service apache2 restart # Restart the server
 
 
-**Checkpoint**: check wether Apache is listening on localhost port 8081 http://localhost:8081
+**Checkpoint**: check whether Apache is listening on localhost port 8081 http://localhost:8081
 
 ----
 
@@ -390,19 +530,19 @@ Nginx configuration III
 Load balancing
 (round robin default, or least_conn;)
 
-.. code:: php
+.. code:: ruby
 
     upstream qgis_mapserv_backend {
         server unix:/run/qgis_mapserv4.sock;
         server unix:/run/qgis_mapserv3.sock;
         server unix:/run/qgis_mapserv2.sock;
         server unix:/run/qgis_mapserv1.sock;
-
     }
 
-.. note::
 
-    Sessions and persistence (ip-hash)!
+
++ Sessions and persistence (ip-hash)!
++ Caching
 
 ----
 
