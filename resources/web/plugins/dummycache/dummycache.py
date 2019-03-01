@@ -42,7 +42,7 @@ class StupidCache(QgsServerCacheFilter):
         try:
             result = self._cache[self._get_hash(request)]
             QgsMessageLog.logMessage('Returning cached document %s' % hash)
-            return result
+            return result.toByteArray()
         except KeyError:
             QgsMessageLog.logMessage('No cached document %s' % hash)
             return QByteArray()

@@ -872,7 +872,7 @@ There are no substantial differences between plugins API in 2.x and 3.x
 
 ----
 
-QGIS Server Access Control Plugins
+Access Control Plugins
 ==================================
 
 Since QGIS 2.12
@@ -884,6 +884,58 @@ https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/server.html#acce
 
 Example:
 https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/accesscontrol/accesscontrol.py
+
+
+----
+
+Cache plugins
+============================
+
+Since QGIS 3.4
+
+.. code:: python
+
+    from qgis.server import QgsServerCacheFilter
+    from qgis.core import QgsMessageLog
+    from qgis.PyQt.QtCore import QByteArray
+    import hashlib
+
+    class StupidCache(QgsServerCacheFilter):
+        """A simple in-memory and not-shared cache for demonstration purposes"""
+
+        _cache = {}
+
+        def _get_hash(self, request):
+            # create a unique hash from the request
+            paramMap = request.parameters()
+            urlParam = "&".join(["%s=%s" % (k, paramMap[k]) for k in paramMap.keys()])
+            m = hashlib.md5()
+            m.update(urlParam.encode('utf8'))
+            return m.hexdigest()
+
+
+----
+
+Cache plugins II
+============================
+
+
+.. code:: python
+
+        def getCachedDocument(self, project, request, key):
+            hash = self._get_hash(request)
+            try:
+                result = self._cache[self._get_hash(request)]
+                return result
+            except KeyError:
+                return QByteArray()
+
+        def setCachedDocument(self, doc, project, request, key):
+            hash = self._get_hash(request)
+            self._cache[hash] = doc
+            return True
+
+    serverIface.registerServerCache(StupidCache(serverIface), 100 )
 
 
 ----

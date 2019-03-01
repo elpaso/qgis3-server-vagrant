@@ -1,7 +1,7 @@
 
 # Path: /etc/systemd/system/qgis-fcgi@.service
 # systemctl start qgis-fcgi@{1..4}.service
-
+# Used by Nginx
 
 [Unit]
 Description = QGIS Server Tracker FastCGI backend (instance %i)
@@ -22,7 +22,7 @@ Restart = always
 
 # Environment
 Environment="QGIS_AUTH_DB_DIR_PATH=QGIS_SERVER_DIR/projects"
-Environment="QGIS_SERVER_LOG_FILE=QGIS_SERVER_DIR/logs/qgis-server-fcgi.log"
+Environment="QGIS_SERVER_LOG_FILE=QGIS_SERVER_DIR/logs/qgis-server-fcgi-nginx.log"
 Environment="QGIS_SERVER_LOG_LEVEL=0"
 Environment="QGIS_DEBUG=1"
 # Temporary workaround for #18230
