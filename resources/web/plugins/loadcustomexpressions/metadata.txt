@@ -1,0 +1,14 @@
+[general]
+name=QGIS LoadCustomExpressions Plugin
+qgisMinimumVersion=2.99
+qgisMaximumVersion=3.99
+description=LoadCustomExpressions Plugin
+version=version 1.0
+author=Tudor Bărăscu (QTIBIA Engineering)
+email=tudor.barascu@qtibia.ro
+; if True it's a server plugin
+server=True
+
+changelog=
+
+about=Adds custom expressions to be used on the server side
