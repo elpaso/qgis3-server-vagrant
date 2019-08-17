@@ -16,6 +16,18 @@
 
 ----
 
+WS Program
+====================
+
++ Introduction to QGIS Server
++ General workflow
++ Deployment strategies
++ Python API
++ Python Plugins
++ Access Control Plugins
++ Cache Plugins
+
+----
 
 QGIS Server
 ===========
@@ -79,6 +91,51 @@ Typical workflow
 
     }
 
+
+-----
+
+System overview
+=====================
+
+.. graph:: images/system-overview.png
+    :class: scale-70 centered
+
+    digraph g {
+            rankdir="TB"
+
+            subgraph cluster_0 {
+                style=filled;
+                color=lightgrey;
+                node [style=filled,color=white];
+                "Web Server" -> "QGIS Server";
+                label = "Server Tier";
+                node [style=filled,color=white];
+                "QGIS Server" -> "Project 1.qgs"
+                "QGIS Server" -> "Project 2.qgs"
+                node [shape=box color="blue" style=box,color=blue]
+                edge [color=blue fontsize=9]
+                "Project 1.qgs" -> "Local Storage"
+            }
+
+
+            edge [fontcolor=red fontsize=9]
+            node [shape=box style="rounded"]
+
+            "Client Tier" -> "Web Server";
+
+            node [shape=box color="white"]
+            edge [color=red fontsize=9]
+            "Multiple processes" -> "QGIS Server";
+            "Multiple projects" -> "Project 1.qgs";
+            "Multiple projects" -> "Project 2.qgs";
+
+            node [shape=box style=box,color=blue]
+            edge [color=blue fontsize=9]
+            "Project 2.qgs" -> "Remote Storage"
+    }
+
+
+
 -----
 
 Configuring the project
@@ -96,9 +153,8 @@ Data Storage
     :class: centered
 
 
-
-
 -----
+
 
 Supported standards
 ====================
@@ -141,49 +197,6 @@ API
 ===
 
 https://qgis.org/api/group__server.html
-
-----
-
-System overview
-=====================
-
-.. graph:: images/system-overview.png
-    :class: scale-70 centered
-
-    digraph g {
-            rankdir="TB"
-
-            subgraph cluster_0 {
-                style=filled;
-                color=lightgrey;
-                node [style=filled,color=white];
-                "Web Server" -> "QGIS Server";
-                label = "Server Tier";
-                node [style=filled,color=white];
-                "QGIS Server" -> "Project 1.qgs"
-                "QGIS Server" -> "Project 2.qgs"
-                node [shape=box color="blue" style=box,color=blue]
-                edge [color=blue fontsize=9]
-                "Project 1.qgs" -> "Local Storage"
-            }
-
-
-            edge [fontcolor=red fontsize=9]
-            node [shape=box style="rounded"]
-
-            "Client Tier" -> "Web Server";
-
-            node [shape=box color="white"]
-            edge [color=red fontsize=9]
-            "Multiple processes" -> "QGIS Server";
-            "Multiple projects" -> "Project 1.qgs";
-            "Multiple projects" -> "Project 2.qgs";
-
-            node [shape=box style=box,color=blue]
-            edge [color=blue fontsize=9]
-            "Project 2.qgs" -> "Remote Storage"
-    }
-
 
 ----
 
@@ -291,8 +304,8 @@ Install the software
     export QGIS_SERVER_DIR=/qgis-server
     export DEBIAN_FRONTEND=noninteractive
 
-    # Install QGIS server and deps
-    apt-get -y install qgis-server python3-qgis xvfb
+    # Install QGIS server and deps (overwrite is a temporary solution)
+    apt-get -y install -o Dpkg::Options::="--force-overwrite" qgis-server python3-qgis xvfb
 
     # Install utilities (optional)
     apt-get -y install vim unzip ipython3
@@ -323,6 +336,8 @@ Install system software II
 
 
 .. code:: bash
+
+    . /vagrant/provisioning/config.sh
 
     # Install sample projects and plugins
     mkdir -p $QGIS_SERVER_DIR/logs
@@ -533,12 +548,12 @@ Load balancing
 .. code:: ruby
 
     upstream qgis_mapserv_backend {
+        ip_hash;
         server unix:/run/qgis_mapserv4.sock;
         server unix:/run/qgis_mapserv3.sock;
         server unix:/run/qgis_mapserv2.sock;
         server unix:/run/qgis_mapserv1.sock;
     }
-
 
 
 + Sessions and persistence (ip-hash)!
@@ -752,7 +767,7 @@ Full list:  https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/s
     &SERVICE=WMS&REQUEST=GetFeatureInfo&CRS=EPSG%3A4326&WIDTH=1794&HEIGHT=1194&LAYERS=world&
     WITH_GEOMETRY=TRUE&QUERY_LAYERS=world&FILTER=world%3A%22NAME%22%20%3D%20%27SPAIN%27
 
----
+----
 
 Checkpoint: highlighting
 =================================
@@ -1119,3 +1134,11 @@ Release cycle
 LTR: 12 months support
 
 https://www.qgis.org/it/site/getinvolved/development/roadmap.html#release-schedule
+
+
+-----
+
+Presentation links
+=========================
+
+https://github.com/elpaso/qgis3-server-vagrant/ (docs folder)
