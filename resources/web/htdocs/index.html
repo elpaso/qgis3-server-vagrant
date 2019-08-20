@@ -11,6 +11,39 @@
   </head>
   <body>
   <h1>QGIS Server Demo</h1>
+  <p>HTTP Basic authentication: username/password</p>
+
+  <table>
+  <thead>
+          <tr>
+                  <th>Server</th>
+                  <th>Port</th>
+                  <th>Mapped to</th>
+          </tr>
+  </thead>
+  <tbody>
+          <tr>
+                  <td>Nginx FastCGI</td>
+                  <td>80</td>
+                  <td><a href="http://localhost:8080">8080</a></td>
+          </tr>
+          <tr>
+                  <td>Apache (Fast)CGI</td>
+                  <td>81</td>
+                  <td><a href="http://localhost:8081">8081</a></td>
+          </tr>
+          <tr>
+                  <td>Nginx Python</td>
+                  <td>82</td>
+                  <td><a href="http://localhost:8082">8082</a></td>
+          </tr>
+          <tr>
+                  <td>Nginx mapproxy</td>
+                  <td>83</td>
+                  <td><a href="http://localhost:8083">8083</a></td>
+          </tr>
+  </tbody>
+  </table>
   <p>Place your HTML content here!</p>
   <p>or browse one of the default endpoints:</p>
   <ul>
@@ -27,6 +60,8 @@
       <li><a href="/cgi-bin/qgis_mapserv.fcgi?MAP=QGIS_SERVER_DIR/projects/helloworld.qgs&SERVICE=XYZ&X=1&Y=0&Z=1&LAYERS=world">XYZ</a></li>
       <li><a href="/cgi-bin/qgis_mapserv.fcgi?MAP=QGIS_SERVER_DIR/projects/helloworld.qgs&SERVICE=CUSTOM">CUSTOM Service</a></li>
       <li><a href="http://127.0.0.1:8083/demo/">Mapproxy demo</a></li>
+      <li><a href="http://localhost:8080/project/helloworld/wfs3">WFS3 (rewrite URL)</a></li>
+
   </ul>
   </body>
 </html>

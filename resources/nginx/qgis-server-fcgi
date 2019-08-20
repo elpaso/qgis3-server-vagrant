@@ -11,7 +11,7 @@ map $http_host $parsed_server_name {
 }
 
 map $http_host $parsed_server_port {
-    default  $host;
+    default  $server_port;
     "~(?P<h>[^:]+):(?P<p>.*+)" $p;
 }
 
@@ -34,10 +34,13 @@ server {
             try_files $uri $uri/ =404;
     }
 
-    # Rewrite rule to shorten url + hide the project locations on disk
-    # E.g. you can do a http://localhost:8080/qtb/helloworld?SERVICE=WMS.. instead of
-    # http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS..
-    rewrite ^/qtb/(.*)$ /cgi-bin/qgis_mapserv.fcgi?map=/qgis-server/projects/$1.qgs last;
+    # project file set by env var
+    # example: http://localhost:8082/project_base_name
+    location ~ ^/project/([^/]+)/?(.*)$
+    {
+      set $qgis_project /qgis-server/projects/$1.qgs;
+      rewrite ^/project/(.*)$ /cgi-bin/qgis_mapserv.fcgi last;
+    }
 
     location /cgi-bin/ {
         # Disable gzip (it makes scripts feel slower since they have to complete
@@ -52,6 +55,9 @@ server {
         # get the correct values for the online resource URIs
         fastcgi_param SERVER_NAME       $parsed_server_name;
         fastcgi_param SERVER_PORT       $parsed_server_port;
+
+        # Set project file from env var
+        fastcgi_param QGIS_PROJECT_FILE $qgis_project;
 
         # Fastcgi parameters, include the standard ones
         # Note: this needs to be last or it will take precedence over the SERVER_NAME/PORT overridden above

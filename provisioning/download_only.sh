@@ -11,8 +11,8 @@ set -e
 echo "Setting up development apt repositories ..."
 
 # Add QGIS repositories
-apt-key adv --keyserver keyserver.ubuntu.com --recv-key CAEB3DC3BDF7FB45
-echo 'deb http://qgis.org/debian-nightly bionic main' > /etc/apt/sources.list.d/debian-gis.list
+apt-key adv --keyserver keyserver.ubuntu.com --recv-key 51F523511C7028C3
+echo 'deb http://qgis.org/ubuntu-nightly bionic main' > /etc/apt/sources.list.d/ubuntu-qgis.list
 
 # Update && upgrade packages
 apt-get update && apt-get -y upgrade

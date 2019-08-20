@@ -23,11 +23,11 @@ Restart = always
 # Environment
 Environment="QGIS_AUTH_DB_DIR_PATH=QGIS_SERVER_DIR/projects"
 Environment="QGIS_SERVER_LOG_FILE=QGIS_SERVER_DIR/logs/qgis-server-fcgi-nginx.log"
+# For stderr logging (goes to syslog)
+#Environment="QGIS_SERVER_LOG_FILE=''"
+#Environment="QGIS_SERVER_LOG_STDERR=1"
 Environment="QGIS_SERVER_LOG_LEVEL=0"
 Environment="QGIS_DEBUG=1"
-# Temporary workaround for #18230
-# Now fixed on 3.4
-# Environment="QGIS_PREFIX_PATH=/usr"
 Environment="DISPLAY=:99"
 Environment="QGIS_PLUGINPATH=QGIS_SERVER_DIR/plugins"
 Environment="QGIS_OPTIONS_PATH=QGIS_SERVER_DIR"

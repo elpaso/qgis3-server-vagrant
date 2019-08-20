@@ -3,7 +3,7 @@
 # This is parsed by provisioning scripts to
 # create the final configuration file
 
-# Extract server name and port from HTTP_HOST, this 
+# Extract server name and port from HTTP_HOST, this
 # is needed because we are behind a VMs mapped port
 
 map $http_host $parsed_server_name {
@@ -12,14 +12,14 @@ map $http_host $parsed_server_name {
 }
 
 map $http_host $parsed_server_port {
-    default  $host;
+    default  $server_port;
     "~(?P<h>[^:]+):(?P<p>.*+)" $p;
 }
 
 upstream mapproxy_backend {
 QGIS_SERVER_HTTP_SERVERS
 }
- 
+
 server {
     listen 83 default_server;
     listen [::]:83 default_server;
@@ -36,7 +36,7 @@ server {
         # get the correct values for the online resource URIs
         # Pass headers to proxy
         proxy_set_header    X_FORWARDED_HOST  $parsed_server_name:$parsed_server_port;
- 
+
         proxy_pass http://mapproxy_backend;
     }
 

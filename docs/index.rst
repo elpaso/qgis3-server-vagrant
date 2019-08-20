@@ -163,6 +163,7 @@ Supported standards
 + WFS 1.0.0, 1.1.0
 + WCS 1.1.1
 + WMTS 1.0.0
++ WFS3 draft (new!)
 
 ----
 
@@ -178,8 +179,8 @@ http://test.qgis.org/ogc_cite/
 
 ----
 
-Architecture
-=============
+Legacy Architecture
+===================
 
 ``SERVICE`` modules
 
@@ -193,8 +194,18 @@ Architecture
 
 ----
 
-API
-===
+New API Architecture
+====================
+
+``API`` modules
+
++ WFS3 API handler
++ Custom API handlers (C++ and Python)
+
+
+
+API documentation
+=================
 
 https://qgis.org/api/group__server.html
 
@@ -215,8 +226,30 @@ Nginx **MapProxy**   83         8083
 
 ----
 
-OS Setup
-====================
+Deployment strategies
+=====================
+
+1. Docker
+2. Bare metal
+    + nginx (spawn-fcgi, systemd)
+    + Apache2/mod_fcgid
+    + Python (uwsgi, gunicorn ...)
+
+----
+
+Docker images
+=====================
+
++ https://github.com/kartoza/docker-qgis-server
++ https://github.com/3liz/docker-qgis-server
++ https://github.com/gem/oq-qgis-server
++ https://github.com/elpaso/qgis-server-docker
+
+
+----
+
+Bare metal - OS Setup
+=====================
 
 We are using Ubuntu Bionic 64bit
 
@@ -232,6 +265,14 @@ Quickstart:
 .. code:: bash
 
     vagrant up
+
+----
+
+Provided VMs
+====================
+
+1. Unprovisioned (software installed, no configuration)
+2. Fully provisioned (ready to run)
 
 ----
 
@@ -415,13 +456,33 @@ VirtualHost configuration for both **FastCGI** and **CGI**
         FcgidInitialEnv LANG "en_US.UTF-8"
         FcgidInitialEnv PYTHONIOENCODING UTF-8
         FcgidInitialEnv QGIS_DEBUG 1
-        FcgidInitialEnv QGIS_SERVER_LOG_FILE "QGIS_SERVER_DIR/logs/qgis-apache-001.log"
-        FcgidInitialEnv QGIS_SERVER_LOG_LEVEL 0
         FcgidInitialEnv QGIS_PLUGINPATH "QGIS_SERVER_DIR/plugins"
         FcgidInitialEnv QGIS_AUTH_DB_DIR_PATH "QGIS_SERVER_DIR"
+        # Path to the QGIS3.ini settings file
         FcgidInitialEnv QGIS_OPTIONS_PATH "QGIS_SERVER_DIR"
+        # Path to the user profile directory
         FcgidInitialEnv QGIS_CUSTOM_CONFIG_PATH "QGIS_SERVER_DIR"
         FcgidInitialEnv DISPLAY ":99"
+
+-----
+
+
+Apache2 configuration III
+=========================
+
+Logging
+
+.. code:: bash
+
+
+        FcgidInitialEnv QGIS_DEBUG 1
+        FcgidInitialEnv QGIS_SERVER_LOG_FILE "QGIS_SERVER_DIR/logs/qgis-apache-001.log"
+        # Log to stderr instead:
+        # FcgidInitialEnv QGIS_SERVER_LOG_FILE ""
+        # FcgidInitialEnv QGIS_SERVER_LOG_STDERR 1
+        FcgidInitialEnv QGIS_SERVER_LOG_LEVEL 0
+        FcgidInitialEnv QGIS_PLUGINPATH "QGIS_SERVER_DIR/plugins"
+
 
 -----
 
@@ -432,18 +493,12 @@ Apache2 configuration IV
 
 .. code:: bash
 
-        # For simple CGI: ignored by fcgid
+        # For simple CGI: ignored by fcgid,
+        # Same as FastCGI, but "SetEnv" instead of "FcgidInitialEnv"
         SetEnv LC_ALL "en_US.UTF-8"
         SetEnv LANG "en_US.UTF-8"
         SetEnv PYTHONIOENCODING UTF-8
-        SetEnv QGIS_DEBUG 1
-        SetEnv QGIS_SERVER_LOG_FILE "QGIS_SERVER_DIR/logs/qgis-apache-001.log"
-        SetEnv QGIS_SERVER_LOG_LEVEL 0
-        SetEnv QGIS_PLUGINPATH "QGIS_SERVER_DIR/plugins"
-        SetEnv QGIS_AUTH_DB_DIR_PATH "QGIS_SERVER_DIR"
-        SetEnv QGIS_OPTIONS_PATH "QGIS_SERVER_DIR"
-        SetEnv QGIS_CUSTOM_CONFIG_PATH "QGIS_SERVER_DIR"
-        SetEnv DISPLAY ":99"
+        ...
 
 ----
 
@@ -533,7 +588,7 @@ Nginx configuration II
     }
 
     map $http_host $parsed_server_port {
-        default  $host;
+        default  $server_port;
         "~(?P<h>[^:]+):(?P<p>.*+)" $p;
     }
 
@@ -586,6 +641,25 @@ Nginx configuration IV
 Nginx configuration V
 =======================
 
+Rewrite!
+
+.. code:: bash
+
+        # project file set by env var
+        # example: http://localhost:8082/project_base_name
+        location ~ ^/project/([^/]+)/?(.*)$
+        {
+        set $qgis_project /qgis-server/projects/$1.qgs;
+        rewrite ^/project/(.*)$ /cgi-bin/qgis_mapserv.fcgi last;
+        }
+
+
+
+----
+
+Nginx configuration VI
+=======================
+
 .. code:: bash
 
         location /cgi-bin/ {
@@ -602,13 +676,15 @@ Nginx configuration V
             fastcgi_param SERVER_NAME       $parsed_server_name;
             fastcgi_param SERVER_PORT       $parsed_server_port;
 
+            # Set project file from env var
+            fastcgi_param QGIS_PROJECT_FILE $qgis_project;
+
             # Fastcgi parameters, include the standard ones
             # (note: this needs to be last or it will overwrite fastcgi_param set above)
             include /etc/nginx/fastcgi_params;
 
         }
     }
-
 
 ----
 
@@ -679,8 +755,6 @@ Service
     Environment="QGIS_SERVER_LOG_FILE=QGIS_SERVER_DIR/logs/qgis-server-fcgi.log"
     Environment="QGIS_SERVER_LOG_LEVEL=0"
     Environment="QGIS_DEBUG=1"
-    # Temporary workaround for #18230
-    Environment="QGIS_PREFIX_PATH=/usr"
     Environment="DISPLAY=:99"
     Environment="QGIS_PLUGINPATH=QGIS_SERVER_DIR/plugins"
     Environment="QGIS_OPTIONS_PATH=QGIS_SERVER_DIR"
@@ -833,29 +907,9 @@ Checkpoint: printing substitutions
 
 ----
 
-QGIS Server 2.x and python
+QGIS Server 3 and python
 ============================
 
-Since QGIS 2.8
-
-.. code:: python
-
-    from qgis.server import QgsServer
-    s = QgsServer()
-    header, body = s.handleRequest(
-        'MAP=/qgis-server/projects/helloworld.qgs' +
-        '&SERVICE=WMS&REQUEST=GetCapabilities')
-    print(header, body)
-
-Full script:
-https://github.com/qgis/QGIS/blob/release-2_18/tests/src/python/qgis_wrapped_server.py
-
-----
-
-QGIS Server 3.x and python
-============================
-
-Since QGIS 2.99
 
 .. code:: python
 
@@ -958,15 +1012,30 @@ Cache plugins II
 QGIS Server 3.x and python services
 ===================================
 
-Since QGIS 2.99
+Since QGIS 3
 
-New server **plugin-based** architecture!
+New server **plugin-based** service architecture!
 
 You can now create custom services in pure *Python*.
 
 Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customservice/customservice.py
 
 ----
+
+
+QGIS Server 3.x and python custom APIs
+======================================
+
+Since QGIS 3.10
+
+New server **plugin-based** API architecture!
+
+You can now create custom APIs in pure *Python*.
+
+Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customapi/customapi.py
+
+----
+
 
 QGIS Server Python app: the basics
 ==================================
@@ -1029,8 +1098,6 @@ Systemd
     Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python.log"
     Environment="QGIS_SERVER_LOG_LEVEL=0"
     Environment="QGIS_DEBUG=1"
-    # Temporary workaround for #18230
-    # Not required in 3.4: Environment="QGIS_PREFIX_PATH=/usr"
     Environment="DISPLAY=:99"
     Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
     Environment="QGIS_OPTIONS_PATH=/qgis-server"
@@ -1113,10 +1180,11 @@ Logging
 =======
 
 
-``QGIS_SERVER_LOG_FILE``
+``QGIS_SERVER_LOG_FILE`` (deprecated)
 
 Specify path and filename. Make sure that server has proper permissions for writing to file. File should be created automatically, just send some requests to server. If it’s not there, check permissions.
 
+``QGIS_SERVER_LOG_STDERR`` (best option)
 
 ``QGIS_SERVER_LOG_LEVEL``
 

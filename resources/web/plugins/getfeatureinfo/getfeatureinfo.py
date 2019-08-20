@@ -13,8 +13,8 @@ class GetFeatureInfoFilter(QgsServerFilter):
         if params.get('TEST', False):
             handler.clearBody()
             handler.appendBody(b"ciao")
-            
-        if (params.get('SERVICE').upper() == 'WMS' \
+
+        if (params.get('SERVICE', '').upper() == 'WMS' \
                 and params.get('REQUEST', '').upper() == 'GETFEATUREINFO' \
                 and params.get('INFO_FORMAT', '').upper() == 'TEXT/HTML' \
                 and not handler.exceptionRaised() ):

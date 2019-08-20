@@ -24,7 +24,7 @@ class HTTPBasicFilter(QgsServerFilter):
     def requestReady(self):
         handler = self.serverInterface().requestHandler()
         auth = self.serverInterface().getEnv('HTTP_AUTHORIZATION')
-        
+
         if self._checkAuth():
             return
 
@@ -48,4 +48,4 @@ class HTTPBasic:
     def __init__(self, serverIface):
         # Save reference to the QGIS server interface
         serverIface.registerFilter( HTTPBasicFilter(serverIface), 10 )
-    
+
