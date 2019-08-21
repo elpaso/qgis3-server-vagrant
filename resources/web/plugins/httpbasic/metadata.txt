@@ -1,7 +1,15 @@
+; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+;
+; WARNING: this is only a demo and it is not for use in production:
+; username and password are shown in the clear to the user
+;
+; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 [general]
-name=QGIS Server HTTP Basic Auth Plugin
+name=!!!! DEMO: ++ NOT FOR PRODUCTION ++  QGIS Server HTTP Basic Auth Plugin !!!!
 qgisMinimumVersion=2.8
-qgisMaximumVersion=2.99
+qgisMaximumVersion=3.99
 description=QGIS Server HTTP Basic Auth Plugin
 version=version 1.0
 author=Alessandro Pasotti (ItOpen)

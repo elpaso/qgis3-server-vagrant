@@ -10,7 +10,11 @@ from utils.graphviz_directive import Graphviz
 directives.register_directive('graph', Graphviz)
 
 # Need to make sure all graph images files are existing
-presentation = sys.argv[1:][0]
+try:
+    presentation = sys.argv[1:][0]
+except IndexError:
+    presentation = 'index.rst'
+
 # Relpath
 rel_path = os.path.abspath(os.path.dirname(presentation))
 # Make dir
@@ -31,5 +35,5 @@ with open(presentation, 'r') as f:
 
 
 if __name__ == "__main__":
-    cmd = sys.argv[1:]
+    cmd = [presentation]
     hovercraft.main(cmd)

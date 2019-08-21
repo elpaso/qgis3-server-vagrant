@@ -1,9 +1,22 @@
+"""
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+WARNING: this is only a demo and it is not for use in production:
+username and password are shown in the clear to the user
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+"""
+
 import os
 
 from qgis.server import *
 from qgis.core import QgsMessageLog
 import base64
 
+USERNAME='qgis'
+PASSWORD='qgis'
 
 class HTTPBasicFilter(QgsServerFilter):
 
@@ -16,8 +29,8 @@ class HTTPBasicFilter(QgsServerFilter):
             auth = self.serverInterface().requestHandler().requestHeader('HTTP_AUTHORIZATION')
         if auth:
             username, password = base64.b64decode(auth[6:]).split(b':')
-            if (username.decode('utf-8') == os.environ.get('QGIS_SERVER_USERNAME', 'username') and
-                    password.decode('utf-8') == os.environ.get('QGIS_SERVER_PASSWORD', 'password')):
+            if (username.decode('utf-8') == os.environ.get('QGIS_SERVER_USERNAME', USERNAME) and
+                    password.decode('utf-8') == os.environ.get('QGIS_SERVER_PASSWORD', PASSWORD)):
                 return True
         return False
 
@@ -38,7 +51,7 @@ class HTTPBasicFilter(QgsServerFilter):
         # No auth ...
         handler.clear()
         handler.setResponseHeader('Status', '401 Authorization required')
-        handler.setResponseHeader('WWW-Authenticate', 'Basic realm="QGIS Server"')
+        handler.setResponseHeader('WWW-Authenticate', 'Basic realm="QGIS Server (%s/%s)"' % (os.environ.get('QGIS_SERVER_USERNAME', USERNAME)), os.environ.get('QGIS_SERVER_PASSWORD', PASSWORD))
         handler.appendBody(b'<h1>Authorization required</h1>')
 
 

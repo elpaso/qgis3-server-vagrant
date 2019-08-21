@@ -1,5 +1,6 @@
 
 import json
+import os
 
 from qgis.PyQt.QtCore import QBuffer, QIODevice, QTextStream, QRegularExpression
 from qgis.server import (
@@ -25,11 +26,10 @@ class CustomApiHandler(QgsServerOgcApiHandler):
 
     def __init__(self):
         super(CustomApiHandler).__init__()
-        self.setContentTypes([QgsServerOgcApi.JSON])
+        self.setContentTypes([QgsServerOgcApi.HTML, QgsServerOgcApi.JSON])
 
     def path(self):
         return QRegularExpression("/customapi")
-
 
     def operationId(self):
         return "CustomApiXYCircle"
@@ -59,6 +59,8 @@ class CustomApiHandler(QgsServerOgcApiHandler):
         exporter = QgsJsonExporter()
         self.write(json.loads(exporter.exportFeature(f)), context)
 
+    def templatePath(self, context):
+        return os.path.join(os.path.dirname(__file__), 'circle.html')
 
     def parameters(self, context):
         return [QgsServerQueryStringParameter('x', True, QgsServerQueryStringParameter.Type.Double, 'X coordinate'),
@@ -70,7 +72,8 @@ class CustomApiHandler(QgsServerOgcApiHandler):
 class CustomApi():
 
     def __init__(self, serverIface):
-        api = QgsServerOgcApi(serverIface, '/customapi', 'custom api', 'a custom api', '1.1')
+        api = QgsServerOgcApi(serverIface, '/customapi',
+                              'custom api', 'a custom api', '1.1')
         handler = CustomApiHandler()
         api.registerHandler(handler)
         serverIface.serviceRegistry().registerApi(api)

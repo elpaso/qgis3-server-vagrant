@@ -22,10 +22,12 @@ WS Program
 + Introduction to QGIS Server
 + General workflow
 + Deployment strategies
++ QGIS Server vendor features
 + Python API
 + Python Plugins
-+ Access Control Plugins
-+ Cache Plugins
+    + Access Control Plugins
+    + Cache Plugins
++ Python applications and embedding
 
 ----
 
@@ -34,7 +36,7 @@ QGIS Server
 
 
 .. graph:: images/intro.png
-    :class: scale-70 centered
+    :class: scale-100 centered
 
     digraph g {
             rankdir="LR"
@@ -202,26 +204,12 @@ New API Architecture
 + WFS3 API handler
 + Custom API handlers (C++ and Python)
 
-
+----
 
 API documentation
 =================
 
 https://qgis.org/api/group__server.html
-
-----
-
-Demo VM stack
-=============
-
-==================== ========== ============
-Server               Port       Mapped to
--------------------- ---------- ------------
-Nginx **FastCGI**    80         8080
-Apache **(Fast)CGI** 81         8081
-Nginx **Python**     82         8082
-Nginx **MapProxy**   83         8083
-==================== ========== ============
 
 
 ----
@@ -229,8 +217,8 @@ Nginx **MapProxy**   83         8083
 Deployment strategies
 =====================
 
-1. Docker
-2. Bare metal
+1. Docker containers
+2. Bare metal or VM
     + nginx (spawn-fcgi, systemd)
     + Apache2/mod_fcgid
     + Python (uwsgi, gunicorn ...)
@@ -245,13 +233,41 @@ Docker images
 + https://github.com/gem/oq-qgis-server
 + https://github.com/elpaso/qgis-server-docker
 
+----
+
+Demo VM stack
+=============
+
+==================== ========== ============
+Server               Port       Mapped to host
+-------------------- ---------- ------------
+Nginx **FastCGI**    80         8080
+Apache **(Fast)CGI** 81         8081
+Nginx **Python**     82         8082
+Nginx **MapProxy**   83         8083
+==================== ========== ============
+
+----
+
+Application summary
+====================
+
++ **Apache2**: web server
++ **mod_fcgid** Apache module for FastCGI
+
++ **Nginx**: web server
++ **systemd** (Linux process manager, for FastCGI + nginx)
+
++ **MapProxy**: Python based WMS/WFS/TMS caching proxy
+
++ **xvfb** (headless X server, required by QT)
 
 ----
 
 Bare metal - OS Setup
 =====================
 
-We are using Ubuntu Bionic 64bit
+We are using *Ubuntu Bionic 64bit*
 
 https://github.com/elpaso/qgis3-server-vagrant
 
@@ -272,17 +288,31 @@ Provided VMs
 ====================
 
 1. Unprovisioned (software installed, no configuration)
+    You need to make the configuration manually or run the provisioning scripts from::
+    /vagrant/provisioning
+
 2. Fully provisioned (ready to run)
+
+
 
 ----
 
 SSH into the machine
 ====================
 
+Vagrant:
+
 .. code:: bash
 
     vagrant ssh
-    sudo su -
+    sudo su - # become superuser
+
+Plain VM (username: qgis, password: qgis):
+
+.. code:: bash
+
+    ssh -p 2222 qgis@192.168.56.1
+    sudo su - # become superuser
 
 **Checkpoint**: you need to be able to log into the machine and become ``root``
 
@@ -297,8 +327,9 @@ Only for unprovisioned machines!
 
     wget https://github.com/elpaso/qgis3-server-vagrant/archive/master.zip
     unzip master.zip
-    rmdir /vagrant/
+    rmdir /vagrant/ # if exists
     mv qgis3-server-vagrant-master/ /vagrant
+    cd /vagrant/provisioning
 
 ----
 
@@ -308,19 +339,21 @@ Add required repositories
 .. code:: bash
 
     # Add QGIS repositories
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-key CAEB3DC3BDF7FB45
-    echo 'deb http://qgis.org/debian bionic main' > /etc/apt/sources.list.d/debian-gis.list
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-key 51F523511C7028C3
+    echo 'deb http://qgis.org/ubuntu-nightly bionic main' > /etc/apt/sources.list.d/ubuntu-qgis.list
     apt-get update && apt-get -y upgrade
 
 ----
 
-Add required repositories
+Check new packages
 =========================
 
 **Checkpoint**: the available version of qgis-server must be >= 3 from qgis.org
 
 .. code:: bash
 
+    apt-cache policy qgis-server
+    # output follows:
     qgis-server:
     Installed: 1:3.5.0+git20190214+dabd649+28bionic
     Candidate: 1:3.5.0+git20190214+dabd649+28bionic
@@ -337,17 +370,18 @@ Add required repositories
 Install system software
 =======================
 
-Install the software
+Install the software, see::
+
+    /vagrant/provisioning/config.sh
+    /vagrant/provisioning/common.sh
 
 .. code:: bash
 
     # Common configuration
     export QGIS_SERVER_DIR=/qgis-server
     export DEBIAN_FRONTEND=noninteractive
-
     # Install QGIS server and deps (overwrite is a temporary solution)
     apt-get -y install -o Dpkg::Options::="--force-overwrite" qgis-server python3-qgis xvfb
-
     # Install utilities (optional)
     apt-get -y install vim unzip ipython3
 
@@ -375,6 +409,7 @@ Install system software I
 Install system software II
 ===========================
 
+Copy resources
 
 .. code:: bash
 
@@ -393,6 +428,8 @@ Install system software II
 Install system software III
 =============================
 
+Setup *xvfb* and plain **CGI**
+
 .. code:: bash
 
     # Setup xvfb
@@ -410,7 +447,10 @@ Install system software III
 Apache2
 ======================
 
-Installation (with FCGI module)
+Installation (with **FCGI** module)
+
+
+    The Apache HTTP Server Project is an effort to develop and maintain an open-source HTTP server for modern operating systems including UNIX and Windows. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
 
 .. code:: bash
 
@@ -428,8 +468,10 @@ Configure the web server
 
     cp /vagrant/resources/apache2/001-qgis-server.conf \
         /etc/apache2/sites-available
+    # sed: replace QGIS_SERVER_DIR with actual path
     sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@g" \
         /etc/apache2/sites-available/001-qgis-server.conf
+    # sed: replace port from 80 to 81
     sed -i -e 's/VirtualHost \*:80/VirtualHost \*:81/' \
         /etc/apache2/sites-available/001-qgis-server.conf
     sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@g" \
@@ -447,11 +489,7 @@ VirtualHost configuration for both **FastCGI** and **CGI**
 .. code:: bash
 
     <VirtualHost *:81>
-
         # [ ... ] Standard config goes here
-
-        # Longer timeout for WPS... default = 40
-        FcgidIOTimeout 120
         FcgidInitialEnv LC_ALL "en_US.UTF-8"
         FcgidInitialEnv LANG "en_US.UTF-8"
         FcgidInitialEnv PYTHONIOENCODING UTF-8
@@ -470,12 +508,13 @@ VirtualHost configuration for both **FastCGI** and **CGI**
 Apache2 configuration III
 =========================
 
-Logging
+**Logging**
 
 .. code:: bash
 
 
         FcgidInitialEnv QGIS_DEBUG 1
+        # Deprecated log to file (bad practice!)
         FcgidInitialEnv QGIS_SERVER_LOG_FILE "QGIS_SERVER_DIR/logs/qgis-apache-001.log"
         # Log to stderr instead:
         # FcgidInitialEnv QGIS_SERVER_LOG_FILE ""
@@ -507,13 +546,12 @@ Apache2 configuration V
 
 .. code:: bash
 
-        # Needed for QGIS plugin HTTP BASIC auth
+        # Required by QGIS plugin HTTP BASIC auth
         <IfModule mod_fcgid.c>
             RewriteEngine on
             RewriteCond %{HTTP:Authorization} .
             RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
         </IfModule>
-
         ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
         <Directory "/usr/lib/cgi-bin">
             AllowOverride All
@@ -523,7 +561,6 @@ Apache2 configuration V
             AddHandler fcgid-script .fcgi
             Require all granted
         </Directory>
-
     </VirtualHost>
 
 -----
@@ -539,12 +576,9 @@ Enable sites and restart
     a2enmod cgid # Required by plain old CGI
     a2dissite 000-default
     a2ensite 001-qgis-server
-
     # Listen on port 81 instead of 80 (nginx)
     sed -i -e 's/Listen 80/Listen 81/' /etc/apache2/ports.conf
-
     service apache2 restart # Restart the server
-
 
 **Checkpoint**: check whether Apache is listening on localhost port 8081 http://localhost:8081
 
@@ -552,6 +586,8 @@ Enable sites and restart
 
 Nginx Installation
 ===================
+
+    nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server
 
 .. code:: bash
 
@@ -566,9 +602,11 @@ Nginx configuration I
 
 .. code:: bash
 
+    # Enable site
     rm /etc/nginx/sites-enabled/default
     cp /vagrant/resources/nginx/qgis-server-fcgi \
         /etc/nginx/sites-enabled/qgis-server
+    # sed: replace QGIS_SERVER_DIR with actual path
     sed -i -e "s@QGIS_SERVER_DIR@${QGIS_SERVER_DIR}@" \
         /etc/nginx/sites-enabled/qgis-server
 
@@ -580,7 +618,7 @@ Nginx configuration II
 .. code:: bash
 
     # Extract server name and port from HTTP_HOST, this
-    # is needed because we are behind a VMs mapped port
+    # is required because we are behind a VMs mapped port
 
     map $http_host $parsed_server_name {
         default  $host;
@@ -646,11 +684,11 @@ Rewrite!
 .. code:: bash
 
         # project file set by env var
-        # example: http://localhost:8082/project_base_name
+        # example: http://localhost:8080/project/project_base_name/
         location ~ ^/project/([^/]+)/?(.*)$
         {
-        set $qgis_project /qgis-server/projects/$1.qgs;
-        rewrite ^/project/(.*)$ /cgi-bin/qgis_mapserv.fcgi last;
+          set $qgis_project /qgis-server/projects/$1.qgs;
+          rewrite ^/project/(.*)$ /cgi-bin/qgis_mapserv.fcgi last;
         }
 
 
@@ -671,10 +709,19 @@ Nginx configuration VI
             fastcgi_pass  qgis_mapserv_backend;
 
             # $http_host contains the original server name and port, such as: "localhost:8080"
-            # QGIS Server behind a VM needs this parsed values in order to automatically
-            # get the correct values for the online resource URIs
             fastcgi_param SERVER_NAME       $parsed_server_name;
             fastcgi_param SERVER_PORT       $parsed_server_port;
+
+            # [ continue ... ]
+
+----
+
+Nginx configuration VII
+=======================
+
+.. code:: bash
+
+            # [ ... continued ]
 
             # Set project file from env var
             fastcgi_param QGIS_PROJECT_FILE $qgis_project;
@@ -686,9 +733,10 @@ Nginx configuration VI
         }
     }
 
+
 ----
 
-Systemd config for FastCGI
+Systemd socket config for FastCGI
 ===================================
 
 Socket
@@ -700,7 +748,6 @@ Socket
 
     [Unit]
     Description = QGIS Server FastCGI Socket (instance %i)
-
     [Socket]
     SocketUser = www-data
     SocketGroup = www-data
@@ -713,10 +760,8 @@ Socket
 ----
 
 
-Systemd config for FastCGI 2
+Systemd service config for FastCGI
 ===================================
-
-Service
 
 .. code:: bash
 
@@ -725,19 +770,15 @@ Service
 
     [Unit]
     Description = QGIS Server Tracker FastCGI backend (instance %i)
-
     [Service]
     User = www-data
     Group = www-data
     ExecStart = /usr/lib/cgi-bin/qgis_mapserv.fcgi
     StandardInput = socket
-    #StandardOutput = null
-    #StandardError = null
     StandardOutput=syslog
     StandardError=syslog
     SyslogIdentifier=qgis-server-fcgi
     WorkingDirectory=/tmp
-
     Restart = always
 
 
@@ -762,17 +803,6 @@ Service
 
     [Install]
     WantedBy = multi-user.target
-
-----
-
-Checkpoint: Apache2
-===========================
-
-Check **WMS** on localhost 8081 in the browser
-
-http://localhost:8081
-
-Follow the links!
 
 
 ----

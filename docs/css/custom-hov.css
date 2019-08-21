@@ -31,11 +31,23 @@ ul.pull-left, ul.pull-right {
 }
 
 .scale-50 {
-    max-width: 50%;
+    max-width: 50% !important;
 }
 
 .scale-70 {
-    max-width: 70%;
+    max-width: 70% !important;
+}
+
+.scale-80 {
+    max-width: 80% !important;
+}
+
+.scale-90 {
+    max-width: 90% !important;
+}
+
+.scale-100 {
+    max-width: 100% !important;
 }
 
 .step {

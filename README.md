@@ -39,7 +39,7 @@ sudo dpkg -i vagrant_2.0.3_x86_64.deb
 
 ## Features
 
-This machine is based on xenial and comes with a sample project and some sample plugins.
+This machine is based on Ubuntu bionic and comes with a sample project and some sample plugins.
 
 
 | Server            | Port       | Mapped to |

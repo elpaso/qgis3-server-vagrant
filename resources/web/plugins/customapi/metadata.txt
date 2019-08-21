@@ -1,7 +1,7 @@
 [general]
 name=QGIS Server Custom API Plugin
-qgisMinimumVersion=3.0
-description=QGIS Server Custom API Plugin 
+qgisMinimumVersion=3.9
+description=QGIS Server Custom API Plugin
 version=version 1.0
 author=Alessandro Pasotti (ItOpen)
 email=elpaso@itopen.it
