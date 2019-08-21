@@ -25,7 +25,7 @@ from qgis.core import (
 class CustomApiHandler(QgsServerOgcApiHandler):
 
     def __init__(self):
-        super(CustomApiHandler).__init__()
+        super(CustomApiHandler, self).__init__()
         self.setContentTypes([QgsServerOgcApi.HTML, QgsServerOgcApi.JSON])
 
     def path(self):

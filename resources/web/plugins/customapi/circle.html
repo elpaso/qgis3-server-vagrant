@@ -1,0 +1,75 @@
+<!-- template for the Circle API demo -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+            integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+            crossorigin=""/>
+    <link rel="stylesheet" href="/project/helloworld/wfs3/static/style.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/project/helloworld/wfs3/static/jsonFormatter.min.css" crossorigin="anonymous"></script>
+    <script src="/project/helloworld/wfs3/static/jsonFormatter.min.js" crossorigin="anonymous"></script>
+
+    <title>Circle</title>
+  </head>
+  <body>
+  <div class="container pt-4">
+  <!-- END HEADER TEMPLATE header.html -->
+
+
+        <!-- template for the WFS3 API leaflet map -->
+  <div class="col-md-12">
+    <div id="mapid" class="small"></div>
+
+    <script type="text/javascript">
+    jQuery( document ).ready(function( $ ) {
+        var map = L.map('mapid').setView([0, 0], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map)
+            var data = {"type": "FeatureCollection","features": [{{ json_dump() }}]};
+        var jl = L.geoJSON( data ).addTo(map);
+        map.setView(jl.getBounds().getCenter());
+        if ( jl.getBounds().getEast() != jl.getBounds().getWest() && jl.getBounds().getNorth() != jl.getBounds().getSouth() )
+        {
+          map.fitBounds(jl.getBounds());
+        }
+        jl.on('featureOver', featureOver);
+    });
+
+    </script>
+</div>
+
+
+    </div>
+
+    <!-- FOOTER TEMPLATE footer.html -->
+    </div> <!-- //container -->
+
+    <footer class="footer bg-light py-4 d-flex flex-column justify-content-around align-items-center">
+        <div class="container d-flex flex-row justify-content-between align-items-center w-100">
+                <span><span class="text-muted small mr-2">powered by</span><a class="navbar-brand" href="https://www.qgis.org/" target="_blank">QGIS Server</a></span>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+       integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+       crossorigin=""></script>
+    <script>
+      jQuery('.jref').jsonFormatter();
+    </script>
+  </body>
+</html>

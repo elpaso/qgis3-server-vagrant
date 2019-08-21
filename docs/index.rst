@@ -311,7 +311,7 @@ Plain VM (username: qgis, password: qgis):
 
 .. code:: bash
 
-    ssh -p 2222 qgis@192.168.56.1
+    ssh -p 2222 qgis@localhost # password: qgis
     sudo su - # become superuser
 
 **Checkpoint**: you need to be able to log into the machine and become ``root``
@@ -327,8 +327,9 @@ Only for unprovisioned machines!
 
     wget https://github.com/elpaso/qgis3-server-vagrant/archive/master.zip
     unzip master.zip
-    rmdir /vagrant/ # if exists
+    rm -rf /vagrant/ # if exists
     mv qgis3-server-vagrant-master/ /vagrant
+    rm master.zip
     cd /vagrant/provisioning
 
 ----
