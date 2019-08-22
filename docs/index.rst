@@ -541,6 +541,32 @@ Installation (with **FCGI** module)
 
     apt-get -y install apache2 libapache2-mod-fcgid
 
+----
+
+Apache2 architecture
+=====================
+
+.. graph:: images/apache-architecture.png
+    :class: scale-80 centered
+
+    digraph g {
+            rankdir="TB"
+
+            subgraph cluster_0 {
+                style=filled;
+                color=yellow;
+                node [shape=box style=filled,color=white];
+                "Apache Web Server" -> "Apache FastCGI module (mod_fcgid)";
+                label = "Apache";
+            }
+
+            node [shape=box style=box,color=blue]
+            edge [color=blue fontsize=9 dir=both]
+
+            "Apache FastCGI module (mod_fcgid)" -> "QGIS Server FastCGI";
+
+    }
+
 
 -----
 
@@ -679,6 +705,43 @@ Nginx Installation
     # Install the software
     export DEBIAN_FRONTEND=noninteractive
     apt-get -y install nginx
+
+----
+
+Nginx architecture
+=====================
+
+.. graph:: images/nginx-architecture.png
+    :class: scale-70 centered
+
+    digraph g {
+            rankdir="TB"
+
+            subgraph cluster_0 {
+                style=filled;
+                color=green;
+                node [shape=box style=filled,color=white];
+                "Nginx Web Server";
+                label = "Nginx";
+            }
+
+            subgraph cluster_1 {
+                style=filled;
+                color=yellow;
+                node [shape=box style=filled,color=white];
+                "Systemd Managed Socket";
+                "Systemd Managed Service";
+                label = "Systemd";
+            }
+
+            node [shape=box style=box,color=blue]
+            edge [color=blue fontsize=9 dir=both]
+
+            "Systemd Managed Service" -> "QGIS Server FastCGI";
+            "Nginx Web Server" -> "Systemd Managed Socket";
+            "Systemd Managed Socket" -> "QGIS Server FastCGI";
+    }
+
 
 ----
 
