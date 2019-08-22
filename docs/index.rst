@@ -179,10 +179,49 @@ CI tests:
 http://test.qgis.org/ogc_cite/
 
 
+-----
+
+QGIS Server Modules
+=====================
+
+.. graph:: images/system-architecture.png
+    :class: scale-70 centered
+
+    digraph g {
+            rankdir="TB"
+
+            style=filled;
+            color=lightgrey;
+
+            edge [fontcolor=red fontsize=9]
+            node [shape=box style="rounded"]
+
+            "QGIS Server" -> "Plugin filters"
+
+            node [style=filled, shape=box color=gray];
+
+            "Plugin filters" -> "SERVICE"
+            "Plugin filters" -> "API"
+
+            node [style=filled, shape=box color=green];
+
+            "API" -> "WFS3"
+            "API" -> "Custom API"
+
+            node [style=filled, shape=box color=yellow];
+
+            "SERVICE" -> "WMS/WMTS"
+            "SERVICE" -> "WFS"
+            "SERVICE" -> "WCS"
+            "SERVICE" -> "Custom SERVICE"
+    }
+
+
+
 ----
 
-Legacy Architecture
-===================
+SERVICE Architecture
+======================
 
 ``SERVICE`` modules
 
@@ -191,7 +230,6 @@ Legacy Architecture
 + WCS
 + WMTS
 + Custom modules (C++ and Python)
-+ Python plugins (generic, access control, cache)
 + Python bindings
 
 ----
@@ -203,6 +241,8 @@ New API Architecture
 
 + WFS3 API handler
 + Custom API handlers (C++ and Python)
++ Python bindings
+
 
 ----
 
