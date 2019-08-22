@@ -219,14 +219,19 @@ Deployment strategies
 
 1. Docker containers
 2. Bare metal or VM
-    + nginx (spawn-fcgi, systemd)
-    + Apache2/mod_fcgid
-    + Python (uwsgi, gunicorn ...)
 
 ----
 
 Docker images
 =====================
+
+.. class:: pull-right
+
+    .. image:: images/docker.svg
+        :class: scale-30
+
+
+.. class:: pull-left
 
 + https://github.com/kartoza/docker-qgis-server
 + https://github.com/3liz/docker-qgis-server
@@ -249,18 +254,35 @@ Nginx **MapProxy**   83         8083
 
 ----
 
-Application summary
+Requirements summary
 ====================
+
+.. class:: pull-right
+
+    .. image:: images/apache.png
+        :class: scale-30
+
+    .. image:: images/nginx.svg
+        :class: scale-30
+
+    .. image:: images/mapproxy.png
+        :class: scale-30
+
+.. class:: pull-left
+
++ **xvfb** (headless X server, required by QT)
 
 + **Apache2**: web server
 + **mod_fcgid** Apache module for FastCGI
 
+
 + **Nginx**: web server
 + **systemd** (Linux process manager, for FastCGI + nginx)
 
+Optional:
+
 + **MapProxy**: Python based WMS/WFS/TMS caching proxy
 
-+ **xvfb** (headless X server, required by QT)
 
 ----
 
@@ -276,11 +298,17 @@ in Vagrant it is provided by the *box*:
 https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-vagrant.box
 
 
-Quickstart:
+----
 
-.. code:: bash
+Setup steps
+=====================
 
-    vagrant up
++ add QGIS repositories
++ install QGIS server
++ install support software packages
++ configure services
++ start services
+
 
 ----
 
@@ -294,7 +322,6 @@ Provided VMs
 2. Fully provisioned (ready to run)
 
 
-
 ----
 
 SSH into the machine
@@ -304,6 +331,7 @@ Vagrant:
 
 .. code:: bash
 
+    vagrant up
     vagrant ssh
     sudo su - # become superuser
 
@@ -331,6 +359,22 @@ Only for unprovisioned machines!
     mv qgis3-server-vagrant-master/ /vagrant
     rm master.zip
     cd /vagrant/provisioning
+
+----
+
+The provisioning scripts
+======================================
+
++ config.sh (configuration)
++ setup.sh (complete setup)
++ download_only.sh (download only)
+
+Steps:
+
++ common.sh
++ apache2.sh
++ nginx.sh
++ mapproxy.sh
 
 ----
 
@@ -1002,9 +1046,7 @@ Since QGIS 3.4
 
     class StupidCache(QgsServerCacheFilter):
         """A simple in-memory and not-shared cache for demonstration purposes"""
-
         _cache = {}
-
         def _get_hash(self, request):
             # create a unique hash from the request
             paramMap = request.parameters()
@@ -1067,6 +1109,16 @@ Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/we
 
 ----
 
+QGIS Server Python API
+==================================
+
++ ``QgsServer()`` server instance
++ ``QgsBufferServerRequest(url)``
++ ``QgsBufferServerResponse()``
++ ``QgsServer.handleRequest(request, response)``
+
+
+----
 
 QGIS Server Python app: the basics
 ==================================
@@ -1096,22 +1148,17 @@ Systemd
     # Path: /etc/systemd/system/qgis-server-python@.service
     # systemctl start qgis-server-python@{1..4}.service
 
-
     [Unit]
     Description = QGIS Server Tracker Python backend (instance %i)
-
     [Service]
     User = www-data
     Group = www-data
     ExecStart = /qgis-server/qgis_wrapped_server_wsgi.py
     StandardInput = null
-    #StandardOutput = null
-    #StandardError = null
     StandardOutput=syslog
     StandardError=syslog
     SyslogIdentifier=qgis-server-python
     WorkingDirectory=/tmp
-
     Restart = always
 
 ----
@@ -1133,7 +1180,6 @@ Systemd
     Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
     Environment="QGIS_OPTIONS_PATH=/qgis-server"
     Environment="QGIS_CUSTOM_CONFIG_PATH=/qgis-server"
-
     [Install]
     WantedBy = multi-user.target
 

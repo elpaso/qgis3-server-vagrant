@@ -18,7 +18,13 @@ img.centered {
    display: block;
    width: 49%;
    float: right;
+   clear: right;
 }
+
+
+img.pull-right {
+    margin-bottom: 1em;
+ }
 
 .pull-left {
     display: block;
@@ -28,6 +34,18 @@ img.centered {
 ul.pull-left, ul.pull-right {
     list-style-position: inside;
     padding-left: 0;
+}
+
+.scale-20 {
+    max-width: 20% !important;
+}
+
+.scale-30 {
+    max-width: 30% !important;
+}
+
+.scale-40 {
+    max-width: 40% !important;
 }
 
 .scale-50 {
