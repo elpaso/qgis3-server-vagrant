@@ -36,7 +36,7 @@ QGIS Server
 
 
 .. graph:: images/intro.png
-    :class: scale-100 centered
+    :class: force-150 centered
 
     digraph g {
             rankdir="LR"
@@ -357,7 +357,8 @@ Provided VMs
 
 1. Unprovisioned (software installed, no configuration)
     You need to make the configuration manually or run the provisioning scripts from::
-    /vagrant/provisioning
+
+        /vagrant/provisioning
 
 2. Fully provisioned (ready to run)
 
@@ -534,8 +535,17 @@ Apache2
 
 Installation (with **FCGI** module)
 
+.. class:: pull-right
 
-    The Apache HTTP Server Project is an effort to develop and maintain an open-source HTTP server for modern operating systems including UNIX and Windows. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
+    .. image:: images/apache.png
+        :class: scale-30
+
+
+
+.. class:: pull-left
+
+    The Apache HTTP Server Project is an effort to develop and maintain an open-source HTTP server
+    for modern operating systems including UNIX and Windows.
 
 .. code:: bash
 
@@ -597,7 +607,7 @@ Apache2 configuration II
 
 VirtualHost configuration for both **FastCGI** and **CGI**
 
-.. code:: bash
+.. code:: apache
 
     <VirtualHost *:81>
         # [ ... ] Standard config goes here
@@ -621,7 +631,7 @@ Apache2 configuration III
 
 **Logging**
 
-.. code:: bash
+.. code:: apache
 
 
         FcgidInitialEnv QGIS_DEBUG 1
@@ -641,7 +651,7 @@ Apache2 configuration IV
 
 **CGI**
 
-.. code:: bash
+.. code:: apache
 
         # For simple CGI: ignored by fcgid,
         # Same as FastCGI, but "SetEnv" instead of "FcgidInitialEnv"
@@ -655,7 +665,7 @@ Apache2 configuration IV
 Apache2 configuration V
 =========================
 
-.. code:: bash
+.. code:: apache
 
         # Required by QGIS plugin HTTP BASIC auth
         <IfModule mod_fcgid.c>
@@ -697,6 +707,13 @@ Enable sites and restart
 
 Nginx Installation
 ===================
+
+.. class:: pull-right
+
+    .. image:: images/nginx.svg
+        :class: scale-30
+
+.. class:: pull-left
 
     nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server
 
@@ -763,7 +780,7 @@ Nginx configuration I
 Nginx configuration II
 =======================
 
-.. code:: bash
+.. code:: nginx
 
     # Extract server name and port from HTTP_HOST, this
     # is required because we are behind a VMs mapped port
@@ -786,7 +803,7 @@ Nginx configuration III
 Load balancing
 (round robin default, or least_conn;)
 
-.. code:: ruby
+.. code:: nginx
 
     upstream qgis_mapserv_backend {
         ip_hash;
@@ -805,7 +822,7 @@ Load balancing
 Nginx configuration IV
 =======================
 
-.. code:: bash
+.. code:: nginx
 
     server {
         listen 80 default_server;
@@ -829,7 +846,7 @@ Nginx configuration V
 
 Rewrite!
 
-.. code:: bash
+.. code:: nginx
 
         # project file set by env var
         # example: http://localhost:8080/project/project_base_name/
@@ -846,7 +863,7 @@ Rewrite!
 Nginx configuration VI
 =======================
 
-.. code:: bash
+.. code:: nginx
 
         location /cgi-bin/ {
             # Disable gzip (it makes scripts feel slower since they
@@ -867,7 +884,7 @@ Nginx configuration VI
 Nginx configuration VII
 =======================
 
-.. code:: bash
+.. code:: nginx
 
             # [ ... continued ]
 
@@ -901,7 +918,6 @@ Socket
     SocketGroup = www-data
     SocketMode = 0660
     ListenStream = /run/qgis_mapserv%i.sock
-
     [Install]
     WantedBy = sockets.target
 
@@ -971,7 +987,7 @@ Checkpoint: QGIS as a Client
 
 Check **WMS** and **WFS** using QGIS as a client.
 
-Check that **WFS** requires a "username" and "password"
+Check that **WFS** requires HTTP Basic auth (username and password = "qgis")
 
 Check that **WWS** *GetFeatureInfo* returns a (blueish) formatted HTML
 
@@ -1015,7 +1031,7 @@ Full list:  https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/s
 .. code::
 
     http://localhost:8081/cgi-bin/qgis_mapserv.fcgi?
-    INFO_FORMAT=application/json&MAP=/qgis-server/projects/helloworld.qgs
+    INFO_FORMAT=text/plain&MAP=/qgis-server/projects/helloworld.qgs
     &SERVICE=WMS&REQUEST=GetFeatureInfo&CRS=EPSG%3A4326&WIDTH=1794&HEIGHT=1194&LAYERS=world&
     WITH_GEOMETRY=TRUE&QUERY_LAYERS=world&FILTER=world%3A%22NAME%22%20%3D%20%27SPAIN%27
 
@@ -1083,6 +1099,32 @@ Checkpoint: printing substitutions
     &CRS=EPSG%3A4326&map0:EXTENT=4,52,14,58&FORMAT=png
     &LAYERS=bluemarble,world&print_title=Custom%20print%20title!
 
+
+----
+
+QGIS Server and Python
+==================================
+
+What can we do?
+
++ Use QGIS Server API from another Python application (embedding)
++ Run QGIS Server as a standalone WSGI service
++ Enhance QGIS Server with Python plugins
++ Add a new *SERVICE* written in Python
++ Add a new *API* written in Python
+
+
+----
+
+QGIS Server Python API
+==================================
+
++ ``QgsServer()`` server instance
++ ``QgsBufferServerRequest(url)``
++ ``QgsBufferServerResponse()``
++ ``QgsServer.handleRequest(request, response)``
+
+
 ----
 
 QGIS Server 3 and python
@@ -1105,6 +1147,57 @@ QGIS Server 3 and python
 
 Full script:
 https://github.com/qgis/QGIS/blob/master/tests/src/python/qgis_wrapped_server.py
+
+
+
+-----
+
+QGIS Server Python application 1
+================================
+
+Systemd
+
+.. code:: bash
+
+    # Listen on ports 809%i
+    # Path: /etc/systemd/system/qgis-server-python@.service
+    # systemctl start qgis-server-python@{1..4}.service
+
+    [Unit]
+    Description = QGIS Server Tracker Python backend (instance %i)
+    [Service]
+    User = www-data
+    Group = www-data
+    ExecStart = /qgis-server/qgis_wrapped_server_wsgi.py
+    StandardInput = null
+    StandardOutput=syslog
+    StandardError=syslog
+    SyslogIdentifier=qgis-server-python
+    WorkingDirectory=/tmp
+    Restart = always
+
+----
+
+QGIS Server Python application 2
+================================
+
+Systemd
+
+.. code:: bash
+
+    # Environment
+    Environment=QGIS_SERVER_PORT=809%i
+    Environment="QGIS_AUTH_DB_DIR_PATH=/qgis-server/projects"
+    Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python.log"
+    Environment="QGIS_SERVER_LOG_LEVEL=0"
+    Environment="QGIS_DEBUG=1"
+    Environment="DISPLAY=:99"
+    Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
+    Environment="QGIS_OPTIONS_PATH=/qgis-server"
+    Environment="QGIS_CUSTOM_CONFIG_PATH=/qgis-server"
+    [Install]
+    WantedBy = multi-user.target
+
 
 ----
 
@@ -1190,7 +1283,7 @@ QGIS Server 3.x and python services
 
 Since QGIS 3
 
-New server **plugin-based** service architecture!
+New server **plugin-based** *SERVICE* architecture!
 
 You can now create custom services in pure *Python*.
 
@@ -1204,87 +1297,12 @@ QGIS Server 3.x and python custom APIs
 
 Since QGIS 3.10
 
-New server **plugin-based** API architecture!
+New server **plugin-based** *API* architecture!
 
 You can now create custom APIs in pure *Python*.
 
 Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customapi/customapi.py
 
-----
-
-QGIS Server Python API
-==================================
-
-+ ``QgsServer()`` server instance
-+ ``QgsBufferServerRequest(url)``
-+ ``QgsBufferServerResponse()``
-+ ``QgsServer.handleRequest(request, response)``
-
-
-----
-
-QGIS Server Python app: the basics
-==================================
-
-.. code:: python
-
-    from qgis.core import *
-    from qgis.server import *
-    app = QgsApplication([], False)
-    s = QgsServer()
-    request = QgsBufferServerRequest('?MAP=/qgis-server/projects/helloworld.qgs&REQUEST=GetCapabilities&SERVICE=WMS')
-    response = QgsBufferServerResponse()
-    s.handleRequest(request, response)
-    print(response.body().data().decode('utf8'))
-
-
------
-
-QGIS Server Python application 1
-================================
-
-Systemd
-
-.. code:: bash
-
-    # Listen on ports 809%i
-    # Path: /etc/systemd/system/qgis-server-python@.service
-    # systemctl start qgis-server-python@{1..4}.service
-
-    [Unit]
-    Description = QGIS Server Tracker Python backend (instance %i)
-    [Service]
-    User = www-data
-    Group = www-data
-    ExecStart = /qgis-server/qgis_wrapped_server_wsgi.py
-    StandardInput = null
-    StandardOutput=syslog
-    StandardError=syslog
-    SyslogIdentifier=qgis-server-python
-    WorkingDirectory=/tmp
-    Restart = always
-
-----
-
-QGIS Server Python application 2
-================================
-
-Systemd
-
-.. code:: bash
-
-    # Environment
-    Environment=QGIS_SERVER_PORT=809%i
-    Environment="QGIS_AUTH_DB_DIR_PATH=/qgis-server/projects"
-    Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python.log"
-    Environment="QGIS_SERVER_LOG_LEVEL=0"
-    Environment="QGIS_DEBUG=1"
-    Environment="DISPLAY=:99"
-    Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
-    Environment="QGIS_OPTIONS_PATH=/qgis-server"
-    Environment="QGIS_CUSTOM_CONFIG_PATH=/qgis-server"
-    [Install]
-    WantedBy = multi-user.target
 
 ----
 

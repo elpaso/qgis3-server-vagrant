@@ -68,6 +68,18 @@ ul.pull-left, ul.pull-right {
     max-width: 100% !important;
 }
 
+.scale-100 {
+    max-width: 100% !important;
+}
+
+.force-200 {
+    width: 200% !important;
+}
+
+.force-150 {
+    width: 150% !important;
+}
+
 .step {
     width: 960px;
     height: 600px;
