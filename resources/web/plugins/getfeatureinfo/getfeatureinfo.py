@@ -1,3 +1,20 @@
+# coding=utf-8
+""""Simple plugin example for GetFeatureInfo CSS injection
+
+http://localhost:8080/cgi-bin/qgis_mapserv.fcgi?MAP=/qgis-server/projects/helloworld.qgs&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=world&LAYERS=world&INFO_FORMAT=text%2Fhtml&I=50&J=50&CRS=EPSG%3A4326&STYLES=&WIDTH=101&HEIGHT=101&BBOX=-16.101558208465576%2C-28.4765625%2C54.914066791534424%2C42.5390625
+
+.. note:: This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+"""
+
+__author__ = 'elpaso@itopen.it'
+__date__ = '2019-08-26'
+__copyright__ = 'Copyright 2019, ItOpen'
+
+
 import os
 
 from qgis.server import *

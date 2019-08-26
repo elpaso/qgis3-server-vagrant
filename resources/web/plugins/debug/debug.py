@@ -1,3 +1,22 @@
+# coding=utf-8
+"""" Simple DEBUG SERVICE plugin
+
+http://localhost:8080/cgi-bin/qgis_mapserv.cgi?SERVICE=DEBUG
+
+.. note:: This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+"""
+
+__author__ = 'elpaso@itopen.it'
+__date__ = '2019-08-26'
+__copyright__ = 'Copyright 2019, ItOpen'
+
+
+
+
 import os
 
 from qgis.server import *

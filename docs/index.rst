@@ -1235,13 +1235,7 @@ Since QGIS 3.4
 
 .. code:: python
 
-    from qgis.server import QgsServerCacheFilter
-    from qgis.core import QgsMessageLog
-    from qgis.PyQt.QtCore import QByteArray
-    import hashlib
-
     class StupidCache(QgsServerCacheFilter):
-        """A simple in-memory and not-shared cache for demonstration purposes"""
         _cache = {}
         def _get_hash(self, request):
             # create a unique hash from the request
