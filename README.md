@@ -1,3 +1,7 @@
+# Online version of the Workshop presentation
+
+http://www.itopen.it/bulk/qgis-server-ws/
+
 # QGIS Server 3.x Vagrant testing VMs with Apache and Nginx
 
 Yet another QGIS Server demo VM, initially prepared for Nødebo QGIS
