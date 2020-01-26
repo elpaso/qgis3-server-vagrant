@@ -36,6 +36,14 @@ ul.pull-left, ul.pull-right {
     padding-left: 0;
 }
 
+.zoom-70 {
+    font-size: 70% !important;
+}
+
+.zoom-80 {
+    font-size: 80% !important;
+}
+
 .scale-20 {
     max-width: 20% !important;
 }

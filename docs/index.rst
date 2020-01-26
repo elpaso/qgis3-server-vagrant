@@ -22,6 +22,7 @@ WS Program
 + Introduction to QGIS Server
 + General workflow
 + Deployment strategies
++ Server configuration
 + QGIS Server vendor features
 + Python API
 + Python Plugins
@@ -72,36 +73,60 @@ Typical Workflow
 
     digraph g {
 
-            graph [fontname = "helvetica bold"];
-            node [fontname = "helvetica bold"];
-            edge [fontname = "helvetica bold"];
+        compound=true;
 
-            rankdir="TB"
+        graph [fontname = "helvetica bold"];
+        node [fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
 
-            subgraph cluster_0 {
-                style=filled;
-                color=lightgrey;
-                node [shape=box style=filled,color=white];
-                "Prepare Data" -> "Configure QGIS Project";
-                label = "QGIS Desktop";
-            }
+        rankdir="TB"
 
-            subgraph cluster_1 {
-                style=filled;
-                color=lightgrey;
-                node [shape=box style=filled,color=white];
-                "QGIS Server";
-                label = "QGIS Server";
-            }
+        subgraph cluster_0 {
+            style=filled;
+            color=lightgrey;
+            node [shape=box style=filled,color=white];
+            "Prepare Data" -> "Configure QGIS Project";
+            label = "QGIS Desktop";
+        }
 
-            node [shape=box style=box,color=blue]
-            edge [color=blue fontsize=9]
+        subgraph cluster_1 {
+            style=filled;
+            color=lightgrey;
+            node [shape=box style=filled,color=white];
+            "Serve Requests";
+            label = "QGIS Server";
+        }
 
-            "Configure QGIS Project" -> "Transfer project and data (if local)"
-            "Transfer project and data (if local)" -> "QGIS Server";
+        node [shape=box style=box,color=blue]
+        edge [color=blue fontsize=9]
+
+        "Configure QGIS Project" -> "Transfer project and data (if local)"
+        "Transfer project and data (if local)" -> "Serve Requests" [ltail=cluster_0,lhead=cluster_1];
 
     }
 
+-----
+
+
+Supported Standards
+====================
+
++ WMS 1.3
++ WFS 1.0.0, 1.1.0
++ WCS 1.1.1
++ WMTS 1.0.0
++ WFS3/OAPIF (new!)
+
+----
+
+Compliance tests
+================
+
+OGC CITE Compliance Testing
+
+CI tests:
+
+http://test.qgis.org/ogc_cite/
 
 -----
 
@@ -181,102 +206,34 @@ Data Storage
     :class: centered
 
 
------
-
-
-Supported Standards
-====================
-
-+ WMS 1.3
-+ WFS 1.0.0, 1.1.0
-+ WCS 1.1.1
-+ WMTS 1.0.0
-+ WFS3/OAPIF (new!)
-
 ----
 
-Compliance tests
-================
-
-OGC CITE Compliance Testing
-
-CI tests:
-
-http://test.qgis.org/ogc_cite/
-
-
------
-
-QGIS Server Modules
-=====================
-
-.. graph:: images/system-architecture.png
-    :class: scale-70 centered
-
-    digraph g {
-            rankdir="TB"
-
-            style=filled;
-            color=lightgrey;
-
-            edge [fontcolor=red fontsize=9]
-            node [shape=box style="rounded"]
-
-            "QGIS Server" -> "Plugin filters"
-
-            node [style=filled, shape=box color=gray];
-
-            "Plugin filters" -> "SERVICE"
-            "Plugin filters" -> "API"
-
-            node [style=filled, shape=box color=green];
-
-            "API" -> "WFS3"
-            "API" -> "Custom API"
-
-            node [style=filled, shape=box color=yellow];
-
-            "SERVICE" -> "WMS/WMTS"
-            "SERVICE" -> "WFS"
-            "SERVICE" -> "WCS"
-            "SERVICE" -> "Custom SERVICE"
-    }
-
-
-
-----
-
-SERVICE Architecture
+The Development Server
 ======================
 
-``SERVICE`` modules
+*Not suitable for production!*
 
-+ WMS
-+ WFS
-+ WCS
-+ WMTS
-+ Custom modules (C++ and Python)
-+ Python bindings
+.. code:: bash
+    :class: zoom-80
+
+    Usage: qgis_mapserver [options] [address:port]
+    QGIS Development Server
+
+    Options:
+    -l <logLevel>     Sets log level (default: 0)
+                        0: INFO
+                        1: WARNING
+                        2: CRITICAL
+    -p <projectPath>  Path to a QGIS project file (*.qgs or *.qgz),
+                        if specified it will override the query string MAP argument
+                        and the QGIS_PROJECT_FILE environment variable
+
+    Arguments:
+    addressAndPort    Listen to address and port (default: "localhost:8000")
+                        address and port can also be specified with the environment
+                        variables QGIS_SERVER_ADDRESS and QGIS_SERVER_PORT
 
 ----
-
-New API Architecture
-====================
-
-``API`` modules
-
-+ WFS3 API handler
-+ Custom API handlers (C++ and Python)
-+ Python bindings
-
-
-----
-
-API documentation
-=================
-
-https://qgis.org/api/group__server.html
-
 
 Deployment Strategies
 =====================
@@ -365,6 +322,8 @@ Requirements FCGI Summary
 Advanced QGIS Server Configuration
 ==================================
 
+12 factors app: **environment variables**:
+
 + Layers Authentication
 + Parallel Rendering
 + Logging
@@ -383,7 +342,8 @@ master password required to decrypt the authentication DB.
 
 .. warning::
 
-    Make sure to limit the file as only readable by the Server’s process user and to not store the file within web-accessible directories.
+    Make sure to limit the file as only readable by the Server’s process user and
+    to not store the file within web-accessible directories.
 
 ----
 
@@ -500,10 +460,11 @@ Setup Steps
 =====================
 
 + Add QGIS repositories
-+ Install QGIS server
 + Install support software packages
++ Install QGIS server
 + Configure services
 + Start services
++ Test services
 
 
 ----
@@ -1255,6 +1216,15 @@ Checkpoint: Printing Substitutions
     &CRS=EPSG%3A4326&map0:EXTENT=4,52,14,58&FORMAT=png
     &LAYERS=bluemarble,world&print_title=Custom%20print%20title!
 
+----
+
+Python Development
+==================
+
+
+.. image:: images/development.png
+    :class: centered
+
 
 ----
 
@@ -1270,99 +1240,47 @@ What can we do?
 + Add a new *API* written in Python
 
 
-----
-
-QGIS Server Python API
-==================================
-
-+ ``QgsServer()`` server instance
-+ ``QgsBufferServerRequest(url)``
-+ ``QgsBufferServerResponse()``
-+ ``QgsServer.handleRequest(request, response)``
-
-
-----
-
-QGIS Server 3 and python
-============================
-
-
-.. code:: python
-
-    from qgis.core import QgsApplication
-    from qgis.server import *
-    qgs_app = QgsApplication([], False)
-    qgs_server = QgsServer()
-    request = QgsBufferServerRequest(
-        'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' +
-        '&SERVICE=WMS&REQUEST=GetCapabilities')
-    response = QgsBufferServerResponse()
-    qgs_server.handleRequest(request, response)
-    print(response.headers(), response.body())
-    qgs_app.exitQgis()
-
-Full script:
-https://github.com/qgis/QGIS/blob/master/tests/src/python/qgis_wrapped_server.py
-
-
 
 -----
 
-QGIS Server Python application 1
-================================
+QGIS Server Modules
+=====================
 
-Systemd
+.. graph:: images/system-architecture.png
+    :class: scale-70 centered
 
-.. code:: bash
+    digraph g {
+            rankdir="TB"
 
-    # Listen on ports 809%i
-    # Path: /etc/systemd/system/qgis-server-python@.service
-    # systemctl start qgis-server-python@{1..4}.service
+            style=filled;
+            color=lightgrey;
 
-    [Unit]
-    Description = QGIS Server Tracker Python backend (instance %i)
-    [Service]
-    User = www-data
-    Group = www-data
-    ExecStart = /qgis-server/qgis_wrapped_server_wsgi.py
-    StandardInput = null
-    StandardOutput=syslog
-    StandardError=syslog
-    SyslogIdentifier=qgis-server-python
-    WorkingDirectory=/tmp
-    Restart = always
+            edge [fontcolor=red fontsize=9]
+            node [shape=box style="rounded"]
 
-----
+            node [style=filled, shape=box, fillcolor=white ];
 
-QGIS Server Python application 2
-================================
+            plugins [label="Python Filter Plugins"]
 
-Systemd
+            "QGIS Server" -> plugins
 
-.. code:: bash
+            node [style=filled, shape=box, fillcolor=gray];
 
-    # Environment
-    Environment=QGIS_SERVER_PORT=809%i
-    Environment="QGIS_AUTH_DB_DIR_PATH=/qgis-server/projects"
-    Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python.log"
-    Environment="QGIS_SERVER_LOG_LEVEL=0"
-    Environment="QGIS_DEBUG=1"
-    Environment="DISPLAY=:99"
-    Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
-    Environment="QGIS_OPTIONS_PATH=/qgis-server"
-    Environment="QGIS_CUSTOM_CONFIG_PATH=/qgis-server"
-    [Install]
-    WantedBy = multi-user.target
+            plugins -> "SERVICE"
+            plugins -> "API"
 
+            node [style=filled, shape=box fillcolor=green];
 
-----
+            "API" -> "WFS3"
+            "API" -> "Custom API"
 
-Python Development
-==================
+            node [style=filled, shape=box fillcolor=yellow];
 
-
-.. image:: images/development.png
-    :class: centered
+            "SERVICE" -> "WMS/WMTS"
+            "SERVICE" -> "WFS"
+            "SERVICE" -> "WCS"
+            "SERVICE" -> "Custom SERVICE"
+    }
 
 
 ----
@@ -1380,8 +1298,8 @@ Customization
 ~~~~~~~~~~~~~
 
 + Custom modules (C++ and Python)
-+ Python plugins (generic, access control, cache)
-+ Python bindings
++ Python filter plugins (I/O, access control, cache)
+
 
 ----
 
@@ -1398,6 +1316,7 @@ Customization
 ~~~~~~~~~~~~~
 
 + Custom API handlers (C++ and Python)
++ Python filter plugins
 
 ----
 
@@ -1409,30 +1328,10 @@ C++
 
 https://qgis.org/api/group__server.html
 
-=======
 Python API Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 https://qgis.org/pyqgis/master/server/index.html
-
-
-----
-
-QGIS Server 3 and Python
-============================
-
-
-New server **plugin-based** *API* architecture!
-
-You can now create custom APIs in pure *Python*.
-+ Basic usage as a **standalone** or **embedded** application
-+ Filter plugins
-    + **I/O plugins**
-    + **authentication plugins**
-    + **caching plugins**
-+ Custom services:
-    **legacy**
-    **OGC API** (*REST/JSON*)
 
 
 ----
