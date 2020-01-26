@@ -85,6 +85,7 @@ ul.pull-left, ul.pull-right {
     height: 600px;
 }
 
+h2 > tt,
 p > tt {
     font-weight: bold;
     color: rgb(29, 126, 0);
@@ -263,4 +264,8 @@ ul li {
 
 .slide > h1 {
     text-shadow: #aaa 0 2px 3px;
+}
+
+h2 {
+    color: green;
 }

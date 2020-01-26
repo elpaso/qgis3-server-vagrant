@@ -68,7 +68,10 @@ class Graphviz(Image):
             raise self.error('Format must be png or svg (instead of: %s)' % format)
 
         dot_args = ['dot']
-        dot_args.extend(['-T' + format, '-o' + outfn])
+        if format=='svg':
+           dot_args.extend(['-Tsvg:cairo', '-o' + outfn])
+        else:
+            dot_args.extend(['-T' + format, '-o' + outfn])
         if format == 'png':
             dot_args.extend(['-Tcmapx', '-o%s.map' % outfn])
 

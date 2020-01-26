@@ -3,7 +3,7 @@
 :css: css/custom-hov.css
 :css: css/custom.css
 
-.. title:: QGIS Server Workshop 2019
+.. title:: QGIS Server Workshop 2020
 
 .. header::
 
@@ -12,7 +12,7 @@
 
 .. footer::
 
-    Introduction to QGIS Server Workshop 2019
+    Introduction to QGIS Server Workshop 2020
 
 ----
 
@@ -39,14 +39,18 @@ QGIS Server
     :class: force-150 centered
 
     digraph g {
+
             rankdir="LR"
+
+            graph [fontname = "helvetica bold"];
+            node [fontname = "helvetica bold"];
+            edge [fontname = "helvetica bold"];
 
             edge [fontcolor=red fontsize=9]
             node [shape=box style="rounded"]
 
             desktop [label="QGIS Desktop"]
             server [label="QGIS Server"]
-
             desktop ->  server [label="deploy project"]
 
     }
@@ -54,19 +58,24 @@ QGIS Server
 
 .. class:: centered
 
-    The WYSIWYG GIS Server
+    The *WYSIWYG* GIS Server
 
     From the desktop to the web!
 
 ----
 
-Typical workflow
+Typical Workflow
 ================
 
-.. graph:: images/workflow.png
+.. graph:: images/workflow.svg
     :class: scale-70 centered
 
     digraph g {
+
+            graph [fontname = "helvetica bold"];
+            node [fontname = "helvetica bold"];
+            edge [fontname = "helvetica bold"];
+
             rankdir="TB"
 
             subgraph cluster_0 {
@@ -74,7 +83,7 @@ Typical workflow
                 color=lightgrey;
                 node [shape=box style=filled,color=white];
                 "Prepare Data" -> "Configure QGIS Project";
-                label = "Client Tier";
+                label = "QGIS Desktop";
             }
 
             subgraph cluster_1 {
@@ -82,7 +91,7 @@ Typical workflow
                 color=lightgrey;
                 node [shape=box style=filled,color=white];
                 "QGIS Server";
-                label = "Server Tier";
+                label = "QGIS Server";
             }
 
             node [shape=box style=box,color=blue]
@@ -96,28 +105,43 @@ Typical workflow
 
 -----
 
-System overview
+System Overview
 =====================
 
-.. graph:: images/system-overview.png
+.. graph:: images/system-overview.svg
     :class: scale-70 centered
 
     digraph g {
+
+            graph [fontname = "helvetica bold"];
+            node [fontname = "helvetica bold"];
+            edge [fontname = "helvetica bold"];
             rankdir="TB"
 
             subgraph cluster_0 {
                 style=filled;
                 color=lightgrey;
                 node [style=filled,color=white];
-                "Web Server" -> "QGIS Server";
+                "QGIS Server FCGI";
+                "Web Server" -> "QGIS Server FCGI";
                 label = "Server Tier";
-                node [style=filled,color=white];
-                "QGIS Server" -> "Project 1.qgs"
-                "QGIS Server" -> "Project 2.qgs"
-                node [shape=box color="blue" style=box,color=blue]
-                edge [color=blue fontsize=9]
-                "Project 1.qgs" -> "Local Storage"
+
+                subgraph cluster_1 {
+                    color=white;
+                    label = "Server Data";
+                    node [shape=box,style=filled,color=white];
+                    node [shape=box color="blue" style=box,color=blue]
+                    edge [color=blue fontsize=9]
+                    "project_1.qgs";
+                    "project_2.qgs";
+                    "Local Storage";
+                }
+
+                "QGIS Server FCGI" -> "project_1.qgs"
+                "QGIS Server FCGI" -> "project_2.qgs"
+
             }
+
 
 
             edge [fontcolor=red fontsize=9]
@@ -127,20 +151,22 @@ System overview
 
             node [shape=box color="white"]
             edge [color=red fontsize=9]
-            "Multiple processes" -> "QGIS Server";
-            "Multiple projects" -> "Project 1.qgs";
-            "Multiple projects" -> "Project 2.qgs";
+            "Multiple processes\nManaged by systemd or mod_fcgid" -> "QGIS Server FCGI";
+            "Multiple projects\nMAP=..." -> "project_1.qgs";
+            "Multiple projects\nMAP=..." -> "project_2.qgs";
 
             node [shape=box style=box,color=blue]
             edge [color=blue fontsize=9]
-            "Project 2.qgs" -> "Remote Storage"
+            "project_2.qgs" -> "Local Storage"
+            "project_2.qgs" -> "Remote Storage"
+            "project_1.qgs" -> "Remote Storage"
     }
 
 
 
 -----
 
-Configuring the project
+Configuring the Project
 =======================
 
 .. image:: images/server-options.png
@@ -158,14 +184,14 @@ Data Storage
 -----
 
 
-Supported standards
+Supported Standards
 ====================
 
 + WMS 1.3
 + WFS 1.0.0, 1.1.0
 + WCS 1.1.1
 + WMTS 1.0.0
-+ WFS3 draft (new!)
++ WFS3/OAPIF (new!)
 
 ----
 
@@ -252,17 +278,23 @@ API documentation
 https://qgis.org/api/group__server.html
 
 
-----
-
-Deployment strategies
+Deployment Strategies
 =====================
 
 1. Docker containers
-2. Bare metal or VM
+~~~~~~~~~~~~~~~~~~~~
+
+   + \- you have to know Docker
+   + \+ you can easily replicate/move/scale deployments
+
+2. Bare Metal or VM
+~~~~~~~~~~~~~~~~~~~
+
+   + \+ maybe easier to setup/customize
 
 ----
 
-Docker images
+Docker Images
 =====================
 
 .. class:: pull-right
@@ -280,7 +312,7 @@ Docker images
 
 ----
 
-Demo VM stack
+Demo VM Stack
 =============
 
 ==================== ========== ============
@@ -294,7 +326,130 @@ Nginx **MapProxy**   83         8083
 
 ----
 
-Requirements summary
+Requirements FCGI Summary
+=========================
+
+
+.. graph:: images/fcgi-summary.svg
+    :class: scale-80 centered
+
+    digraph g {
+
+        graph [fontname = "helvetica bold"];
+        node [fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
+
+        rankdir="TB"
+
+        node [shape=box]
+        "QGIS FCGI"
+
+        node [shape=box style="rounded"]
+        edge [color=red fontsize=9]
+
+        "Web Server (Apache/Nginx)\n\n- Request routing\n- Address rewriting\n- Load balancing" -> "QGIS FCGI"
+
+        node [shape=box style="rounded"]
+
+        "xvfb Headless X Server\n\n- Rendering" -> "QGIS FCGI"
+
+        "FCGI Supervisor (systemd)\n\n- Manages FCGI processes lifecycle" -> "xvfb Headless X Server\n\n- Rendering"
+        "FCGI Supervisor (systemd)\n\n- Manages FCGI processes lifecycle" -> "QGIS FCGI"
+        "FCGI Supervisor (apache mod_fcgid)\n\n- Manages FCGI processes lifecycle" -> "QGIS FCGI"
+
+    }
+
+
+----
+
+Advanced QGIS Server Configuration
+==================================
+
++ Layers Authentication
++ Parallel Rendering
++ Logging
++ Caching
+
+----
+
+Authenticated Layers in QGIS Server
+===================================
+
+QGIS authentication DB ``qgis-auth.db`` path can be specified with
+the environment variable ``QGIS_AUTH_DB_DIR_PATH``
+
+``QGIS_AUTH_PASSWORD_FILE`` environment variable can contain the
+master password required to decrypt the authentication DB.
+
+.. warning::
+
+    Make sure to limit the file as only readable by the Server’s process user and to not store the file within web-accessible directories.
+
+----
+
+Parallel Rendering
+============================================
+
+
+``QGIS_SERVER_PARALLEL_RENDERING``
+
+Activates parallel rendering for WMS GetMap requests. It’s disabled (false) by default. Available values are:
+
+0 or false (case insensitive)
+1 or true (case insensitive)
+
+``QGIS_SERVER_MAX_THREADS``
+
+Number of threads to use when parallel rendering is activated. Default value is -1 to use the number of processor cores.
+
+
+----
+
+Logging
+=======
+
+
+``QGIS_SERVER_LOG_FILE`` (deprecated)
+
+Specify path and filename. Make sure that server has proper permissions for writing to file. File should be created automatically, just send some requests to server. If it’s not there, check permissions.
+
+``QGIS_SERVER_LOG_STDERR`` (best option)
+
+``QGIS_SERVER_LOG_LEVEL``
+
+Specify desired log level. Available values are:
+
+0 or ``INFO`` (log all requests)
+1 or ``WARNING``
+2 or ``CRITICAL`` (log just critical errors, suitable for production purposes)
+
+----
+
+Caching
+============================
+
+A QGIS Server instance caches:
+
++ capabilities
++ projects
+
+Caches are **not** shared among instances.
+
+Layers are **not** cached.
+
+Caching is generally delegated to different tier,
+caching solutions are expecially recommended for serving
+tiles:
+
++ mapproxy https://mapproxy.org/
++ tilecache http://tilecache.org/
++ tilestache http://tilestache.org/
+
+Look for metatiles support if your layers contain labels.
+
+----
+
+VM Stack Summary
 ====================
 
 .. class:: pull-right
@@ -315,6 +470,7 @@ Requirements summary
 + **Apache2**: web server
 + **mod_fcgid** Apache module for FastCGI
 
+Alternative:
 
 + **Nginx**: web server
 + **systemd** (Linux process manager, for FastCGI + nginx)
@@ -326,7 +482,7 @@ Optional:
 
 ----
 
-Bare metal - OS Setup
+Bare Metal - OS Setup
 =====================
 
 We are using *Ubuntu Bionic 64bit*
@@ -340,14 +496,14 @@ https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64-vagr
 
 ----
 
-Setup steps
+Setup Steps
 =====================
 
-+ add QGIS repositories
-+ install QGIS server
-+ install support software packages
-+ configure services
-+ start services
++ Add QGIS repositories
++ Install QGIS server
++ Install support software packages
++ Configure services
++ Start services
 
 
 ----
@@ -355,17 +511,17 @@ Setup steps
 Provided VMs
 ====================
 
-1. Unprovisioned (software installed, no configuration)
+1. **Unprovisioned** (software installed, no configuration)
     You need to make the configuration manually or run the provisioning scripts from::
 
         /vagrant/provisioning
 
-2. Fully provisioned (ready to run)
+2. **Fully provisioned** (ready to run)
 
 
 ----
 
-SSH into the machine
+SSH into the Machine
 ====================
 
 Vagrant:
@@ -387,7 +543,7 @@ Plain VM (username: qgis, password: qgis):
 
 ----
 
-Add resources from workshop repository
+Add Resources from Workshop Repository
 ======================================
 
 Only for unprovisioned machines!
@@ -403,7 +559,7 @@ Only for unprovisioned machines!
 
 ----
 
-The provisioning scripts
+The Provisioning Scripts
 ======================================
 
 + config.sh (configuration)
@@ -419,7 +575,7 @@ Steps:
 
 ----
 
-Add required repositories
+Add Required Repositories
 =========================
 
 .. code:: bash
@@ -431,7 +587,7 @@ Add required repositories
 
 ----
 
-Check new packages
+Check New Packages
 =========================
 
 **Checkpoint**: the available version of qgis-server must be >= 3 from qgis.org
@@ -453,7 +609,7 @@ Check new packages
 
 ----
 
-Install system software
+Install System Software
 =======================
 
 Install the software, see::
@@ -474,7 +630,7 @@ Install the software, see::
 
 ----
 
-Install system software I
+Install System Software I
 ===========================
 
 **Checkpoint**: qgis installed with no errors, you can check it with
@@ -492,7 +648,7 @@ Install system software I
 
 ----
 
-Install system software II
+Install System Software II
 ===========================
 
 Copy resources
@@ -511,7 +667,7 @@ Copy resources
 
 ----
 
-Install system software III
+Install System Software III
 =============================
 
 Setup *xvfb* and plain **CGI**
@@ -580,7 +736,7 @@ Apache2 architecture
 
 -----
 
-Apache2 configuration I
+Apache2 Configuration I
 =========================
 
 Configure the web server
@@ -602,7 +758,7 @@ Configure the web server
 
 -----
 
-Apache2 configuration II
+Apache2 Configuration II
 =========================
 
 VirtualHost configuration for both **FastCGI** and **CGI**
@@ -626,7 +782,7 @@ VirtualHost configuration for both **FastCGI** and **CGI**
 -----
 
 
-Apache2 configuration III
+Apache2 Configuration III
 =========================
 
 **Logging**
@@ -646,7 +802,7 @@ Apache2 configuration III
 
 -----
 
-Apache2 configuration IV
+Apache2 Configuration IV
 =========================
 
 **CGI**
@@ -662,7 +818,7 @@ Apache2 configuration IV
 
 ----
 
-Apache2 configuration V
+Apache2 Configuration V
 =========================
 
 .. code:: apache
@@ -686,7 +842,7 @@ Apache2 configuration V
 
 -----
 
-Apache2 configuration VI
+Apache2 Configuration VI
 =========================
 
 Enable sites and restart
@@ -777,7 +933,7 @@ Nginx configuration I
 
 ----
 
-Nginx configuration II
+Nginx Configuration II
 =======================
 
 .. code:: nginx
@@ -797,7 +953,7 @@ Nginx configuration II
 
 ----
 
-Nginx configuration III
+Nginx Configuration III
 =======================
 
 Load balancing
@@ -819,7 +975,7 @@ Load balancing
 
 ----
 
-Nginx configuration IV
+Nginx Configuration IV
 =======================
 
 .. code:: nginx
@@ -841,7 +997,7 @@ Nginx configuration IV
 
 ----
 
-Nginx configuration V
+Nginx Configuration V
 =======================
 
 Rewrite!
@@ -860,7 +1016,7 @@ Rewrite!
 
 ----
 
-Nginx configuration VI
+Nginx Configuration VI
 =======================
 
 .. code:: nginx
@@ -881,7 +1037,7 @@ Nginx configuration VI
 
 ----
 
-Nginx configuration VII
+Nginx Configuration VII
 =======================
 
 .. code:: nginx
@@ -901,7 +1057,7 @@ Nginx configuration VII
 
 ----
 
-Systemd socket config for FastCGI
+Systemd Socket Config for FastCGI
 ===================================
 
 Socket
@@ -924,7 +1080,7 @@ Socket
 ----
 
 
-Systemd service config for FastCGI
+Systemd Service Config for FastCGI
 ===================================
 
 .. code:: bash
@@ -948,7 +1104,7 @@ Systemd service config for FastCGI
 
 ----
 
-Systemd config for FastCGI 3
+Systemd Config for FastCGI 3
 ===================================
 
 Service
@@ -1019,7 +1175,7 @@ The filter is a QGIS Expression:
 
 ----
 
-WMS vendor parameters
+WMS Vendor Parameters
 =======================
 
 Full list:  https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/server/services.html
@@ -1037,7 +1193,7 @@ Full list:  https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/s
 
 ----
 
-Checkpoint: highlighting
+Checkpoint: Highlighting
 =================================
 
 The **SELECTION** parameter can highlight features from one or more layers:
@@ -1055,7 +1211,7 @@ Example: *SELECTION=mylayer1:3,6,9;mylayer2:1,5,6*
 
 ----
 
-Checkpoint: printing
+Checkpoint: Printing
 ==============================
 
 From composer templates (with substitutions!)
@@ -1072,7 +1228,7 @@ See also: DXF Export
 
 ----
 
-Checkpoint: printing URL
+Checkpoint: Printing URL
 ==============================
 
 .. code::
@@ -1084,7 +1240,7 @@ Checkpoint: printing URL
 
 ----
 
-Checkpoint: printing substitutions
+Checkpoint: Printing Substitutions
 ===================================
 
 - Assign an *ID* to the label
@@ -1201,7 +1357,171 @@ Systemd
 
 ----
 
-QGIS Server and python plugins
+Python Development
+==================
+
+
+.. image:: images/development.png
+    :class: centered
+
+
+----
+
+Legacy Architecture
+===================
+
+``SERVICE`` modules
+~~~~~~~~~~~~~~~~~~~
+
++ WMS WFS WCS WMTS
++ XML-based (JSON and other formats are available)
+
+Customization
+~~~~~~~~~~~~~
+
++ Custom modules (C++ and Python)
++ Python plugins (generic, access control, cache)
++ Python bindings
+
+----
+
+New API Architecture
+====================
+
+``API`` modules
+~~~~~~~~~~~~~~~~
+
++ WFS3 API handler
++ JSON / REST based
+
+Customization
+~~~~~~~~~~~~~
+
++ Custom API handlers (C++ and Python)
+
+----
+
+API Documentation
+=================
+
+C++
+~~~
+
+https://qgis.org/api/group__server.html
+
+=======
+Python API Documentation
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://qgis.org/pyqgis/master/server/index.html
+
+
+----
+
+QGIS Server 3 and Python
+============================
+
+
+New server **plugin-based** *API* architecture!
+
+You can now create custom APIs in pure *Python*.
++ Basic usage as a **standalone** or **embedded** application
++ Filter plugins
+    + **I/O plugins**
+    + **authentication plugins**
+    + **caching plugins**
++ Custom services:
+    **legacy**
+    **OGC API** (*REST/JSON*)
+
+
+----
+
+QGIS Server Python API
+==================================
+
++ ``QgsServer()`` server instance
++ ``QgsBufferServerRequest(url)``
++ ``QgsBufferServerResponse()``
++ ``QgsServer.handleRequest(request, response)``
+
+----
+
+
+Python API Basics
+============================
+
+
+.. code:: python
+
+    from qgis.core import QgsApplication
+    from qgis.server import *
+    qgs_app = QgsApplication([], False)
+    qgs_server = QgsServer()
+    request = QgsBufferServerRequest(
+        'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' +
+        '&SERVICE=WMS&REQUEST=GetCapabilities')
+    response = QgsBufferServerResponse()
+    qgs_server.handleRequest(request, response)
+    print(response.headers())
+    print(response.body().data().decode('utf8'))
+    qgs_app.exitQgis()
+
+Full script:
+https://github.com/qgis/QGIS/blob/master/tests/src/python/qgis_wrapped_server.py
+
+
+-----
+
+Standalone Application Setup
+================================
+
+Systemd
+
+.. code:: bash
+
+    # Listen on ports 809%i
+    # Path: /etc/systemd/system/qgis-server-python@.service
+    # systemctl start qgis-server-python@{1..4}.service
+
+    [Unit]
+    Description = QGIS Server Tracker Python backend (instance %i)
+    [Service]
+    User = www-data
+    Group = www-data
+    ExecStart = /qgis-server/qgis_wrapped_server_wsgi.py
+    StandardInput = null
+    StandardOutput=syslog
+    StandardError=syslog
+    SyslogIdentifier=qgis-server-python
+    WorkingDirectory=/tmp
+    Restart = always
+
+----
+
+QGIS Server Python Application 2
+================================
+
+Systemd
+
+.. code:: bash
+
+    # Environment
+    Environment=QGIS_SERVER_PORT=809%i
+    Environment="QGIS_AUTH_DB_DIR_PATH=/qgis-server/projects"
+    Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python.log"
+    Environment="QGIS_SERVER_LOG_LEVEL=0"
+    Environment="QGIS_DEBUG=1"
+    Environment="DISPLAY=:99"
+    Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
+    Environment="QGIS_OPTIONS_PATH=/qgis-server"
+    Environment="QGIS_CUSTOM_CONFIG_PATH=/qgis-server"
+    [Install]
+    WantedBy = multi-user.target
+
+----
+
+I/O Filter Plugins
 ==================================
 
 See presentation: http://www.itopen.it/bulk/nodebo/Presentations/Server%20Plugins/index.html
@@ -1212,7 +1532,7 @@ There are no substantial differences between plugins API in 2.x and 3.x
 
 ----
 
-Access Control Plugins
+Access Control Filter Plugins
 ==================================
 
 Since QGIS 2.12
@@ -1228,14 +1548,20 @@ https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins
 
 ----
 
-Cache plugins
+Cache Filter Plugins
 ============================
 
 Since QGIS 3.4
 
 .. code:: python
 
+    from qgis.server import QgsServerCacheFilter
+    from qgis.core import QgsMessageLog
+    from qgis.PyQt.QtCore import QByteArray
+    import hashlib
+
     class StupidCache(QgsServerCacheFilter):
+        """A simple in-memory and not-shared cache for demonstration purposes"""
         _cache = {}
         def _get_hash(self, request):
             # create a unique hash from the request
@@ -1248,7 +1574,7 @@ Since QGIS 3.4
 
 ----
 
-Cache plugins II
+Cache Plugins II
 ============================
 
 
@@ -1272,12 +1598,12 @@ Cache plugins II
 
 ----
 
-QGIS Server 3.x and python services
+Legacy Custom Services
 ===================================
 
 Since QGIS 3
 
-New server **plugin-based** *SERVICE* architecture!
+New server **plugin-based** service architecture!
 
 You can now create custom services in pure *Python*.
 
@@ -1286,43 +1612,17 @@ Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/we
 ----
 
 
-QGIS Server 3.x and python custom APIs
+OGC API Custom Services
 ======================================
 
 Since QGIS 3.10
 
-New server **plugin-based** *API* architecture!
+New server **plugin-based** API architecture!
 
 You can now create custom APIs in pure *Python*.
 
 Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customapi/customapi.py
 
-
-----
-
-Caching
-============================
-
-A QGIS Server instance caches:
-
-+ capabilities
-+ projects
-
-Caches are **not** shared among instances.
-
-Layers are **not** cached.
-
-Caching is generally delegated to different tier,
-caching solutions are expecially recommended for serving
-tiles:
-
-+ mapproxy https://mapproxy.org/
-+ tilecache http://tilecache.org/
-+ tilestache http://tilestache.org/
-
-Look for metatiles support if your layers contain labels.
-
-----
 
 Other examples
 =====================
@@ -1333,58 +1633,6 @@ Server:
 
 https://github.com/qgis/QGIS/tree/master/tests/src/python
 
-----
-
-Authenticated layers in QGIS Server
-===================================
-
-QGIS authentication DB ``qgis-auth.db`` path can be specified with
-the environment variable ``QGIS_AUTH_DB_DIR_PATH``
-
-``QGIS_AUTH_PASSWORD_FILE`` environment variable can contain the
-master password required to decrypt the authentication DB.
-
-.. warning::
-
-    Make sure to limit the file as only readable by the Server’s process user and to not store the file within web-accessible directories.
-
-----
-
-Parallel rendering
-============================================
-
-
-``QGIS_SERVER_PARALLEL_RENDERING``
-
-Activates parallel rendering for WMS GetMap requests. It’s disabled (false) by default. Available values are:
-
-0 or false (case insensitive)
-1 or true (case insensitive)
-
-``QGIS_SERVER_MAX_THREADS``
-
-Number of threads to use when parallel rendering is activated. Default value is -1 to use the number of processor cores.
-
-
-----
-
-Logging
-=======
-
-
-``QGIS_SERVER_LOG_FILE`` (deprecated)
-
-Specify path and filename. Make sure that server has proper permissions for writing to file. File should be created automatically, just send some requests to server. If it’s not there, check permissions.
-
-``QGIS_SERVER_LOG_STDERR`` (best option)
-
-``QGIS_SERVER_LOG_LEVEL``
-
-Specify desired log level. Available values are:
-
-0 or ``INFO`` (log all requests)
-1 or ``WARNING``
-2 or ``CRITICAL`` (log just critical errors, suitable for production purposes)
 
 -----
 
@@ -1402,3 +1650,4 @@ Presentation links
 =========================
 
 https://github.com/elpaso/qgis3-server-vagrant/ (docs folder)
+
