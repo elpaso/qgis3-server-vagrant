@@ -5,18 +5,26 @@
 
 .. title:: QGIS Server Workshop 2020
 
-.. header::
+----
 
-   .. image:: images/qgis-icon.png
+:id: presentation-title
 
 
-.. footer::
+QGIS Server With Python
+~~~~~~~~~~~~~~~~~~~~~~~
+Workshop
+~~~~~~~~
 
-    Introduction to QGIS Server Workshop 2020
+Alessandro Pasotti
+
+QCooperative / ItOpen
+
+https://www.qcooperative.net
+
 
 ----
 
-WS Program
+Workshop Program
 ====================
 
 + Introduction to QGIS Server
@@ -191,7 +199,7 @@ System Overview
 
 -----
 
-Configuring the Project
+Project Configuration
 =======================
 
 .. image:: images/server-options.png
@@ -548,7 +556,7 @@ Add Required Repositories
 
 ----
 
-Check New Packages
+Check for New Packages
 =========================
 
 **Checkpoint**: the available version of qgis-server must be >= 3 from qgis.org
@@ -677,20 +685,25 @@ Apache2 architecture
     :class: scale-80 centered
 
     digraph g {
-            rankdir="TB"
 
-            subgraph cluster_0 {
-                style=filled;
-                color=yellow;
-                node [shape=box style=filled,color=white];
-                "Apache Web Server" -> "Apache FastCGI module (mod_fcgid)";
-                label = "Apache";
-            }
+        rankdir="TB"
 
-            node [shape=box style=box,color=blue]
-            edge [color=blue fontsize=9 dir=both]
+        graph [fontname = "helvetica bold"];
+        node [fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
 
-            "Apache FastCGI module (mod_fcgid)" -> "QGIS Server FastCGI";
+        subgraph cluster_0 {
+            style=filled;
+            color=yellow;
+            node [shape=box style=filled,color=white];
+            "Apache Web Server" -> "Apache FastCGI module (mod_fcgid)";
+            label = "Apache";
+        }
+
+        node [shape=box style=box,color=blue]
+        edge [color=blue fontsize=9 dir=both]
+
+        "Apache FastCGI module (mod_fcgid)" -> "QGIS Server FastCGI";
 
     }
 
@@ -1184,8 +1197,9 @@ From composer templates (with substitutions!)
     worldFileMap="{db75b0bf-f2f1-42e6-9727-1b6b21d8862e}">
     ...
 
-FORMAT can be any of PDF, PNG
-See also: DXF Export
+**FORMAT** can be any of *PDF*, *PNG*, *JPG*
+
+See also: *DXF* Export
 
 ----
 
@@ -1240,7 +1254,6 @@ What can we do?
 + Add a new *API* written in Python
 
 
-
 -----
 
 QGIS Server Modules
@@ -1250,36 +1263,41 @@ QGIS Server Modules
     :class: scale-70 centered
 
     digraph g {
-            rankdir="TB"
 
-            style=filled;
-            color=lightgrey;
+        rankdir="TB"
 
-            edge [fontcolor=red fontsize=9]
-            node [shape=box style="rounded"]
+        graph [fontname = "helvetica bold"];
+        node [fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
 
-            node [style=filled, shape=box, fillcolor=white ];
+        style=filled;
+        color=lightgrey;
 
-            plugins [label="Python Filter Plugins"]
+        edge [fontcolor=red fontsize=9]
+        node [shape=box style="rounded"]
 
-            "QGIS Server" -> plugins
+        node [style=filled, shape=box, fillcolor=white ];
 
-            node [style=filled, shape=box, fillcolor=gray];
+        plugins [label="Python Filter Plugins"]
 
-            plugins -> "SERVICE"
-            plugins -> "API"
+        "QGIS Server" -> plugins
 
-            node [style=filled, shape=box fillcolor=green];
+        node [style=filled, shape=box, fillcolor=white, fontsize=20];
 
-            "API" -> "WFS3"
-            "API" -> "Custom API"
+        plugins -> "SERVICE"
+        plugins -> "API"
 
-            node [style=filled, shape=box fillcolor=yellow];
+        node [style=filled, shape=box fillcolor=green, fontsize=12];
 
-            "SERVICE" -> "WMS/WMTS"
-            "SERVICE" -> "WFS"
-            "SERVICE" -> "WCS"
-            "SERVICE" -> "Custom SERVICE"
+        "API" -> "WFS3"
+        "API" -> "Custom API"
+
+        node [style=filled, shape=box fillcolor=yellow];
+
+        "SERVICE" -> "WMS/WMTS"
+        "SERVICE" -> "WFS"
+        "SERVICE" -> "WCS"
+        "SERVICE" -> "Custom SERVICE"
     }
 
 

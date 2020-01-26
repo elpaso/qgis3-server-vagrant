@@ -4,6 +4,18 @@
 
 @import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
 
+
+
+.step > h1:first-child {
+    border-bottom:  solid 0.2rem greenyellow;
+}
+
+#presentation-title,
+#presentation-title h1 {
+    text-align: center;
+    border: none;
+}
+
 .centered {
     text-align: center;
 }
