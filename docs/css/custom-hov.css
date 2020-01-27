@@ -2,12 +2,12 @@
 /* ABP: custom per singolo tema */
 
 
-@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 
 
 
 .step > h1:first-child {
-    border-bottom:  solid 0.2rem greenyellow;
+    border-bottom:  solid 0.2rem green; /*#3CC6B9;*/
 }
 
 #presentation-title,
@@ -114,7 +114,7 @@ p > tt {
 body {
     background: white;
     color: #222;
-    font-family: 'Libre Baskerville', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-size: 150%;
 }
 

@@ -10,8 +10,8 @@
 :id: presentation-title
 
 
-QGIS Server With Python
-~~~~~~~~~~~~~~~~~~~~~~~
+QGIS Server With Python Superpowers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Workshop
 ~~~~~~~~
 
@@ -19,8 +19,9 @@ Alessandro Pasotti
 
 QCooperative / ItOpen
 
-https://www.qcooperative.net
 
+.. image:: images/qcooperative.png
+    :class: centered
 
 ----
 
@@ -1468,13 +1469,9 @@ https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins
 Cache Filter Plugins
 ============================
 
-Since QGIS 3.4
-
 .. code:: python
 
     from qgis.server import QgsServerCacheFilter
-    from qgis.core import QgsMessageLog
-    from qgis.PyQt.QtCore import QByteArray
     import hashlib
 
     class StupidCache(QgsServerCacheFilter):
