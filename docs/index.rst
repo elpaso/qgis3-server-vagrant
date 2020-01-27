@@ -292,7 +292,7 @@ Nginx **MapProxy**   83         8083
 
 ----
 
-Requirements FCGI Summary
+FCGI Requirements Summary
 =========================
 
 
@@ -331,7 +331,7 @@ Requirements FCGI Summary
 Advanced QGIS Server Configuration
 ==================================
 
-12 factors app: **environment variables**:
+12 factors app **environment variables**:
 
 + Layers Authentication
 + Parallel Rendering
@@ -742,17 +742,15 @@ VirtualHost configuration for both **FastCGI** and **CGI**
 
     <VirtualHost *:81>
         # [ ... ] Standard config goes here
-        FcgidInitialEnv LC_ALL "en_US.UTF-8"
-        FcgidInitialEnv LANG "en_US.UTF-8"
-        FcgidInitialEnv PYTHONIOENCODING UTF-8
-        FcgidInitialEnv QGIS_DEBUG 1
-        FcgidInitialEnv QGIS_PLUGINPATH "QGIS_SERVER_DIR/plugins"
-        FcgidInitialEnv QGIS_AUTH_DB_DIR_PATH "QGIS_SERVER_DIR"
-        # Path to the QGIS3.ini settings file
-        FcgidInitialEnv QGIS_OPTIONS_PATH "QGIS_SERVER_DIR"
-        # Path to the user profile directory
-        FcgidInitialEnv QGIS_CUSTOM_CONFIG_PATH "QGIS_SERVER_DIR"
         FcgidInitialEnv DISPLAY ":99"
+        FcgidInitialEnv LC_ALL "en_US.UTF-8"
+        # FcgidInitialEnv QGIS_DEBUG 1
+        # FcgidInitialEnv QGIS_PLUGINPATH "QGIS_SERVER_DIR/plugins"
+        # FcgidInitialEnv QGIS_AUTH_DB_DIR_PATH "QGIS_SERVER_DIR"
+        # Path to the QGIS3.ini settings file
+        # FcgidInitialEnv QGIS_OPTIONS_PATH "QGIS_SERVER_DIR"
+        # Path to the user profile directory
+        # FcgidInitialEnv QGIS_CUSTOM_CONFIG_PATH "QGIS_SERVER_DIR"
 
 -----
 
@@ -765,35 +763,17 @@ Apache2 Configuration III
 .. code:: apache
 
 
-        FcgidInitialEnv QGIS_DEBUG 1
+        # FcgidInitialEnv QGIS_DEBUG 1
         # Deprecated log to file (bad practice!)
-        FcgidInitialEnv QGIS_SERVER_LOG_FILE "QGIS_SERVER_DIR/logs/qgis-apache-001.log"
+        # FcgidInitialEnv QGIS_SERVER_LOG_FILE "QGIS_SERVER_DIR/logs/qgis-apache-001.log"
         # Log to stderr instead:
         # FcgidInitialEnv QGIS_SERVER_LOG_FILE ""
         # FcgidInitialEnv QGIS_SERVER_LOG_STDERR 1
-        FcgidInitialEnv QGIS_SERVER_LOG_LEVEL 0
-        FcgidInitialEnv QGIS_PLUGINPATH "QGIS_SERVER_DIR/plugins"
-
-
------
-
-Apache2 Configuration IV
-=========================
-
-**CGI**
-
-.. code:: apache
-
-        # For simple CGI: ignored by fcgid,
-        # Same as FastCGI, but "SetEnv" instead of "FcgidInitialEnv"
-        SetEnv LC_ALL "en_US.UTF-8"
-        SetEnv LANG "en_US.UTF-8"
-        SetEnv PYTHONIOENCODING UTF-8
-        ...
+        # FcgidInitialEnv QGIS_SERVER_LOG_LEVEL 0
 
 ----
 
-Apache2 Configuration V
+Apache2 Configuration IV
 =========================
 
 .. code:: apache
@@ -817,7 +797,7 @@ Apache2 Configuration V
 
 -----
 
-Apache2 Configuration VI
+Apache2 Configuration V
 =========================
 
 Enable sites and restart
@@ -825,7 +805,7 @@ Enable sites and restart
 .. code:: bash
 
     a2enmod rewrite # Only required by some plugins
-    a2enmod cgid # Required by plain old CGI
+    # a2enmod cgid # Required by plain old CGI
     a2dissite 000-default
     a2ensite 001-qgis-server
     # Listen on port 81 instead of 80 (nginx)
