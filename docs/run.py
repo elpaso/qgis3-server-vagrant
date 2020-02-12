@@ -36,4 +36,6 @@ with open(presentation, 'r') as f:
 
 if __name__ == "__main__":
     cmd = [presentation]
+    if len(sys.argv) > 2:
+        cmd.extend(sys.argv[2:])
     hovercraft.main(cmd)

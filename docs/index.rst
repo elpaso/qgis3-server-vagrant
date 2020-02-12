@@ -50,18 +50,18 @@ QGIS Server
 
     digraph g {
 
-            rankdir="LR"
+        rankdir="LR"
 
-            graph [fontname = "helvetica bold"];
-            node [fontname = "helvetica bold"];
-            edge [fontname = "helvetica bold"];
+        graph [fontname = "helvetica bold"];
+        node [fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
 
-            edge [fontcolor=red fontsize=9]
-            node [shape=box style="rounded"]
+        edge [fontcolor=red fontsize=9]
+        node [shape=box style="rounded"]
 
-            desktop [label="QGIS Desktop"]
-            server [label="QGIS Server"]
-            desktop ->  server [label="deploy project"]
+        desktop [label="QGIS Desktop"]
+        server [label="QGIS Server"]
+        desktop ->  server [label="deploy project"]
 
     }
 
@@ -128,7 +128,7 @@ Supported Standards
 
 ----
 
-Compliance tests
+Compliance Tests
 ================
 
 OGC CITE Compliance Testing
@@ -147,53 +147,53 @@ System Overview
 
     digraph g {
 
-            graph [fontname = "helvetica bold"];
-            node [fontname = "helvetica bold"];
-            edge [fontname = "helvetica bold"];
-            rankdir="TB"
+        graph [fontname = "helvetica bold"];
+        node [fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
+        rankdir="TB"
 
-            subgraph cluster_0 {
-                style=filled;
-                color=lightgrey;
-                node [style=filled,color=white];
-                "QGIS Server FCGI";
-                "Web Server" -> "QGIS Server FCGI";
-                label = "Server Tier";
+        subgraph cluster_0 {
+            style=filled;
+            color=lightgrey;
+            node [style=filled,color=white];
+            "QGIS Server FCGI";
+            "Web Server" -> "QGIS Server FCGI";
+            label = "Server Tier";
 
-                subgraph cluster_1 {
-                    color=white;
-                    label = "Server Data";
-                    node [shape=box,style=filled,color=white];
-                    node [shape=box color="blue" style=box,color=blue]
-                    edge [color=blue fontsize=9]
-                    "project_1.qgs";
-                    "project_2.qgs";
-                    "Local Storage";
-                }
-
-                "QGIS Server FCGI" -> "project_1.qgs"
-                "QGIS Server FCGI" -> "project_2.qgs"
-
+            subgraph cluster_1 {
+                color=white;
+                label = "Server Data";
+                node [shape=box,style=filled,color=white];
+                node [shape=box color="blue" style=box,color=blue]
+                edge [color=blue fontsize=9]
+                "project_1.qgs";
+                "project_2.qgs";
+                "Local Storage";
             }
 
+            "QGIS Server FCGI" -> "project_1.qgs"
+            "QGIS Server FCGI" -> "project_2.qgs"
+
+        }
 
 
-            edge [fontcolor=red fontsize=9]
-            node [shape=box style="rounded"]
 
-            "Client Tier" -> "Web Server";
+        edge [fontcolor=red fontsize=9]
+        node [shape=box style="rounded"]
 
-            node [shape=box color="white"]
-            edge [color=red fontsize=9]
-            "Multiple processes\nManaged by systemd or mod_fcgid" -> "QGIS Server FCGI";
-            "Multiple projects\nMAP=..." -> "project_1.qgs";
-            "Multiple projects\nMAP=..." -> "project_2.qgs";
+        "Client Tier" -> "Web Server";
 
-            node [shape=box style=box,color=blue]
-            edge [color=blue fontsize=9]
-            "project_2.qgs" -> "Local Storage"
-            "project_2.qgs" -> "Remote Storage"
-            "project_1.qgs" -> "Remote Storage"
+        node [shape=box color="white"]
+        edge [color=red fontsize=9]
+        "Multiple processes\nManaged by systemd or mod_fcgid" -> "QGIS Server FCGI";
+        "Multiple projects\nMAP=..." -> "project_1.qgs";
+        "Multiple projects\nMAP=..." -> "project_2.qgs";
+
+        node [shape=box style=box,color=blue]
+        edge [color=blue fontsize=9]
+        "project_2.qgs" -> "Local Storage"
+        "project_2.qgs" -> "Remote Storage"
+        "project_1.qgs" -> "Remote Storage"
     }
 
 
@@ -288,6 +288,7 @@ Nginx **FastCGI**    80         8080
 Apache **(Fast)CGI** 81         8081
 Nginx **Python**     82         8082
 Nginx **MapProxy**   83         8083
+Open for experiments 8000       8000
 ==================== ========== ============
 
 ----
@@ -331,8 +332,11 @@ FCGI Requirements Summary
 Advanced QGIS Server Configuration
 ==================================
 
-12 factors app **environment variables**:
+12 factors app https://12factor.net/
 
+Configuration through **environment variables**
+
++ Paths to plugins, default project etc.
 + Layers Authentication
 + Parallel Rendering
 + Logging
@@ -349,10 +353,10 @@ the environment variable ``QGIS_AUTH_DB_DIR_PATH``
 ``QGIS_AUTH_PASSWORD_FILE`` environment variable can contain the
 master password required to decrypt the authentication DB.
 
-.. warning::
+.. class:: warning
 
-    Make sure to limit the file as only readable by the Server’s process user and
-    to not store the file within web-accessible directories.
+    Make sure to limit permissions on the file to be only readable by the Server’s
+    process user and to not store the file within web-accessible directories.
 
 ----
 
@@ -469,7 +473,7 @@ Setup Steps
 =====================
 
 + Add QGIS repositories
-+ Install support software packages
++ Install support packages (Nginx, Apache etc.)
 + Install QGIS server
 + Configure services
 + Start services
@@ -665,7 +669,6 @@ Installation (with **FCGI** module)
 
     .. image:: images/apache.png
         :class: scale-30
-
 
 
 .. class:: pull-left
@@ -1059,7 +1062,7 @@ Systemd Service Config for FastCGI
 
 ----
 
-Systemd Config for FastCGI 3
+Systemd Service Config for FastCGI
 ===================================
 
 Service
@@ -1433,8 +1436,6 @@ There are no substantial differences between plugins API in 2.x and 3.x
 Access Control Filter Plugins
 ==================================
 
-Since QGIS 2.12
-
 Fine-grained control over layers, features and attributes!
 
 https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/server.html#access-control-plugin
@@ -1495,9 +1496,7 @@ Cache Plugins II
 Legacy Custom Services
 ===================================
 
-Since QGIS 3
-
-New server **plugin-based** service architecture!
+New server *plugin-based* **service** architecture!
 
 You can now create custom services in pure *Python*.
 
@@ -1511,7 +1510,7 @@ OGC API Custom Services
 
 Since QGIS 3.10
 
-New server **plugin-based** API architecture!
+New server *plugin-based* **API** architecture!
 
 You can now create custom APIs in pure *Python*.
 
@@ -1522,7 +1521,7 @@ Other examples
 =====================
 
 The Python QGIS tests contain a comprehensive set
-of scripts to test all possible services of QGIS
+of scripts to test services implementations in QGIS
 Server:
 
 https://github.com/qgis/QGIS/tree/master/tests/src/python

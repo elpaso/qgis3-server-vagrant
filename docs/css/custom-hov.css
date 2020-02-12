@@ -4,7 +4,18 @@
 
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
-
+.warning::before {
+	content: "!";
+	color: white;
+	background-color: red;
+	border-radius: 1.5em;
+	margin-right: 0.5em;
+	width: 1.5em;
+	display: inline-block;
+	align-content: center;
+	text-align: center;
+	font-weight: bold;
+}
 
 .step > h1:first-child {
     border-bottom:  solid 0.2rem green; /*#3CC6B9;*/
