@@ -19,14 +19,20 @@ USERNAME='qgis'
 PASSWORD='qgis'
 
 class HTTPBasicFilter(QgsServerFilter):
+    
+    def _getAuthHeader(self):
+        """Check for various header incarnations of Authorization"""
+        
+        return self.serverInterface().getEnv('HTTP_AUTHORIZATION') or \
+            self.serverInterface().requestHandler().requestHeader('HTTP_AUTHORIZATION') or \
+            self.serverInterface().requestHandler().requestHeader('Authorization')
+                    
 
     def _checkAuth(self):
         # NOAUTH for wget / GET retrieving
         if 'NOAUTH' in self.serverInterface().requestHandler().parameterMap():
             return True
-        auth = self.serverInterface().getEnv('HTTP_AUTHORIZATION')
-        if not auth:
-            auth = self.serverInterface().requestHandler().requestHeader('HTTP_AUTHORIZATION')
+        auth = self._getAuthHeader()
         if auth:
             username, password = base64.b64decode(auth[6:]).split(b':')
             if (username.decode('utf-8') == os.environ.get('QGIS_SERVER_USERNAME', USERNAME) and
@@ -36,7 +42,6 @@ class HTTPBasicFilter(QgsServerFilter):
 
     def requestReady(self):
         handler = self.serverInterface().requestHandler()
-        auth = self.serverInterface().getEnv('HTTP_AUTHORIZATION')
 
         if self._checkAuth():
             return
@@ -45,12 +50,12 @@ class HTTPBasicFilter(QgsServerFilter):
 
     def responseComplete(self):
         handler = self.serverInterface().requestHandler()
-        auth = self.serverInterface().getEnv('HTTP_AUTHORIZATION')
         if self._checkAuth():
             return
         # No auth ...
         handler.clear()
         handler.setResponseHeader('Status', '401 Authorization required')
+        handler.setStatusCode(401)
         handler.setResponseHeader('WWW-Authenticate', 'Basic realm="QGIS Server (%s/%s)"' % (os.environ.get('QGIS_SERVER_USERNAME', USERNAME), os.environ.get('QGIS_SERVER_PASSWORD', PASSWORD)))
         handler.appendBody(b'<h1>Authorization required</h1>')
 
