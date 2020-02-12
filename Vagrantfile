@@ -14,6 +14,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 81, host: 8081 # apache fastcgi
   config.vm.network "forwarded_port", guest: 82, host: 8082 # nginx uwsgi
   config.vm.network "forwarded_port", guest: 83, host: 8083 # nginx mapproxy
+  config.vm.network "forwarded_port", guest: 8000, host: 8000 # for qgis_mapserver
 
   config.vm.provider "virtualbox" do |v|
     #v.gui = true
