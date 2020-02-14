@@ -34,9 +34,10 @@ Workshop Program
 + Server configuration
 + QGIS Server vendor features
 + Python API
-+ Python Plugins
++ Python Plugins & Modules
     + Access Control Plugins
     + Cache Plugins
+    + Custom Services & APIs
 + Python applications and embedding
 
 ----
@@ -206,6 +207,8 @@ Project Configuration
 .. image:: images/server-options.png
     :class: centered
 
+Official documentation: https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/server/index.html
+
 -----
 
 Data Storage
@@ -215,39 +218,13 @@ Data Storage
     :class: centered
 
 
-----
-
-The Development Server
-======================
-
-*Not suitable for production!*
-
-.. code:: bash
-    :class: zoom-80
-
-    Usage: qgis_mapserver [options] [address:port]
-    QGIS Development Server
-
-    Options:
-    -l <logLevel>     Sets log level (default: 0)
-                        0: INFO
-                        1: WARNING
-                        2: CRITICAL
-    -p <projectPath>  Path to a QGIS project file (*.qgs or *.qgz),
-                        if specified it will override the query string MAP argument
-                        and the QGIS_PROJECT_FILE environment variable
-
-    Arguments:
-    addressAndPort    Listen to address and port (default: "localhost:8000")
-                        address and port can also be specified with the environment
-                        variables QGIS_SERVER_ADDRESS and QGIS_SERVER_PORT
 
 ----
 
 Deployment Strategies
 =====================
 
-1. Docker containers
+1. Docker Containers
 ~~~~~~~~~~~~~~~~~~~~
 
    + \- you have to know Docker
@@ -288,8 +265,40 @@ Nginx **FastCGI**    80         8080
 Apache **(Fast)CGI** 81         8081
 Nginx **Python**     82         8082
 Nginx **MapProxy**   83         8083
-Open for experiments 8000       8000
+Development server   8000       8000
 ==================== ========== ============
+
+
+.. class:: warning
+
+    Plain **CGI** is only useful for testing!
+
+----
+
+The Development Server
+======================
+
+*Not suitable for production!*
+
+.. code:: bash
+    :class: zoom-80
+
+    Usage: qgis_mapserver [options] [address:port]
+    QGIS Development Server
+
+    Options:
+    -l <logLevel>     Sets log level (default: 0)
+                        0: INFO
+                        1: WARNING
+                        2: CRITICAL
+    -p <projectPath>  Path to a QGIS project file (*.qgs or *.qgz),
+                        if specified it will override the query string MAP argument
+                        and the QGIS_PROJECT_FILE environment variable
+
+    Arguments:
+    addressAndPort    Listen to address and port (default: "localhost:8000")
+                        address and port can also be specified with the environment
+                        variables QGIS_SERVER_ADDRESS and QGIS_SERVER_PORT
 
 ----
 
@@ -326,6 +335,9 @@ FCGI Requirements Summary
 
     }
 
+.. class:: warning
+
+    **xvfb** is required for features like printing and HTML labels.
 
 ----
 
@@ -340,7 +352,6 @@ Configuration through **environment variables**
 + Layers Authentication
 + Parallel Rendering
 + Logging
-+ Caching
 
 ----
 
@@ -355,8 +366,13 @@ master password required to decrypt the authentication DB.
 
 .. class:: warning
 
-    Make sure to limit permissions on the file to be only readable by the Server’s
-    process user and to not store the file within web-accessible directories.
+    Make sure that the permissions on the file are set to be only readable by
+    the Server’s process user and check that the file is not accessible
+    via any URL.
+
+.. class:: warning
+
+    TODO for QGIS4: ``QGIS_AUTH_PASSWORD`` needs to be added.
 
 ----
 
@@ -403,12 +419,9 @@ Caching
 
 A QGIS Server instance caches:
 
-+ capabilities
-+ projects
++ capabilities XML document
 
-Caches are **not** shared among instances.
-
-Layers are **not** cached.
+Caches are **not** shared among instances, layers are **not** cached.
 
 Caching is generally delegated to different tier,
 caching solutions are expecially recommended for serving
@@ -418,7 +431,7 @@ tiles:
 + tilecache http://tilecache.org/
 + tilestache http://tilestache.org/
 
-Look for metatiles support if your layers contain labels.
+Look for metatiles and/or activate `TILE` buffer support if your layers contain labels.
 
 ----
 
@@ -531,6 +544,7 @@ Only for unprovisioned machines!
     rm master.zip
     cd /vagrant/provisioning
 
+
 ----
 
 The Provisioning Scripts
@@ -559,6 +573,8 @@ Add Required Repositories
     echo 'deb http://qgis.org/ubuntu-nightly bionic main' > /etc/apt/sources.list.d/ubuntu-qgis.list
     apt-get update && apt-get -y upgrade
 
+Which repository? https://qgis.org/en/site/forusers/alldownloads.html#debian-ubuntu
+
 ----
 
 Check for New Packages
@@ -571,14 +587,14 @@ Check for New Packages
     apt-cache policy qgis-server
     # output follows:
     qgis-server:
-    Installed: 1:3.5.0+git20190214+dabd649+28bionic
-    Candidate: 1:3.5.0+git20190214+dabd649+28bionic
+    Installed: 1:3.11.0+git20200214+51ba7e8a89+28bionic
+    Candidate: 1:3.11.0+git20200214+51ba7e8a89+28bionic
     Version table:
-    *** 1:3.5.0+git20190214+dabd649+28bionic 500
-            500 http://qgis.org/debian-nightly bionic/main amd64 Packages
-            100 /var/lib/dpkg/status
+    *** 1:3.11.0+git20200214+51ba7e8a89+28bionic 500
+           500 http://qgis.org/ubuntu-nightly bionic/main amd64 Packages
+           100 /var/lib/dpkg/status
         2.18.17+dfsg-1 500
-            500 http://archive.ubuntu.com/ubuntu bionic/universe amd64 Packages
+           500 http://it.archive.ubuntu.com/ubuntu bionic/universe amd64 Packages
 
 
 ----
@@ -1260,9 +1276,11 @@ QGIS Server Modules
         edge [fontcolor=red fontsize=9]
         node [shape=box style="rounded"]
 
-        node [style=filled, shape=box, fillcolor=white ];
+        node [style=filled, shape=box fillcolor=lightblue];
 
         plugins [label="Python Filter Plugins"]
+
+        node [style=filled, shape=box, fillcolor=white ];
 
         "QGIS Server" -> plugins
 
@@ -1274,14 +1292,17 @@ QGIS Server Modules
         node [style=filled, shape=box fillcolor=green, fontsize=12];
 
         "API" -> "WFS3"
-        "API" -> "Custom API"
 
         node [style=filled, shape=box fillcolor=yellow];
 
         "SERVICE" -> "WMS/WMTS"
         "SERVICE" -> "WFS"
         "SERVICE" -> "WCS"
+
+        node [style=filled, shape=box fillcolor=lightblue];
+
         "SERVICE" -> "Custom SERVICE"
+        "API" -> "Custom API"
     }
 
 
@@ -1438,11 +1459,18 @@ Access Control Filter Plugins
 
 Fine-grained control over layers, features and attributes!
 
-https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/server.html#access-control-plugin
-
++ layerFilterExpression(layer)
++ layerFilterSubsetString(layer)
++ layerPermissions(layer) -> QgsAccessControlFilter.LayerPermissions
++ authorizedLayerAttributes(layer, attributes)
++ allowToEdit(layer, feature)
++ cacheKey()
 
 Example:
 https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/accesscontrol/accesscontrol.py
+
+Docs: https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/server.html#access-control-plugin
+
 
 
 ----

@@ -77,9 +77,11 @@ class RestrictedAccessControl(QgsAccessControlFilter):
         return feature.attribute("ISO2") in ["IT", "CH"]
 
     def cacheKey(self):
+        """Cache key to used to create the capabilities cache, "" for no cache"""
+
         return "r" if self._active else "f"
 
-   
+
 
 
 class AccessControl:
@@ -87,4 +89,4 @@ class AccessControl:
     def __init__(self, serverIface):
         # Save reference to the QGIS server interface
         serverIface.registerAccessControl( RestrictedAccessControl(serverIface), 100 )
-    
+
