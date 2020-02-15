@@ -219,7 +219,23 @@ Data Storage
 .. image:: images/project-properties.png
     :class: centered
 
+-----
 
+Project File Storage
+====================
+
+* **FILESYSTEM** |rarr| ``MAP=/path/to/project.qgs`` or *rewrite*!
+* **DB** |rarr| ``MAP=postgres://[user[:pass]@]host[:port]/?dbname=X&schema=Y&project=Z`` or *rewrite*!
+
+.. class:: warning
+
+    Use rewrite!
+
+Specifiers:
+
+* first .QGS from binary directory
+* ``MAP=``
+* environment variable ``QGIS_PROJECT_FILE``
 
 ----
 
