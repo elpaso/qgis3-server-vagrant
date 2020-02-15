@@ -5,6 +5,8 @@
 
 .. title:: QGIS Server Workshop 2020
 
+.. include:: <isonum.txt>
+
 ----
 
 :id: presentation-title
@@ -33,12 +35,12 @@ Workshop Program
 + Deployment strategies
 + Server configuration
 + QGIS Server vendor features
-+ Python API
++ Python development
++ Python applications and embedding
 + Python Plugins & Modules
     + Access Control Plugins
     + Cache Plugins
     + Custom Services & APIs
-+ Python applications and embedding
 
 ----
 
@@ -432,6 +434,18 @@ tiles:
 + tilestache http://tilestache.org/
 
 Look for metatiles and/or activate `TILE` buffer support if your layers contain labels.
+
+----
+
+WFS3/OAPIF and the new OGC APIs
+===============================
+
+Resources overrides (HTML templates, JS/CSS etc.):
+
+Base directory for all WFS3 static resources (HTML templates, CSS, JS etc.) ``QGIS_SERVER_API_RESOURCES_DIRECTORY``
+
+https://docs.qgis.org/testing/en/docs/user_manual/working_with_ogc/server/services.html#the-html-template-language
+
 
 ----
 
@@ -862,31 +876,36 @@ Nginx architecture
     :class: scale-70 centered
 
     digraph g {
-            rankdir="TB"
 
-            subgraph cluster_0 {
-                style=filled;
-                color=green;
-                node [shape=box style=filled,color=white];
-                "Nginx Web Server";
-                label = "Nginx";
-            }
+        rankdir="TB"
 
-            subgraph cluster_1 {
-                style=filled;
-                color=yellow;
-                node [shape=box style=filled,color=white];
-                "Systemd Managed Socket";
-                "Systemd Managed Service";
-                label = "Systemd";
-            }
+        graph [fontname = "helvetica bold"];
+        node [fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
 
-            node [shape=box style=box,color=blue]
-            edge [color=blue fontsize=9 dir=both]
+        subgraph cluster_0 {
+            style=filled;
+            color=green;
+            node [shape=box style=filled,color=white];
+            "Nginx Web Server";
+            label = "Nginx";
+        }
 
-            "Systemd Managed Service" -> "QGIS Server FastCGI";
-            "Nginx Web Server" -> "Systemd Managed Socket";
-            "Systemd Managed Socket" -> "QGIS Server FastCGI";
+        subgraph cluster_1 {
+            style=filled;
+            color=yellow;
+            node [shape=box style=filled,color=white];
+            "Systemd Managed Socket";
+            "Systemd Managed Service";
+            label = "Systemd";
+        }
+
+        node [shape=box style=box,color=blue]
+        edge [color=blue fontsize=9 dir=both]
+
+        "Systemd Managed Service" -> "QGIS Server FastCGI";
+        "Nginx Web Server" -> "Systemd Managed Socket";
+        "Systemd Managed Socket" -> "QGIS Server FastCGI";
     }
 
 
@@ -1126,7 +1145,7 @@ is available in the ``resources/qgis/`` directory.
 
 ----
 
-Checkpoint: WMS search
+Checkpoint: WMS Search FILTER
 =================================
 
 Searching features with **WMS**
@@ -1144,7 +1163,7 @@ The filter is a QGIS Expression:
 **FILTER=world:"NAME" = 'SPAIN'**
 
 * Field name is enclosed in double quotes, literal string in single quotes
-* You need one space between the operator and tokens
+* You need exactly one space between the operator and tokens
 
 
 ----
@@ -1247,11 +1266,11 @@ QGIS Server and Python
 
 What can we do?
 
-+ Use QGIS Server API from another Python application (embedding)
-+ Run QGIS Server as a standalone WSGI service
-+ Enhance QGIS Server with Python plugins
-+ Add a new *SERVICE* written in Python
-+ Add a new *API* written in Python
++ **EMBEDDING** |rarr| Use QGIS Server API from another Python application
++ **STANDALONE** |rarr| Run QGIS Server as a WSGI/HTTP service
++ **FILTERS** |rarr| Enhance/Customize QGIS Server with filter plugins
++ **SERVICES** |rarr| Add a new *SERVICE*
++ **OGC APIs** |rarr| Add a new *OGC API*
 
 
 -----
@@ -1273,8 +1292,6 @@ QGIS Server Modules
         style=filled;
         color=lightgrey;
 
-        edge [fontcolor=red fontsize=9]
-        node [shape=box style="rounded"]
 
         node [style=filled, shape=box fillcolor=lightblue];
 
@@ -1287,11 +1304,11 @@ QGIS Server Modules
         node [style=filled, shape=box, fillcolor=white, fontsize=20];
 
         plugins -> "SERVICE"
-        plugins -> "API"
+        plugins -> "OGC API"
 
-        node [style=filled, shape=box fillcolor=green, fontsize=12];
+        node [style=filled, shape=box fillcolor=yellow, fontsize=12];
 
-        "API" -> "WFS3"
+        "OGC API" -> "WFS3"
 
         node [style=filled, shape=box fillcolor=yellow];
 
@@ -1302,8 +1319,37 @@ QGIS Server Modules
         node [style=filled, shape=box fillcolor=lightblue];
 
         "SERVICE" -> "Custom SERVICE"
-        "API" -> "Custom API"
+        "OGC API" -> "Custom API"
     }
+
+----
+
+Server API Documentation
+=========================
+
+C++
+~~~
+
+https://qgis.org/api/group__server.html
+
+Python
+~~~~~~~~~~~
+
+https://qgis.org/pyqgis/master/server/index.html
+
+
+----
+
+I/O Filters
+===========
+
+Applications:
+
+* web clients configuration
+* authentication/authorization
+* new services (WPS etc.)
+* new output formats
+* customization of standard services (ex: ``GetFeatureInfo``)
 
 
 ----
@@ -1326,49 +1372,49 @@ Customization
 
 ----
 
-New API Architecture
-====================
+New OGC API Architecture
+=========================
 
-``API`` modules
-~~~~~~~~~~~~~~~~
+``OGC API`` modules
+~~~~~~~~~~~~~~~~~~~~
 
-+ WFS3 API handler
++ WFS3/OAPIF API handler
 + JSON / REST based
 
 Customization
 ~~~~~~~~~~~~~
 
 + Custom API handlers (C++ and Python)
-+ Python filter plugins
++ Python filter plugins (I/O, access control, cache)
 
 ----
 
-API Documentation
-=================
+Python Development Topics
+=========================
 
-C++
-~~~
-
-https://qgis.org/api/group__server.html
-
-Python API Documentation
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-https://qgis.org/pyqgis/master/server/index.html
-
+* Standalone/Embedding
+* Plugins Anatomy
+* Filters
+    * I/O
+    * Access Control
+    * Cache
+* Custom Services
+* Custom OGC API handlers
 
 ----
 
-QGIS Server Python API
+QGIS Server API
 ==================================
+
+For standalone or embedding:
 
 + ``QgsServer()`` server instance
 + ``QgsBufferServerRequest(url)``
 + ``QgsBufferServerResponse()``
 + ``QgsServer.handleRequest(request, response)``
 
-----
 
+----
 
 Python API Basics
 ============================
@@ -1378,79 +1424,144 @@ Python API Basics
 
     from qgis.core import QgsApplication
     from qgis.server import *
-    qgs_app = QgsApplication([], False)
-    qgs_server = QgsServer()
+    app = QgsApplication([], False)
+    server = QgsServer()
     request = QgsBufferServerRequest(
         'http://localhost:8081/?MAP=/qgis-server/projects/helloworld.qgs' +
         '&SERVICE=WMS&REQUEST=GetCapabilities')
     response = QgsBufferServerResponse()
-    qgs_server.handleRequest(request, response)
+    server.handleRequest(request, response)
     print(response.headers())
     print(response.body().data().decode('utf8'))
-    qgs_app.exitQgis()
+    app.exitQgis()
 
 Full script:
 https://github.com/qgis/QGIS/blob/master/tests/src/python/qgis_wrapped_server.py
 
+----
 
------
+Plugins Anatomy
+=============================
 
-Standalone Application Setup
-================================
+Plugins are loaded from ``QGIS_PLUGINPATH`` directory.
 
-Systemd
+The Server Interface
+~~~~~~~~~~~~~~~~~~~~~
 
-.. code:: bash
+A ``QgsServerInterface`` instance is made available to plugins and it provides methods to *register* filters,
+services and APIs and methods to manage the capabilities cache for legacy services.
 
-    # Listen on ports 809%i
-    # Path: /etc/systemd/system/qgis-server-python@.service
-    # systemctl start qgis-server-python@{1..4}.service
+.. code::python
 
-    [Unit]
-    Description = QGIS Server Tracker Python backend (instance %i)
-    [Service]
-    User = www-data
-    Group = www-data
-    ExecStart = /qgis-server/qgis_wrapped_server_wsgi.py
-    StandardInput = null
-    StandardOutput=syslog
-    StandardError=syslog
-    SyslogIdentifier=qgis-server-python
-    WorkingDirectory=/tmp
-    Restart = always
+    def serverClassFactory(serverIface):
+        from . myplugin import MyPlugin
+        return MyPlugin(serverIface)
+
 
 ----
 
-QGIS Server Python Application 2
-================================
+Plugins Workflow
+=============================
 
-Systemd
+.. graph:: images/system-architecture.png
+    :class: centered
 
-.. code:: bash
+    digraph g {
 
-    # Environment
-    Environment=QGIS_SERVER_PORT=809%i
-    Environment="QGIS_AUTH_DB_DIR_PATH=/qgis-server/projects"
-    Environment="QGIS_SERVER_LOG_FILE=/qgis-server/logs/qgis-server-python.log"
-    Environment="QGIS_SERVER_LOG_LEVEL=0"
-    Environment="QGIS_DEBUG=1"
-    Environment="DISPLAY=:99"
-    Environment="QGIS_PLUGINPATH=/qgis-server/plugins"
-    Environment="QGIS_OPTIONS_PATH=/qgis-server"
-    Environment="QGIS_CUSTOM_CONFIG_PATH=/qgis-server"
-    [Install]
-    WantedBy = multi-user.target
+        rankdir="TB"
+
+        graph [fontname = "helvetica bold"];
+        node [style=filled, shape=box, fillcolor=white fontname = "helvetica bold"];
+        edge [fontname = "helvetica bold"];
+
+        style=filled;
+        color=lightgrey;
+
+        call [label="call plugin's serverClassFactory(serverInterface)"]
+
+        "Server Initialized" -> "Look for plugins"
+        "Look for plugins" -> "Load plugins"
+        "Load plugins" -> call
+
+        call -> "Register I/O filter"
+        call -> "Register Access Control filter"
+        call -> "Register Cache filter"
+        call -> "Register a SERVICE"
+        call -> "Register an API handler"
+
+    }
+
 
 ----
 
-I/O Filter Plugins
-==================================
+Filter Plugins Registration
+=============================
 
-See presentation: http://www.itopen.it/bulk/nodebo/Presentations/Server%20Plugins/index.html
+=============== ============================ ===============================
+Type            Base Class                   QgsServerInterface registration
+--------------- ---------------------------- -------------------------------
+I/O             ``QgsServerFilter``          ``registerFilter()``
+Access Control  ``QgsAccessControlFilter``   ``registerAccessControl()``
+Cache           ``QgsServerCacheFilter``     ``registerServerCache()``
+=============== ============================ ===============================
 
-API: Server https://qgis.org/pyqgis/master/server/index.html
+Note: custom **SERVICE** and **API** handlers are registered in the
+``serverInterface.serviceRegistry()``
 
-There are no substantial differences between plugins API in 2.x and 3.x
+----
+
+I/O Filters Hooks
+======================
+
+Server plugins register one or more ``QgsServerFilters`` that "listen to signals". Plugin filters receive the request/response objects and they can manipulate them with the following methods:
+
+* ``requestReady()`` |rarr| triggered after the *request* object is created
+* ``responseComplete()`` |rarr| triggered after the main loop completes
+* ``sendResponse()`` |rarr| triggered before *response* byte stream is sent to the client
+
+----
+
+I/O Filters Flowchart
+=======================
+
+
+.. graph:: images/qgis-server-pluginflow.png
+    :scale: 100%
+
+    digraph g {
+
+        node [color=greenyellow, shape=box, style=filled, fontname="sans-serif"]
+        "Incoming request" [color=greenyellow, shape=box, style="filled,rounded"]
+        core [shape=diamond, label="SERVICE or API?"]
+        output [label="Output to FCGI stdin", color=greenyellow, shape=box, style="filled,rounded"]
+        requestReady [style="filled,rounded", color=orange]
+        responseComplete [style="filled,rounded", color=orange]
+        sendResponse2 [label="sendResponse", style="filled,rounded,dashed", color=orange]
+        sendResponse [style="filled,rounded", color=orange]
+
+        "Incoming request" -> requestReady
+        requestReady -> core
+        core -> "Process" [ label="yes" ]
+        "Process" -> responseComplete
+        "Process" -> sendResponse2 [style=dashed, label="streaming?"]
+        sendResponse2 -> "Process"[style=dashed]
+        core -> "Raise exception" [ label="no" ]
+        "Raise exception" -> responseComplete
+
+        responseComplete -> sendResponse
+        sendResponse -> output
+
+    }
+
+
+----
+
+I/O Filters Examples
+=======================
+
+
+* https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/httpbasic/httpbasic.py
+* https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/getfeatureinfo/getfeatureinfo.py
 
 ----
 
@@ -1459,12 +1570,12 @@ Access Control Filter Plugins
 
 Fine-grained control over layers, features and attributes!
 
-+ layerFilterExpression(layer)
-+ layerFilterSubsetString(layer)
-+ layerPermissions(layer) -> QgsAccessControlFilter.LayerPermissions
-+ authorizedLayerAttributes(layer, attributes)
-+ allowToEdit(layer, feature)
-+ cacheKey()
++ ``layerFilterExpression(layer)``
++ ``layerFilterSubsetString(layer)``
++ ``layerPermissions(layer)`` |rarr| QgsAccessControlFilter.LayerPermissions
++ ``authorizedLayerAttributes(layer, attributes)``
++ ``allowToEdit(layer, feature)``
++ ``cacheKey()``
 
 Example:
 https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/accesscontrol/accesscontrol.py
@@ -1528,7 +1639,12 @@ New server *plugin-based* **service** architecture!
 
 You can now create custom services in pure *Python*.
 
-Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customservice/customservice.py
+.. code::python
+
+    # MyService is a QgsService subclass
+    serverInterface.serviceRegistry().registerService(MyService())
+
+Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/xyz/xyz.py
 
 ----
 
@@ -1541,6 +1657,11 @@ Since QGIS 3.10
 New server *plugin-based* **API** architecture!
 
 You can now create custom APIs in pure *Python*.
+
+.. code::python
+
+    # MyApi is a QgsServerOgcApi subclass
+    serverInterface.serviceRegistry().registerApi(MyApi())
 
 Example: https://github.com/elpaso/qgis3-server-vagrant/blob/master/resources/web/plugins/customapi/customapi.py
 

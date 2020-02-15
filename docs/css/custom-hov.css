@@ -116,6 +116,12 @@ ul.pull-left, ul.pull-right {
     height: 600px;
 }
 
+li > tt {
+    font-weight: bold;
+    font-size: 120%;
+}
+
+h1 > tt,
 h2 > tt,
 p > tt {
     font-weight: bold;
