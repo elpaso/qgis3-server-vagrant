@@ -57,5 +57,3 @@ sed -i -e "s@MAPPROXY_DIR@${MAPPROXY_DIR}@g" /etc/systemd/system/mapproxy@.servi
 chown -R www-data.www-data ${MAPPROXY_DIR}
 
 systemctl restart nginx.service
-
-

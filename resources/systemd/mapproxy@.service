@@ -6,13 +6,15 @@
 
 [Unit]
 Description = Mapproxy backend (instance %i)
+Wants = network.target
+After = network.target
 
 [Service]
-Restart=always
+Restart = always
 User = www-data
 Group = www-data
-WorkingDirectory=MAPPROXY_DIR
-ExecStart=MAPPROXY_DIR/bin/mapproxy-util serve-develop -b 0.0.0.0:810%i MAPPROXY_DIR/myconfig/mapproxy.yaml
+WorkingDirectory = MAPPROXY_DIR
+ExecStart = MAPPROXY_DIR/bin/mapproxy-util serve-develop -b 0.0.0.0:810%i MAPPROXY_DIR/myconfig/mapproxy.yaml
 
 [Install]
 WantedBy = multi-user.target
