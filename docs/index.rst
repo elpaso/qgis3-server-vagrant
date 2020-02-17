@@ -541,19 +541,19 @@ Provided VMs
 SSH into the Machine
 ====================
 
+Plain VM (username: qgis, password: qgis):
+
+.. code:: bash
+
+    ssh -p 2222 qgis@localhost # password: qgis
+    sudo su - # become superuser
+
 Vagrant:
 
 .. code:: bash
 
     vagrant up
     vagrant ssh
-    sudo su - # become superuser
-
-Plain VM (username: qgis, password: qgis):
-
-.. code:: bash
-
-    ssh -p 2222 qgis@localhost # password: qgis
     sudo su - # become superuser
 
 **Checkpoint**: you need to be able to log into the machine and become ``root``
@@ -816,8 +816,7 @@ Apache2 Configuration III
         # Deprecated log to file (bad practice!)
         # FcgidInitialEnv QGIS_SERVER_LOG_FILE "QGIS_SERVER_DIR/logs/qgis-apache-001.log"
         # Log to stderr instead:
-        # FcgidInitialEnv QGIS_SERVER_LOG_FILE ""
-        # FcgidInitialEnv QGIS_SERVER_LOG_STDERR 1
+        FcgidInitialEnv QGIS_SERVER_LOG_STDERR 1
         # FcgidInitialEnv QGIS_SERVER_LOG_LEVEL 0
 
 ----

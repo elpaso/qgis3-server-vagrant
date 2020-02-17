@@ -1,5 +1,5 @@
 
-# Path: /etc/systemd/system/qgis-fcgi@.service
+# Path: /etc/systemd/system/qgis-server-fcgi@.service
 # systemctl start qgis-fcgi@{1..4}.service
 # Used by Nginx
 
