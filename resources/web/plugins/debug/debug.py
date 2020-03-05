@@ -42,11 +42,11 @@ class DebugFilter(QgsServerFilter):
         handler.setResponseHeader('Status', '200 Ok')
         handler.appendBody(b'<h1>Params</h1>')
         for k in params:
-            handler.appendBody(('<p><b>%s</b> %s</p>' % (k, params.get(k))).encode('utf8'))
+            handler.appendBody(('<p><b>%s</b> "%s"</p>' % (k, params.get(k))).encode('utf8'))
 
         handler.appendBody('<h1>Headers</h1>'.encode('utf8'))
         for k in headers_dict:
-            handler.appendBody(('<p><b>%s</b> %s</p>' % (k, headers_dict.get(k))).encode('utf8'))
+            handler.appendBody(('<p><b>%s</b> "%s"</p>' % (k, headers_dict.get(k))).encode('utf8'))
 
 
 class Debug:
